@@ -1,16 +1,9 @@
-
 ---
 layout: default
 ---
 
-<div class="post">
-
-	<h2>{{ page.title }}</h2>
-	<span class="date">{{ page.date | date_to_string }}</span>
-
-	<div class="entry">{{ content }}</div>
-
-	<span class="meta"></span>
-
-</div>
-
+<article class="post">
+	<h3>{{ page.title }}</h3>
+	<span class="small">{{ page.date | date: "%b %e, %Y" }}</span>
+	<div class="content well">{{ content }}</div>
+</article>

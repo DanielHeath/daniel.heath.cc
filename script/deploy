@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+cd _site 
+s3cmd sync --force --reduced-redundancy --acl-public * s3://blogotest
+
