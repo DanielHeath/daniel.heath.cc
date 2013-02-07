@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 set -e
+set -x
+
 rm -rf _site/*
-jekyll build
+jekyll _site
 cd _site
 s3cmd sync --force --reduced-redundancy --acl-public * s3://daniel.heath.cc
