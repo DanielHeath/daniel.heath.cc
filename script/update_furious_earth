@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -e
+
+rm -rf tmp/*
+rm -rf furious-earth/*
+cd tmp
+
+wget -p http://furious-earth.heroku.com/
+cat furious-earth.heroku.com/index.html | sed 's/\/assets/\/furious-earth/' > ../furious-earth/index.html
+mv furious-earth.heroku.com/assets/* ../furious-earth/
+
+cd ..
