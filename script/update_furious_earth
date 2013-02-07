@@ -4,6 +4,7 @@ set -e
 
 rm -rf tmp/*
 rm -rf furious-earth/*
+mkdir -p tmp
 cd tmp
 
 wget -p http://furious-earth.heroku.com/
