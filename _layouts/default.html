@@ -20,16 +20,20 @@
 			</header>
 		</div>
 
-		<br/>
 		<div class="container-fluid">
 		  <div class="row-fluid">
 		    <div class="span2">
 
 				<ul class="nav nav-pills nav-stacked">
+					<li class="nav-header">Projects</li>
 					<li>
-						<a href="/furious-earth">Furious Earth (a game for two players)</a>
+						<a href="/furious-earth">Furious Earth (two player hotseat shooter)</a>
 					</li>
-				{% for post in site.posts %}
+					<li>
+						<a href="http://darkblade.heroku.com" target="_blank">World of Darkness character creator</a>
+					</li>
+					<li class="nav-header">Latest Posts</li>
+				{% for post in site.posts limit: 5 %}
 					<li>
 						<a href="{{ post.url }}">{{ post.title }}</a>
 					</li>

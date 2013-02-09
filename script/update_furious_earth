@@ -8,7 +8,8 @@ mkdir -p tmp
 cd tmp
 
 wget -p http://furious-earth.heroku.com/
-cat furious-earth.heroku.com/index.html | sed 's/\/assets/\/furious-earth/' > ../furious-earth/index.html
+cat furious-earth.heroku.com/index.html | sed 's/\/assets/\/furious-earth/' > ../furious-earth/game.html
 mv furious-earth.heroku.com/assets/* ../furious-earth/
 
 cd ..
+rm -rf tmp/*
