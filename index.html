@@ -6,7 +6,7 @@ title: Home
 <!-- Show last 5 posts here -->
 {% for post in site.posts limit: 5  %}
 <article class="post">
-	<h3>{{ post.title }}</h3>
+	<h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
 	<span class="small">{{ post.date | date: "%b %e, %Y" }}</span>
 	<div class="content well">{{ post.content }}</div>
 </article>
