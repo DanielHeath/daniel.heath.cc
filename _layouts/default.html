@@ -12,7 +12,10 @@
 		<div class="row-fluid page-header">
 			<header>
 				<a href="/">
-					<div class="span4 offset1">
+					<div class="span1">
+						<img src="/profile-pic.png" class="heading-image" licence="http://creativecommons.org/licenses/by-nd/3.0/"/>
+					</div>
+					<div class="span4">
 						<h1>Sans Bytes</h1>
 						<span class="small">Daniel Heath blogs here</span>
 					</div>
@@ -27,10 +30,10 @@
 				<ul class="nav nav-pills nav-stacked">
 					<li class="nav-header">Projects</li>
 					<li>
-						<a href="/furious-earth">Furious Earth (two player hotseat shooter)</a>
+						<a href="/furious-earth">Furious Earth<br/> (two-player shooter)</a>
 					</li>
 					<li>
-						<a href="http://wod.daniel.heath.cc">Mage: the Awakening character creator</a>
+						<a href="http://wod.daniel.heath.cc" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
 					</li>
 					<li class="nav-header">Latest Posts</li>
 				{% for post in site.posts limit: 5 %}
@@ -51,16 +54,16 @@
 		  </div>
 		</div>
 
-		<footer class="row-fluid">
-			&copy; 2013
+		<footer class="row-fluid page-footer">
 
 			<address>
-			  <strong>Daniel Heath</strong> |
-			  <a href="mailto:daniel@heath.cc">daniel@heath.cc</a> |
+			  &copy; 2013 <strong class="name">Daniel Heath</strong> |
+			  <a href="/about">About</a> |
+			  <a class="email" href="mailto:daniel@heath.cc">Email</a> |
 			  <a href="http://daniel.heath.cc/">Blog</a> |
+			  <a href="https://github.com/DanielHeath">Github</a> |
 			  <a href="https://twitter.com/DanielrHeath">Twitter</a> |
 			  <a href="https://plus.google.com/114859106574535166251">Google+</a>
-
 			</address>
 		</footer>
 

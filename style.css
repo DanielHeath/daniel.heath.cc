@@ -13,7 +13,10 @@
 .post .content h6 {
 	font-size: smaller;
 }
-
-footer {
+.page-footer {
 	text-align: center;
+	padding-top: 40px;
+}
+.heading-image {
+	padding: 20px;
 }
