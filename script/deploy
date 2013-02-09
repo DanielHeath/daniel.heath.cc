@@ -5,3 +5,4 @@ rm -rf _site/*
 jekyll build
 cd _site
 s3cmd sync --force --reduced-redundancy --acl-public * s3://daniel.heath.cc
+
