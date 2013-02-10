@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Static sites on S3
+title: Thanks
 
 excerpt: A quick shout-out to the technologies that make this blog easy to build
-published: false
+published: true
 ---
 
 In no particular order, I want to give a quick shout-out to the technologies that make this blog easy to build.
@@ -16,4 +16,4 @@ In no particular order, I want to give a quick shout-out to the technologies tha
 
 Thanks also to Ben Schwarz who recently posted [his s3 deploy script](http://germanforblack.com/post/41918581806/how-i-deploy-a-static-site-or-assets-to-s3) (which I shamelessly copied) - saved me digging through the documentation.
 
-Not to mention the constellation of other open source which supports everything I do - from curl/wget to ruby to linux. To every OSS developer out there - thank you!
+Not to mention the constellation of other open source software which supports everything I do - from curl/sed to postgres/sendmail to ruby/go/gcc to linux/bsd. To every OSS developer out there - thank you!
