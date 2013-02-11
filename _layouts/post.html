@@ -2,19 +2,6 @@
 layout: default
 ---
 
-<article class="post">
-	<h3>{{ page.title }}</h3>
-	<span class="small">{{ page.date | date: "%b %e, %Y" }}</span>
-	<div class="content row">
-    <div class="span6 well">
-      <div class="">
-        {{ content }}
-      </div>
-    </div>
-
-  </div>
-	<div class="row small">
-		There is no comment box here.<br/>
-		If you have something to contribute I would be delighted to hear it via <a href="mailto:daniel@heath.cc">email</a>.<br/>
-	</div>
-</article>
+{% assign post = page %}
+{% assign postcontent = content %}
+{% include post.html %}

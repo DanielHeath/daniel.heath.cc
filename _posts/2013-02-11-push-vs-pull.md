@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Pull and Flow
+title: Push vs Pull
 
 excerpt: An observation on team structure and productivity
 published: true
@@ -16,8 +16,6 @@ Humans are susceptible to a cognitive bias in this situation; they naturally wan
 The problem with this bias is that other important activities (eg bugfixes, toolchain improvements) are not prioritised fairly as a result.
 
 The farther behind you get on a task, the more willing you become to do things like add poorly-factored code to the system, skip writing tests, or create bugs.
-
-More mature/senior employees are less affected by this bias, because they understand what happens when you ignore the other stuff.
 
 ## An alternative
 In the LPOS team at Lonely Planet, we adopted a different approach.

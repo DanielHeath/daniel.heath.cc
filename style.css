@@ -14,7 +14,8 @@
   font-size: smaller;
 }
 .post .content {
-  max-width: 900px;
+  min-width: 600px;
+  text-align: justify;
 }
 .page-footer {
 	text-align: center;

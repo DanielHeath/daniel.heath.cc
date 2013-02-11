@@ -1,0 +1,15 @@
+
+<article class="post">
+  <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+  <span class="small">{{ post.date | date: "%b %e, %Y" }}</span>
+  <div class="row">
+    <div class="span6 well content">
+      {{ postcontent }}
+    </div>
+
+  </div>
+  <div class="row small">
+    There is no comment box here.<br/>
+    If you have something to contribute I would be delighted to hear it via <a href="mailto:daniel@heath.cc">email</a>.<br/>
+  </div>
+</article>
