@@ -11,7 +11,10 @@
 	font-size: smaller;
 }
 .post .content h6 {
-	font-size: smaller;
+  font-size: smaller;
+}
+.post .content {
+  max-width: 900px;
 }
 .page-footer {
 	text-align: center;
