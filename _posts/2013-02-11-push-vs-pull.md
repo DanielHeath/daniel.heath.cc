@@ -23,7 +23,7 @@ Managers maintained a single, prioritised queue of tasks - features, bugfixes, y
 
 Developers (collectively) became responsible for getting the highest-priority things completed as quickly as possible.
 
-This avoides the bias described earlier: now, when a task drags out, the whole team hold collective responsibility (and everyone wants to know how they can help).
+This avoids the bias described earlier: now, when a task drags out, the whole team hold collective responsibility (and everyone wants to know how they can help).
 
 Developers no longer prioritise multiple incoming streams of work (eg features/bugs/support requests), but instead assist management in evaluating priorities for the queue.
 
@@ -32,4 +32,4 @@ Spending time on improving tools so the whole team benefits no longer requires p
 Did it make all our problems go away? Of course not. 
 Would it work with 15-20 developers? Who knows.
 
-We sure shipped a more good code, and our users were thrilled.
+We sure shipped more useful software, and our users were thrilled.
