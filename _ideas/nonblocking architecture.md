@@ -1,0 +1,1 @@
+scissors - reasons for design - latent failure scenarios - independence - testability
