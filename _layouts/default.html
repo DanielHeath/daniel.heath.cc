@@ -34,8 +34,8 @@
 				<li>
 					<a href="http://wod.daniel.heath.cc" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
 				</li>
-				<li class="nav-header">Latest Posts</li>
-			{% for post in site.posts limit: 5 %}
+				<li class="nav-header">Posts</li>
+			{% for post in site.posts %}
 				<li>
 					<a href="{{ post.url }}">{{ post.title }}</a>
 				</li>
