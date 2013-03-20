@@ -1,5 +1,9 @@
-Removing Carmen Ortiz is pointless
-----------------------------------
+---
+layout: post
+title: Removing Carmen Ortiz is pointless
+
+excerpt: The system, not one individual, is to blame for abysmal behavior.
+---
 
 There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann & Scott Garland (assistant us attorneys) from office.
 
