@@ -5,11 +5,17 @@ set -e
 rm -rf tmp/*
 rm -rf furious-earth/*
 mkdir -p tmp
+mkdir -p furious-earth/desktop/
+mkdir -p furious-earth/tablet/
 cd tmp
 
 wget -p http://furious-earth.heroku.com/
-cat furious-earth.heroku.com/index.html | sed 's/\/assets/\/furious-earth/' > ../furious-earth/game.html
+wget -p http://furious-earth.heroku.com/tablet
+
+cat furious-earth.heroku.com/index.html | sed 's/\/assets/\/furious-earth/' > ../furious-earth/desktop/index.html
+cat furious-earth.heroku.com/tablet | sed 's/\/assets/\/furious-earth/' > ../furious-earth/tablet/index.html
 mv furious-earth.heroku.com/assets/* ../furious-earth/
 
 cd ..
 rm -rf tmp/*
+git checkout furious-earth/index.html
