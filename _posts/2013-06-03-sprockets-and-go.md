@@ -14,7 +14,7 @@ Turns out, sprockets is really easy to integrate.
 ## Assets in development
 First things first - lets get to 'it works on my machine'.
 
-I've put together a (sample repo)[https://github.com/DanielHeath/sprockets-sample] using the asset pipeline.
+I've put together a [sample repo](https://github.com/DanielHeath/sprockets-sample) using the asset pipeline.
 
 The setup for your app will be similar:
  * The `assets` folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).
