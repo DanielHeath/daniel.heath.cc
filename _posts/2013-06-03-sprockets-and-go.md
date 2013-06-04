@@ -1,6 +1,6 @@
 ---
 layout: post
-title: The rails asset pipeline: Now for every framework.
+title: The rails asset pipeline - Now for every framework.
 
 excerpt: I integrated sprockets with my framework in an afternoon, and you can too!
 ---
