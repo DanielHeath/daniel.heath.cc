@@ -24,3 +24,6 @@
 .heading-image {
 	padding: 20px;
 }
+.nav-pills.nav-stacked > li > a {
+	border: 1px solid rgb(229, 229, 229);
+}
