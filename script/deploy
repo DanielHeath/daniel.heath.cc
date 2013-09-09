@@ -2,6 +2,6 @@
 
 set -e
 rm -rf _site/*
-jekyll build
+bundle exec jekyll build
 cd _site
 s3cmd sync --force --reduced-redundancy --guess-mime-type --acl-public * s3://daniel.heath.cc
