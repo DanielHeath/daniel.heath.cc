@@ -1,3 +1,9 @@
+---
+layout: post
+title: Questions for prospective employers
+
+excerpt: I've been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.
+---
 I've been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.
 
 ## Corporate

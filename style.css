@@ -116,7 +116,9 @@ h3 a small {
 .page {
   padding-bottom: 84px;
 }
-
+.clear {
+  clear: both;
+}
 
 /* Responsive
 -------------------------------------------------- */
