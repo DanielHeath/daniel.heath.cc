@@ -107,7 +107,8 @@ h3 a small {
 .post ol {
   margin-left: 30px;
 }
-.post-date {
+
+.byline {
   display: block;
   margin: 0px 80px;
   color: #aaa;

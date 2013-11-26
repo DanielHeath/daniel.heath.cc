@@ -1,11 +1,13 @@
 <article class="post span8 offset1 h-entry">
   <h3>
   	<a class="p-name" href="{{ post.url }}">{{ post.title }}</a>
-  	<span
-  		class="small post-date dt-published"
-  		datetime="{{ post.date | date: "%Y-%m-%d %H-%M-%S" }}"
-  	>{{ post.date | date: "%b %e, %Y" }}</span>
-  	<span class="small p-author h-card">Daniel Heath</span>
+  	<div class="byline">
+	  	<span
+	  		class="small post-date dt-published"
+	  		datetime="{{ post.date | date: "%Y-%m-%d %H-%M-%S" }}"
+	  	>{{ post.date | date: "%b %e, %Y" }}</span>
+	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
+  	</div>
   </h3>
 
   <div class="row">
