@@ -3,10 +3,10 @@
 	<head>
 		<meta charset="utf-8"/>
 		<title>{% if page.title %} {{ page.title }} | {% endif %} Sans Bytes</title>
-        <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
-        <link rel="stylesheet" href="/style.css" />
-        <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{site.baseurl}}/feed.xml" />
+		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" href="/style.css" />
+		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{site.baseurl}}/feed.xml" />
 	</head>
 
 	<body>
@@ -24,8 +24,8 @@
 			</header>
 		</div>
 
-	  <div class="row">
-	    <div class="span2">
+	    <div class="row">
+		<div class="span2">
 
 			<ul class="nav nav-pills nav-stacked">
 				<li class="nav-header">Projects</li>
@@ -42,43 +42,45 @@
 				</li>
 			{% endfor %}
 			</ul>
-	    </div>
+		</div>
 
-	    <div class="span10">
+		<div class="span10">
 
 				<div id="content">
 					{{ content }}
 				</div>
-
+			</div>
 	    </div>
-	  </div>
 
-		<footer class="row-fluid page-footer">
+		<footer class="row-fluid page-footer vcard">
+			&copy; 2013
+			<strong class="name fn">Daniel Heath</strong> |
+			<a href="/about">About</a> |
 
-			<address>
-			  &copy; 2013 <strong class="name">Daniel Heath</strong> |
-			  <a href="/about">About</a> |
-			  <a class="email" href="mailto:daniel@heath.cc">Email</a> |
-			  <a href="http://daniel.heath.cc/">Blog</a> |
-			  <a href="https://github.com/DanielHeath">Github</a> |
-			  <a href="https://twitter.com/DanielrHeath">Twitter</a> |
-			  <a href="/resume">Resume</a> |
-			  <a href="https://plus.google.com/114859106574535166251">Google+</a>
+			<address class="adr">
+			    <a class="email" href="mailto:daniel@heath.cc">Email</a> |
+			    <a href="http://daniel.heath.cc/">Blog</a> |
+			    <a href="https://github.com/DanielHeath">Github</a> |
+			    <a href="https://twitter.com/DanielrHeath">Twitter</a> |
+			    <a href="/resume">Resume</a> |
+			    <a href="https://plus.google.com/114859106574535166251">Google+</a> |
+				<a class="url" href="xmpp:daniel@heath.cc">Jabber</a>
+
 			</address>
 		</footer>
 
 		<script type="text/javascript">
 
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-38426219-1']);
-		  _gaq.push(['_setDomainName', 'heath.cc']);
-		  _gaq.push(['_trackPageview']);
+		    var _gaq = _gaq || [];
+		    _gaq.push(['_setAccount', 'UA-38426219-1']);
+		    _gaq.push(['_setDomainName', 'heath.cc']);
+		    _gaq.push(['_trackPageview']);
 
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		  })();
+		    (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		    })();
 
 		</script>
 

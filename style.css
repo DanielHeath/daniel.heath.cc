@@ -119,6 +119,9 @@ h3 a small {
 .clear {
   clear: both;
 }
+address {
+  display: inline;
+}
 
 /* Responsive
 -------------------------------------------------- */

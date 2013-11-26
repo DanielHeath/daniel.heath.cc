@@ -5,7 +5,7 @@ title: About
 
 # About
 
-My name is Daniel Heath. I’m a software developer (usually web development), currently at 99designs.
+My name is Daniel Heath. I’m a software developer (usually web development), currently at realestate.com.au.
 
 My main professional interests are:
  * How existing companies can adapt to compete with tech-savvy startups
