@@ -4,4 +4,4 @@ set -e
 rm -rf _site/*
 bundle exec jekyll build
 cd _site
-s3cmd sync --force --reduced-redundancy --guess-mime-type --acl-public * s3://daniel.heath.cc
+s3cmd sync --config=/Users/daniel.heath/.aws/.s3cfg.blog --force --reduced-redundancy --guess-mime-type --acl-public * s3://daniel.heath.cc
