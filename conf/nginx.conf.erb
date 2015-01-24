@@ -1,0 +1,8 @@
+server {
+    server_name   daniel.heath.cc;
+    listen        <%= ENV['PORT'] %>;
+    daemon        off;
+    location / {
+      root         www;
+    }
+}
