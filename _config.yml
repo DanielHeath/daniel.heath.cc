@@ -13,5 +13,6 @@ permalink: pretty
 exclude:
   - '.bundle'
   - 'conf'
+  - 'bin'
 
 destination: www
