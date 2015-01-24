@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+	<channel>
+		<title>daniel.heath.cc</title>
+		<description>Daniel Heath - Blog</description>
+		<link>http://daniel.heath.cc</link>
+		
+			<item>
+				<title>Postgres features for Ruby developers</title>
+				<description>&lt;h2 id=&quot;about-postgres&quot;&gt;About postgres&lt;/h2&gt;
+
+&lt;p&gt;Postgres is a relational database which is
+widely used by Ruby developers.&lt;/p&gt;
+
+&lt;p&gt;For instance, it’s the default database for Heroku (a popular
+hosting provider for Ruby apps).&lt;/p&gt;
+
+&lt;p&gt;Like most databases, postgres uses standard SQL.
+It also offers many features which
+are not available in most other databases.&lt;/p&gt;
+
+&lt;p&gt;I’m going to provide a high-level overview of features
+here without providing much detail.
+If you have questions, the &lt;a href=&quot;http://www.postgresql.org/docs/current/static/sql.html&quot;&gt;online documentation for postgres&lt;/a&gt; is
+comprehensive, useful, and up to date.&lt;/p&gt;
+
+&lt;h2 id=&quot;overview-of-features&quot;&gt;Overview of Features&lt;/h2&gt;
+
+&lt;h3 id=&quot;uuid-columns&quot;&gt;UUID columns&lt;/h3&gt;
+
+&lt;p&gt;By default, Rails gives you tables with an integer ID.
+This ID is always generated when you create a new
+record - you can’t specify the value for a new records ID.&lt;/p&gt;
+
+&lt;p&gt;Postgres supports using a Universally Unique ID (UUID) instead.&lt;/p&gt;
+
+&lt;p&gt;UUIDs look like this: &lt;code&gt;93743318-67f4-4c29-8ba0-5ba4f667c7b2&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;This can be a useful alternative because it lets you specify
+the ID, but will still generate an ID if you don’t specify one.&lt;/p&gt;
+
+&lt;h3 id=&quot;text-search&quot;&gt;Text Search&lt;/h3&gt;
+
+&lt;p&gt;Some apps need fulltext search, but running a separate search engine
+is hard. Postgres has a reasonably good quality text-search engine built in.&lt;/p&gt;
+
+&lt;p&gt;You’ll need to spend some time perusing the documentation to use this - every
+app is different and you’ll need to configure the search to suit your needs.&lt;/p&gt;
+
+&lt;h3 id=&quot;spatial-data&quot;&gt;Spatial data&lt;/h3&gt;
+
+&lt;p&gt;One of the most commonly used extensions to postgres is called PostGIS.
+This lets you store geographic data (e.g. points or areas on a map).&lt;/p&gt;
+
+&lt;p&gt;You can then write queries to find (e.g.) what’s
+within 10km of this point, with the closest points first.&lt;/p&gt;
+
+&lt;h3 id=&quot;scaling&quot;&gt;Scaling&lt;/h3&gt;
+
+&lt;p&gt;Most web applications using postgres will have one server
+dedicated to running postgres, with other servers running
+the web application.&lt;/p&gt;
+
+&lt;p&gt;As the amount of data you’re dealing with increases,
+the database server can become overloaded.&lt;/p&gt;
+
+&lt;p&gt;There are three common approaches to avoiding this:&lt;/p&gt;
+
+&lt;h4 id=&quot;throw-money-at-it&quot;&gt;Throw money at it&lt;/h4&gt;
+
+&lt;p&gt;The easiest answer is usually “buy more ram/CPU/disk”.&lt;/p&gt;
+
+&lt;h4 id=&quot;partitioning-via-child-tables&quot;&gt;Partitioning via Child Tables&lt;/h4&gt;
+
+&lt;p&gt;Partitioning lets you use multiple servers, storing part of your data on each of them.&lt;/p&gt;
+
+&lt;p&gt;This technique helps you scale a database which is overloaded
+due to too many &lt;code&gt;update&lt;/code&gt;, &lt;code&gt;delete&lt;/code&gt; &amp;amp; &lt;code&gt;insert&lt;/code&gt; commands.&lt;/p&gt;
+
+&lt;p&gt;For instance, all records where the &lt;code&gt;name&lt;/code&gt; field starts from A through F
+will go to one server, G through P to a second, and the remainder to a third.&lt;/p&gt;
+
+&lt;p&gt;You can achieve this using a feature called child tables (the documentation has good examples).&lt;/p&gt;
+
+&lt;h4 id=&quot;replication&quot;&gt;Replication&lt;/h4&gt;
+
+&lt;p&gt;Replication lets you use multiple servers, storing all of your data on each of them.
+Only one of the servers is allowed to handle &lt;code&gt;update&lt;/code&gt;, &lt;code&gt;insert&lt;/code&gt; or &lt;code&gt;delete&lt;/code&gt; queries.&lt;/p&gt;
+
+&lt;p&gt;This technique helps you scale a database which is overloaded
+due to too many &lt;code&gt;select&lt;/code&gt; queries running at once.&lt;/p&gt;
+
+&lt;p&gt;It is also good because each server has a full copy of the database,
+meaning that if the primary database fails, you can
+quickly switch to one of the replica servers.&lt;/p&gt;
+
+&lt;p&gt;Most modern databases, including Postgres, have good
+support for replication.&lt;/p&gt;
+
+&lt;h3 id=&quot;arrays-and-hashes-and-json-oh-my-xml-too&quot;&gt;Arrays and Hashes and JSON, oh my! (XML too)&lt;/h3&gt;
+
+&lt;h4 id=&quot;arrays&quot;&gt;Arrays&lt;/h4&gt;
+
+&lt;p&gt;A column in an SQL table has a type (e.g. string, integer, timestamp).
+Postgres also lets you can create a column which stores an array of
+strings, or timestamps, or any other type (even arrays of arrays!).&lt;/p&gt;
+
+&lt;p&gt;If you’re using Rails with ActiveRecord, these arrays
+work like normal Ruby arrays.&lt;/p&gt;
+
+&lt;h4 id=&quot;hashes-via-hstore&quot;&gt;Hashes (via HSTORE)&lt;/h4&gt;
+
+&lt;p&gt;Similarly to arrays, you can store hashes like &lt;code&gt;{&#39;foo&#39; =&amp;gt; &#39;bar&#39;, &#39;k&#39; =&amp;gt; &#39;v&#39;}&lt;/code&gt;
+This works like a normal Ruby hash through ActiveRecord, except you can
+only use strings for the keys and values.&lt;/p&gt;
+
+&lt;h4 id=&quot;json&quot;&gt;JSON&lt;/h4&gt;
+
+&lt;p&gt;Postgres has a JSON type which can store any JSON value.
+ActiveRecord makes this work nicely with Ruby (with caveats;
+it can’t tell that the JSON has changed when
+you modify part of a nested structure).&lt;/p&gt;
+
+&lt;p&gt;You can query your JSON data using postgres built-in functions.&lt;/p&gt;
+
+&lt;h4 id=&quot;xml&quot;&gt;XML&lt;/h4&gt;
+
+&lt;p&gt;The XML type will stop you from accidentally storing something which
+is not valid XML. This is better than just using a string field, as
+you can be sure that the data you have stored is valid XML.&lt;/p&gt;
+
+&lt;p&gt;You can query your XML data using XPATH selectors.&lt;/p&gt;
+
+&lt;h3 id=&quot;stored-procedures&quot;&gt;Stored procedures&lt;/h3&gt;
+
+&lt;p&gt;Postgres lets you create stored procedures (functions written in SQL).&lt;/p&gt;
+
+&lt;p&gt;You can write these functions in other languages if you have the right
+extensions installed; for instance, the V8 Postgres extension lets you
+write stored procedures in Javascript. There is also a Ruby extension.&lt;/p&gt;
+
+&lt;p&gt;Writing stored procedures in Javascript is clearly a good idea which
+will not upset your teammates.&lt;/p&gt;
+
+&lt;h3 id=&quot;indexing&quot;&gt;Indexing&lt;/h3&gt;
+
+&lt;p&gt;Big database tables can be hundreds of gigabytes, and it can take a long
+time to scan through all that data to find the record you’re looking for.&lt;/p&gt;
+
+&lt;p&gt;An index is a much smaller file which can be scanned quickly and tells
+the database where to find the records which match a query.&lt;/p&gt;
+
+&lt;p&gt;Practically all databases support some kind of indexing.&lt;/p&gt;
+
+&lt;h4 id=&quot;partial-indexes&quot;&gt;Partial indexes&lt;/h4&gt;
+
+&lt;p&gt;Unlike other databases, postgres lets you create an index with a
+&lt;code&gt;where&lt;/code&gt; condition (e.g. &lt;code&gt;create index (...) where (condition)&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;This means that the index file can be even smaller and quicker to use.&lt;/p&gt;
+
+&lt;h4 id=&quot;expression-indexes&quot;&gt;Expression indexes&lt;/h4&gt;
+
+&lt;p&gt;Postgres also allows you to create an index on any expression (not just a column).
+This means you can do things like &lt;code&gt;create index index_name on table_name ( to_uppercase(description) )&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;ddl-transactions&quot;&gt;DDL Transactions&lt;/h3&gt;
+
+&lt;p&gt;This feature protects you when running migrations.&lt;/p&gt;
+
+&lt;p&gt;In other databases, if a migration fails part-way through, the database
+can be left half-way between the old state and the new state. Postgres
+stops this from happening - migrations either succeed completely, or
+do nothing at all.&lt;/p&gt;
+
+&lt;h3 id=&quot;constraints--deferred-constraints&quot;&gt;Constraints &amp;amp; Deferred constraints&lt;/h3&gt;
+
+&lt;p&gt;Many databases support constraints (like validations built into the database).&lt;/p&gt;
+
+&lt;p&gt;However, they are often hard to use because they can’t be broken, even temporarily.&lt;/p&gt;
+
+&lt;p&gt;Postgres supports &lt;code&gt;deferred&lt;/code&gt; constraints, which only apply when you commit a transaction.
+This makes constraints far more usable with Rails.&lt;/p&gt;
+
+&lt;h3 id=&quot;foreign-tables&quot;&gt;Foreign Tables&lt;/h3&gt;
+
+&lt;p&gt;Foreign tables let you run join queries against tables which are in
+a totally different database (e.g. MySql or any JDBC database).&lt;/p&gt;
+
+&lt;p&gt;Handy when dealing with really big, organically grown systems.&lt;/p&gt;
+</description>
+				<published>2014-08-27 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2014/08/27/postgres-features-in-20-minutes/</link>
+			</item>
+		
+			<item>
+				<title>Questions for prospective employers</title>
+				<description>&lt;p&gt;I’ve been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.&lt;/p&gt;
+
+&lt;h2 id=&quot;corporate&quot;&gt;Corporate&lt;/h2&gt;
+
+&lt;p&gt;How many large customers? How many small ones? How much variance in customer spend is there? (companies with few large customers are probably going to work on whatever those customers tell them to work on; if they have many small customers and don’t  A/B test something might be wrong)&lt;/p&gt;
+
+&lt;p&gt;Org chart: How many sales / dev / product / UX / admin?&lt;/p&gt;
+
+&lt;p&gt;Has the team released any interesting OSS in the last year (on work time)?&lt;/p&gt;
+
+&lt;p&gt;Has the team released any interesting OSS in the last year (on their own time)?&lt;/p&gt;
+
+&lt;p&gt;How much pairing do you do and when/why do you do it?&lt;/p&gt;
+
+&lt;p&gt;How/when do you do code reviews? During pairing?&lt;/p&gt;
+
+&lt;h2 id=&quot;code&quot;&gt;Code&lt;/h2&gt;
+
+&lt;p&gt;What’s your take on test coverage?&lt;/p&gt;
+
+&lt;p&gt;What quality metrics do you use?&lt;/p&gt;
+
+&lt;p&gt;Do you enforce a styleguide? How?&lt;/p&gt;
+
+&lt;p&gt;What languages &amp;amp; frameworks do you use?&lt;/p&gt;
+
+&lt;p&gt;How long does a typical CI build take?
+How long does a typical local build take?&lt;/p&gt;
+
+&lt;p&gt;What techniques do you use to keep tests running fast? (e.g. parallel tests, GC tweaks, avoiding I/O)&lt;/p&gt;
+
+&lt;p&gt;How many code repositories? apps?&lt;/p&gt;
+
+&lt;h2 id=&quot;devops&quot;&gt;Devops&lt;/h2&gt;
+&lt;p&gt;How similar is your development environment to production?&lt;/p&gt;
+
+&lt;p&gt;How many architectural pieces are there (appworker, queue, cache, database)?&lt;/p&gt;
+
+&lt;p&gt;How many of these are outsourced vs self run (e.g. are you using RDS/heroku PG, or running mysql/postgres yourselves? Do you run your own queue or use iron.io?)&lt;/p&gt;
+
+&lt;p&gt;How often do you deploy? Continuous delivery? Fortnightly sprints?&lt;/p&gt;
+
+&lt;p&gt;How many production-like environments do you have (eg staging, uat)?&lt;/p&gt;
+
+&lt;p&gt;How long from ‘lets deploy’ to ‘done’?&lt;/p&gt;
+
+&lt;p&gt;How long to roll-back from a bad deploy?&lt;/p&gt;
+
+&lt;p&gt;How many servers are you running?&lt;/p&gt;
+
+&lt;p&gt;How many kinds of server are you running (db, cache, web, ci, SCM hosting…)?&lt;/p&gt;
+
+&lt;p&gt;Cloud or self-hosted (or something else)?&lt;/p&gt;
+
+&lt;h2 id=&quot;team--culture&quot;&gt;Team &amp;amp; Culture&lt;/h2&gt;
+
+&lt;p&gt;How is the team organised? Small groups? Heirarchy? Triads?
+How do the dev team decide what to work on?
+How do you stay in sync across multiple locations (if applicable)?
+How do the team keep each other informed (eg email/chat/face-to-face)?&lt;/p&gt;
+
+&lt;p&gt;How often do you use A/B testing to determine whether a change stays? Who makes the call on what to test?&lt;/p&gt;
+
+&lt;p&gt;How do you set up a new development environment?&lt;/p&gt;
+
+</description>
+				<published>2013-10-03 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2013/10/03/questions-for-prospective-employers/</link>
+			</item>
+		
+			<item>
+				<title>Learning Go</title>
+				<description>&lt;p&gt;I’ve been using Go fulltime for ~9 months now.&lt;/p&gt;
+
+&lt;p&gt;The big differences I’ve noticed coming from Ruby:&lt;/p&gt;
+
+&lt;h2 id=&quot;imports&quot;&gt;Imports&lt;/h2&gt;
+
+&lt;p&gt;Imports can’t clobber the global namespace or change the behavior of other packages (unless those packages were designed to allow it).&lt;/p&gt;
+
+&lt;p&gt;Only types/methods that are exported by a package are available when you import it.&lt;/p&gt;
+
+&lt;h2 id=&quot;static-language&quot;&gt;Static language&lt;/h2&gt;
+&lt;p&gt;There’s no monkey patching.
+When writing packages, export interfaces, not types (to make testing possible).&lt;/p&gt;
+
+&lt;h2 id=&quot;composition-not-inheritance&quot;&gt;Composition, not inheritance&lt;/h2&gt;
+&lt;p&gt;Go has no classes. Group data together using structs.&lt;/p&gt;
+
+&lt;p&gt;Any type can have methods. E.G.&lt;/p&gt;
+
+ 	type Foo string
+ 	func(f Foo) Print() { fmt.Println(f) }
+ 	Foo(“a string”).Print() # Prints “a string”
+
+ 	type Bar struct { str string }
+ 	func(b Bar) Print() { fmt.Println(b.str) }
+ 	Bar{“A different string”}.Print() # Prints “A different string”
+
+&lt;p&gt;Important differences moving from ruby to go:
+* Code re-use via composition feels very natural coming from ruby.
+ * Where you would have used a module Foo in ruby, embed an interface Foo in go.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Because imports can’t interfere with one another, many small dependencies is not a problem. Compose your app from many small frameworks rather than using one large one.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Monitoring is back in the dark ages (No newrelic). Plan accordingly.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<published>2013-06-23 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2013/06/23/learning-go/</link>
+			</item>
+		
+			<item>
+				<title>The rails asset pipeline - Now for every framework.</title>
+				<description>&lt;p&gt;I recently found myself wanting the features of the rails asset pipeline in my golang project at work.&lt;/p&gt;
+
+&lt;p&gt;Since there isn’t much in the way of asset pipelining for golang yet, I built it.&lt;/p&gt;
+
+&lt;p&gt;Turns out, sprockets is really easy to integrate.&lt;/p&gt;
+
+&lt;h2 id=&quot;assets-in-development&quot;&gt;Assets in development&lt;/h2&gt;
+&lt;p&gt;First things first - lets get to ‘it works on my machine’.&lt;/p&gt;
+
+&lt;p&gt;I’ve put together a &lt;a href=&quot;https://github.com/DanielHeath/sprockets-sample&quot;&gt;sample repo&lt;/a&gt; using the asset pipeline.&lt;/p&gt;
+
+&lt;p&gt;The setup for your app will be similar:
+ * The &lt;code&gt;assets&lt;/code&gt; folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).
+ * You’ll need a similar &lt;code&gt;Rakefile&lt;/code&gt; to build assets (and maybe launch the server)
+ * You might store the &lt;code&gt;sprockets&lt;/code&gt; directory somewhere else - update the &lt;code&gt;Rakefile&lt;/code&gt; to match.
+ * Use a Gemfile and the bundler rubygem to manage dependencies.
+ * Edit the rakefile to change the port the asset server runs on.&lt;/p&gt;
+
+&lt;p&gt;When your app starts (in development), it should make a request to &lt;code&gt;http://localhost:11111/assets/manifest.json&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Parse this JSON hash; the keys are asset names (eg “application.css”) and the values are relative URLs the compiled assets can be fetched from.&lt;/p&gt;
+
+&lt;p&gt;When generating a link to an asset in your app, use the JSON hash you fetched to lookup the URL. In the case of “application.css” this might look like &lt;code&gt;http://localhost:11111/application-8e5bf6909b33895a72899ee43f5a9d53.css&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;That should be all you need for development - you should be able to see SASS/Coffeescript assets compiled and loading normally.&lt;/p&gt;
+
+&lt;h2 id=&quot;assets-in-production&quot;&gt;Assets in production&lt;/h2&gt;
+&lt;p&gt;For production we want to pre-compile assets rather than regenerating them each time they change.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;rake assets&lt;/code&gt; will create a ‘public’ folder containing ‘manifest.json’ (same format as before).
+Get this directory onto your production servers (&lt;code&gt;git add -Af public/&lt;/code&gt; will add it to source control if you deploy via git).&lt;/p&gt;
+
+&lt;p&gt;When generating a link to an asset, look up manifest.json (the same as in development, but from the filesystem instead of over HTTP).&lt;/p&gt;
+
+&lt;h2 id=&quot;fin&quot;&gt;Fin&lt;/h2&gt;
+
+&lt;p&gt;The whole thing, including deployment, took me well under a day to add to our app.
+The resulting assets are minified, concatenated, and gzipped (for size).
+They are also fingerprinted (so you can set an unlimited cache lifetime).&lt;/p&gt;
+</description>
+				<published>2013-06-03 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2013/06/03/sprockets-and-go/</link>
+			</item>
+		
+			<item>
+				<title>Removing Carmen Ortiz is pointless</title>
+				<description>&lt;p&gt;There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp;amp; Scott Garland (assistant us attorneys) from office.&lt;/p&gt;
+
+&lt;p&gt;It’s natural to want the wrongdoer to be punished when their behavior causes something as awful as Aarons death.
+It’s also unhelpful, and a waste of energy that could be directed towards preventing future cases like this.&lt;/p&gt;
+
+&lt;p&gt;Ortiz, Heymann and Garland reacted the same way you or I would.
+This is a controversial position because few people like the idea that they could become that kind of amoral scoundrel.
+However, almost all human beings derive their sense of right and wrong from those around them.&lt;/p&gt;
+
+&lt;p&gt;The US attorneys office promotes those who successfully prosecute high-profile cases. 
+That is the metric by which success is judged, and Ortiz (and other US attorneys) have adjusted their behavior to optimize for this.&lt;/p&gt;
+
+&lt;p&gt;As long as prosecutorial overreach results in promotions (and is only infrequently punished, however severely) we are going to keep seeing US attorneys behaving like this.&lt;/p&gt;
+
+&lt;p&gt;The solution isn’t to fire more attorneys. &lt;/p&gt;
+
+&lt;p&gt;So here’s my question: 
+What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?&lt;/p&gt;
+</description>
+				<published>2013-03-19 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/03/19/removing-cortiz-is-pointless/</link>
+			</item>
+		
+			<item>
+				<title>Push vs Pull</title>
+				<description>&lt;h2 id=&quot;team-structure-and-productivity&quot;&gt;Team structure and productivity&lt;/h2&gt;
+
+&lt;p&gt;When a manager publicly assigns a task to someone (eg in jira, or pivotal, or on a card wall),
+they are publicly attaching that employee to an expectation that the task will be completed.&lt;/p&gt;
+
+&lt;p&gt;Humans are susceptible to a cognitive bias in this situation; they naturally want to please (and be seen to please) their manager.
+The problem with this bias is that other important activities (eg maintaining a holistic view of the system, bugfixes, toolchain improvements, assisting others) are not prioritised fairly.&lt;/p&gt;
+
+&lt;p&gt;As a result, employees micro-optimize for their current task (eg by not helping others, creating/ignoring bugs, not testing their work carefully). This is particularly the case when the current task is behind its expected completion date.&lt;/p&gt;
+
+&lt;h2 id=&quot;an-alternative&quot;&gt;An alternative&lt;/h2&gt;
+&lt;p&gt;In the LPOS team at Lonely Planet, we adopted a different approach.&lt;/p&gt;
+
+&lt;p&gt;The entire team were involved in prioritisation meetings weekly (lead by management), to produce a single, prioritised queue of tasks - features, bugfixes, you name it. 
+They were totally optional (about half the development team came to any given meeting).&lt;/p&gt;
+
+&lt;p&gt;Developers (collectively) became responsible for getting the highest-priority things completed as quickly as possible.&lt;/p&gt;
+
+&lt;p&gt;This avoids the bias described earlier: now, when a task drags out, the whole team hold collective responsibility (and everyone wants to know how they can help).&lt;/p&gt;
+
+&lt;p&gt;Developers no longer prioritise multiple incoming streams of work (eg features/bugs/support requests), but instead assist management in evaluating priorities for the queue.&lt;/p&gt;
+
+&lt;p&gt;Spending time on improving tools so the whole team benefits no longer requires putting aside ‘your’ work.&lt;/p&gt;
+
+&lt;p&gt;Did it make all our problems go away? Of course not. &lt;/p&gt;
+
+&lt;p&gt;Would it work with 15-20 developers? I would love to find out.&lt;/p&gt;
+
+&lt;p&gt;We shipped more software after the change, and our users were thrilled.&lt;/p&gt;
+
+&lt;h2 id=&quot;followup&quot;&gt;Followup&lt;/h2&gt;
+
+&lt;p&gt;I’d like to thank &lt;a href=&quot;http://twitter.com/brentsnook&quot;&gt;Brent Snook&lt;/a&gt; for some really insightful observations which I’ve incorporated into this original article.&lt;/p&gt;
+
+&lt;p&gt;Paraphrasing from his response:&lt;/p&gt;
+
+&lt;div class=&quot;well&quot;&gt;
+  &lt;p&gt;
+    There is a definite difference when everyone feels like they own prioritisation and agree on the importance of what they are doing next.
+  &lt;/p&gt;
+  &lt;p&gt;
+    When you go through the process of evaluating pieces of work against others, your goal becomes to solve that important problem in the context of delivering a product.
+  &lt;/p&gt;
+  &lt;p&gt;
+    We gained a more holistic view of the problem we were solving, which helped us avoid micro-optimization.
+  &lt;/p&gt;
+&lt;/div&gt;
+</description>
+				<published>2013-02-11 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/02/11/push-vs-pull/</link>
+			</item>
+		
+			<item>
+				<title>Thanks</title>
+				<description>&lt;p&gt;In no particular order, I want to give a quick shout-out to the technologies that make this blog easy to build.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cloudflare CDN - These guys are fantastic. I use their free plan on this blog for DNS hosting and speed&lt;/li&gt;
+  &lt;li&gt;S3 - Cheap storage, not especially fast for serving a website (hence the CDN).&lt;/li&gt;
+  &lt;li&gt;Jekyll - The gold standard for static blogs.&lt;/li&gt;
+  &lt;li&gt;Git - Keeps track of every version of everything I write.&lt;/li&gt;
+  &lt;li&gt;Bootstrap - You have &lt;em&gt;no idea&lt;/em&gt; how bad this site looked without it.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Thanks also to Ben Schwarz who recently posted &lt;a href=&quot;http://germanforblack.com/post/41918581806/how-i-deploy-a-static-site-or-assets-to-s3&quot;&gt;his s3 deploy script&lt;/a&gt; (which I shamelessly copied) - saved me digging through the documentation.&lt;/p&gt;
+
+&lt;p&gt;Not to mention the constellation of other open source software which supports everything I do - from curl/sed to postgres/sendmail to ruby/go/gcc to linux/bsd. To every OSS developer out there - thank you!&lt;/p&gt;
+</description>
+				<published>2013-02-10 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/02/10/static-sites-on-s3/</link>
+			</item>
+		
+			<item>
+				<title>Distributed Teams</title>
+				<description>&lt;p&gt;I got into a conversation a couple of weeks back about distributed teams.
+It seemed that almost everyone had a story of a team where someone had started working remotely and the results had not been positive.&lt;/p&gt;
+
+&lt;p&gt;As I see it, the problem is most people prefer in-person interaction (and this biases decisions about who to communicate with).&lt;/p&gt;
+
+&lt;p&gt;This bias results in remote workers being left out and prevents them from contributing as fully as they otherwise could.&lt;/p&gt;
+
+&lt;p&gt;When any one person on your team is working remotely, communication within the team needs to be done online - even when you’re right next to the rest of the team.&lt;/p&gt;
+
+&lt;p&gt;Otherwise, your remote workers will slowly become disconnected from your on-site workers.&lt;/p&gt;
+
+&lt;p&gt;99designs uses basecamp, github, email, an internal chatroom and instant messenging. Chat is the preferred way to get in touch, even for developers on the same floor. As a result, remote workers are looped in despite being spread over several offices in different time zones and countries.&lt;/p&gt;
+</description>
+				<published>2013-02-09 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/02/09/distributed-teams/</link>
+			</item>
+		
+			<item>
+				<title>Fast tests with PhantomJS</title>
+				<description>&lt;p&gt;date: 22/08/2011&lt;/p&gt;
+
+&lt;p&gt;So, I write (and run) javascript tests a lot.&lt;/p&gt;
+
+&lt;p&gt;I run javascript specs by serving them as part of a page.
+This lets me use the browser tools (debugger/inspector etc)
+It also means that the specs are running on the same platform as the code (no bugs that only happen in the specs).&lt;/p&gt;
+
+&lt;p&gt;To run these in CI, I wrote a &lt;a href=&quot;/examples/jasmine_runner.rake.txt&quot;&gt;script using capybara&lt;/a&gt;.
+It visits the URL for each of the spec files and scrapes the pages to determine success/failure.
+However, it was slow - the suite for our app took over 100 seconds.&lt;/p&gt;
+
+&lt;p&gt;So I sat down and hacked together &lt;a href=&quot;/examples/jasmine_runner.coffee.txt&quot;&gt;a faster script&lt;/a&gt;.
+Rather than completely replacing my CI script, I just got it running a single test file.
+This individual specs running about 5 times faster.&lt;/p&gt;
+
+&lt;p&gt;Then I realised that without the overhead of loading a firefox instance, there was no reason not to run all the specs in parallel. Some quick shell scripting and I was there:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;find public/spec/integration -iname *.js | grep -v _spec_helper.js | sed s/^public.spec.//g | xargs -L1 -P30 ./lib/tasks/phantom_runner.coffee
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hey presto! the entire suite ran in under 7 seconds, even on my ancient, groaning hardware.&lt;/p&gt;
+
+&lt;p&gt;Next, I set up &lt;a href=&quot;https://github.com/DanielHeath/JasmineCoffee.tmbundle&quot;&gt;a textmate bundle&lt;/a&gt; so I could hit command-R to launch the spec in a browser, and command-D to run it using phantom.
+Then, I set up a &lt;a href=&quot;/examples/jasmine_runner.guardfile.txt&quot;&gt;Guardfile&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Now I’m wondering if I could fork from within PhantomJS to speed things up further - but that’s a post for another day.&lt;/p&gt;
+</description>
+				<published>2011-08-22 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2011/08/22/fast-tests-with-phantomjs/</link>
+			</item>
+		
+			<item>
+				<title>Testing web applications</title>
+				<description>&lt;p&gt;As a followup to my last post - a description of how I test my work.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-do-you-need-out-of-a-webapp-test-suite&quot;&gt;What do you need out of a webapp test suite&lt;/h2&gt;
+
+&lt;p&gt;Must haves:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run tests in a real browser&lt;/li&gt;
+  &lt;li&gt;Inspect test state using a debugger to track down the reason for failures&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Nice to have:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run your entire suite fast (See next post)&lt;/li&gt;
+  &lt;li&gt;When you save a spec file, it runs and pops up a notification with the result (See next post)&lt;/li&gt;
+  &lt;li&gt;When you save a code file, it runs the associated test and pops up a notification with the result&lt;/li&gt;
+  &lt;li&gt;Run specific tests&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;setting-up-the-basics&quot;&gt;Setting up the basics&lt;/h2&gt;
+&lt;p&gt;To get started testing, I’ve found jasmine.js is pretty awesome.
+You should be able to get up and running with it fairly quickly; I’ve found the following approach works well:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Write a hello world spec that has one failing and one passing test&lt;/li&gt;
+  &lt;li&gt;Put it in &lt;code&gt;spec/jasmine/hello_world_spec.coffee&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;I’ve got a very simple &lt;code&gt;spec_controller.rb&lt;/code&gt;, which
+    &lt;ul&gt;
+      &lt;li&gt;Is only available when RAILS_ENV is development&lt;/li&gt;
+      &lt;li&gt;Serves up &lt;a href=&quot;/examples/jasmine_runner.html.erb.txt&quot;&gt;an html page&lt;/a&gt; with
+        &lt;ul&gt;
+          &lt;li&gt;jasmine and jasmine-html&lt;/li&gt;
+          &lt;li&gt;All the javascript for my app (except the application starter file)&lt;/li&gt;
+          &lt;li&gt;Test-specific css styles&lt;/li&gt;
+          &lt;li&gt;DOM fixtures&lt;/li&gt;
+          &lt;li&gt;The actual test&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Here’s the html.erb template I use:&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Serve spec files out of /spec when your app is in development mode.&lt;/li&gt;
+  &lt;li&gt;Run specs by visiting &lt;code&gt;http://localhost/spec?spec_file=hello_world_spec&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;You can now run the specs manually; a good start&lt;/li&gt;
+  &lt;li&gt;I use &lt;a href=&quot;/examples/jasmine_runner.rake.txt&quot;&gt;a capybara script&lt;/a&gt; in a rake task to run the specs in CI.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;next-time&quot;&gt;Next time&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;How to set up phantomjs, autotest (with growl/libnotify) to run your tests&lt;/li&gt;
+  &lt;li&gt;My textmate bundle for jasmine / coffeescript development&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+				<published>2011-08-21 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2011/08/21/testing-web-applications/</link>
+			</item>
+		
+	</channel>
+</rss>
