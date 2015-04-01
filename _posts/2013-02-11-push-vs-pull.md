@@ -19,7 +19,7 @@ As a result, employees micro-optimize for their current task (eg by not helping 
 ## An alternative
 In the LPOS team at Lonely Planet, we adopted a different approach.
 
-The entire team were involved in prioritisation meetings weekly (lead by management), to produce a single, prioritised queue of tasks - features, bugfixes, you name it. 
+The entire team were involved in prioritisation meetings weekly (lead by management), to produce a single, prioritised queue of tasks - features, bugfixes, you name it.
 They were totally optional (about half the development team came to any given meeting).
 
 Developers (collectively) became responsible for getting the highest-priority things completed as quickly as possible.
@@ -30,9 +30,9 @@ Developers no longer prioritise multiple incoming streams of work (eg features/b
 
 Spending time on improving tools so the whole team benefits no longer requires putting aside 'your' work.
 
-Did it make all our problems go away? Of course not. 
+Did it make all our problems go away? Of course not.
 
-Would it work with 15-20 developers? I would love to find out.
+Would it work with 15-20 developers? I would love to find out (we had 6-10 at various times on the project, with 0-2 testers).
 
 We shipped more software after the change, and our users were thrilled.
 
