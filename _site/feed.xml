@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
-  <channel>
-    <title>daniel.heath.cc</title>
-    <description>Daniel Heath - Blog</description>
-    <link>http://daniel.heath.cc</link>
-    
-      <item>
-        <title>Postgres features for Ruby developers</title>
-        <description>&lt;h2 id=&quot;about-postgres&quot;&gt;About postgres&lt;/h2&gt;
+	<channel>
+		<title>daniel.heath.cc</title>
+		<description>Daniel's stuff</description>
+		<link>http://daniel.heath.cc</link>
+		
+			<item>
+				<title>Postgres features for Ruby developers</title>
+				<description>&lt;h2 id=&quot;about-postgres&quot;&gt;About postgres&lt;/h2&gt;
 
 &lt;p&gt;Postgres is a relational database which is
 widely used by Ruby developers.&lt;/p&gt;
@@ -189,13 +189,13 @@ a totally different database (e.g. MySql or any JDBC database).&lt;/p&gt;
 
 &lt;p&gt;Handy when dealing with really big, organically grown systems.&lt;/p&gt;
 </description>
-        <published>2014-08-27 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2014/08/27/postgres-features-in-20-minutes/</link>
-      </item>
-    
-      <item>
-        <title>Questions for prospective employers</title>
-        <description>&lt;p&gt;I’ve been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.&lt;/p&gt;
+				<published>2014-08-27 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2014/08/27/postgres-features-in-20-minutes/</link>
+			</item>
+		
+			<item>
+				<title>Questions for prospective employers</title>
+				<description>&lt;p&gt;I’ve been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.&lt;/p&gt;
 
 &lt;h2 id=&quot;corporate&quot;&gt;Corporate&lt;/h2&gt;
 
@@ -261,13 +261,13 @@ How do the team keep each other informed (eg email/chat/face-to-face)?&lt;/p&gt;
 &lt;p&gt;How do you set up a new development environment?&lt;/p&gt;
 
 </description>
-        <published>2013-10-03 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2013/10/03/questions-for-prospective-employers/</link>
-      </item>
-    
-      <item>
-        <title>Learning Go</title>
-        <description>&lt;p&gt;I’ve been using Go fulltime for ~9 months now.&lt;/p&gt;
+				<published>2013-10-03 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2013/10/03/questions-for-prospective-employers/</link>
+			</item>
+		
+			<item>
+				<title>Learning Go</title>
+				<description>&lt;p&gt;I’ve been using Go fulltime for ~9 months now.&lt;/p&gt;
 
 &lt;p&gt;The big differences I’ve noticed coming from Ruby:&lt;/p&gt;
 
@@ -307,13 +307,13 @@ When writing packages, export interfaces, not types (to make testing possible).&
   &lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <published>2013-06-23 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2013/06/23/learning-go/</link>
-      </item>
-    
-      <item>
-        <title>The rails asset pipeline - Now for every framework.</title>
-        <description>&lt;p&gt;I recently found myself wanting the features of the rails asset pipeline in my golang project at work.&lt;/p&gt;
+				<published>2013-06-23 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2013/06/23/learning-go/</link>
+			</item>
+		
+			<item>
+				<title>The rails asset pipeline - Now for every framework.</title>
+				<description>&lt;p&gt;I recently found myself wanting the features of the rails asset pipeline in my golang project at work.&lt;/p&gt;
 
 &lt;p&gt;Since there isn’t much in the way of asset pipelining for golang yet, I built it.&lt;/p&gt;
 
@@ -353,13 +353,13 @@ Get this directory onto your production servers (&lt;code&gt;git add -Af public/
 The resulting assets are minified, concatenated, and gzipped (for size).
 They are also fingerprinted (so you can set an unlimited cache lifetime).&lt;/p&gt;
 </description>
-        <published>2013-06-03 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2013/06/03/sprockets-and-go/</link>
-      </item>
-    
-      <item>
-        <title>Removing Carmen Ortiz is pointless</title>
-        <description>&lt;p&gt;There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp;amp; Scott Garland (assistant us attorneys) from office.&lt;/p&gt;
+				<published>2013-06-03 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2013/06/03/sprockets-and-go/</link>
+			</item>
+		
+			<item>
+				<title>Removing Carmen Ortiz is pointless</title>
+				<description>&lt;p&gt;There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp;amp; Scott Garland (assistant us attorneys) from office.&lt;/p&gt;
 
 &lt;p&gt;It’s natural to want the wrongdoer to be punished when their behavior causes something as awful as Aarons death.
 It’s also unhelpful, and a waste of energy that could be directed towards preventing future cases like this.&lt;/p&gt;
@@ -378,13 +378,13 @@ That is the metric by which success is judged, and Ortiz (and other US attorneys
 &lt;p&gt;So here’s my question: 
 What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?&lt;/p&gt;
 </description>
-        <published>2013-03-19 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/03/19/removing-cortiz-is-pointless/</link>
-      </item>
-    
-      <item>
-        <title>Push vs Pull</title>
-        <description>&lt;h2 id=&quot;team-structure-and-productivity&quot;&gt;Team structure and productivity&lt;/h2&gt;
+				<published>2013-03-19 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/03/19/removing-cortiz-is-pointless/</link>
+			</item>
+		
+			<item>
+				<title>Push vs Pull</title>
+				<description>&lt;h2 id=&quot;team-structure-and-productivity&quot;&gt;Team structure and productivity&lt;/h2&gt;
 
 &lt;p&gt;When a manager publicly assigns a task to someone (eg in jira, or pivotal, or on a card wall),
 they are publicly attaching that employee to an expectation that the task will be completed.&lt;/p&gt;
@@ -397,7 +397,7 @@ The problem with this bias is that other important activities (eg maintaining a 
 &lt;h2 id=&quot;an-alternative&quot;&gt;An alternative&lt;/h2&gt;
 &lt;p&gt;In the LPOS team at Lonely Planet, we adopted a different approach.&lt;/p&gt;
 
-&lt;p&gt;The entire team were involved in prioritisation meetings weekly (lead by management), to produce a single, prioritised queue of tasks - features, bugfixes, you name it.
+&lt;p&gt;The entire team were involved in prioritisation meetings weekly (lead by management), to produce a single, prioritised queue of tasks - features, bugfixes, you name it. 
 They were totally optional (about half the development team came to any given meeting).&lt;/p&gt;
 
 &lt;p&gt;Developers (collectively) became responsible for getting the highest-priority things completed as quickly as possible.&lt;/p&gt;
@@ -410,7 +410,7 @@ They were totally optional (about half the development team came to any given me
 
 &lt;p&gt;Did it make all our problems go away? Of course not.&lt;/p&gt;
 
-&lt;p&gt;Would it work with 15-20 developers? I would love to find out (we had 6-10 at various times on the project, with 0-2 testers).&lt;/p&gt;
+&lt;p&gt;Would it work with 15-20 developers? I would love to find out.&lt;/p&gt;
 
 &lt;p&gt;We shipped more software after the change, and our users were thrilled.&lt;/p&gt;
 
@@ -432,13 +432,13 @@ They were totally optional (about half the development team came to any given me
   &lt;/p&gt;
 &lt;/div&gt;
 </description>
-        <published>2013-02-11 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/02/11/push-vs-pull/</link>
-      </item>
-    
-      <item>
-        <title>Thanks</title>
-        <description>&lt;p&gt;In no particular order, I want to give a quick shout-out to the technologies that make this blog easy to build.&lt;/p&gt;
+				<published>2013-02-11 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/02/11/push-vs-pull/</link>
+			</item>
+		
+			<item>
+				<title>Thanks</title>
+				<description>&lt;p&gt;In no particular order, I want to give a quick shout-out to the technologies that make this blog easy to build.&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Cloudflare CDN - These guys are fantastic. I use their free plan on this blog for DNS hosting and speed&lt;/li&gt;
@@ -452,13 +452,13 @@ They were totally optional (about half the development team came to any given me
 
 &lt;p&gt;Not to mention the constellation of other open source software which supports everything I do - from curl/sed to postgres/sendmail to ruby/go/gcc to linux/bsd. To every OSS developer out there - thank you!&lt;/p&gt;
 </description>
-        <published>2013-02-10 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/02/10/static-sites-on-s3/</link>
-      </item>
-    
-      <item>
-        <title>Distributed Teams</title>
-        <description>&lt;p&gt;I got into a conversation a couple of weeks back about distributed teams.
+				<published>2013-02-10 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/02/10/static-sites-on-s3/</link>
+			</item>
+		
+			<item>
+				<title>Distributed Teams</title>
+				<description>&lt;p&gt;I got into a conversation a couple of weeks back about distributed teams.
 It seemed that almost everyone had a story of a team where someone had started working remotely and the results had not been positive.&lt;/p&gt;
 
 &lt;p&gt;As I see it, the problem is most people prefer in-person interaction (and this biases decisions about who to communicate with).&lt;/p&gt;
@@ -471,13 +471,13 @@ It seemed that almost everyone had a story of a team where someone had started w
 
 &lt;p&gt;99designs uses basecamp, github, email, an internal chatroom and instant messenging. Chat is the preferred way to get in touch, even for developers on the same floor. As a result, remote workers are looped in despite being spread over several offices in different time zones and countries.&lt;/p&gt;
 </description>
-        <published>2013-02-09 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/02/09/distributed-teams/</link>
-      </item>
-    
-      <item>
-        <title>Fast tests with PhantomJS</title>
-        <description>&lt;p&gt;date: 22/08/2011&lt;/p&gt;
+				<published>2013-02-09 00:00:00 +1100</published>
+				<link>http://daniel.heath.cc/2013/02/09/distributed-teams/</link>
+			</item>
+		
+			<item>
+				<title>Fast tests with PhantomJS</title>
+				<description>&lt;p&gt;date: 22/08/2011&lt;/p&gt;
 
 &lt;p&gt;So, I write (and run) javascript tests a lot.&lt;/p&gt;
 
@@ -505,13 +505,13 @@ Then, I set up a &lt;a href=&quot;/examples/jasmine_runner.guardfile.txt&quot;&g
 
 &lt;p&gt;Now I’m wondering if I could fork from within PhantomJS to speed things up further - but that’s a post for another day.&lt;/p&gt;
 </description>
-        <published>2011-08-22 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2011/08/22/fast-tests-with-phantomjs/</link>
-      </item>
-    
-      <item>
-        <title>Testing web applications</title>
-        <description>&lt;p&gt;As a followup to my last post - a description of how I test my work.&lt;/p&gt;
+				<published>2011-08-22 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2011/08/22/fast-tests-with-phantomjs/</link>
+			</item>
+		
+			<item>
+				<title>Testing web applications</title>
+				<description>&lt;p&gt;As a followup to my last post - a description of how I test my work.&lt;/p&gt;
 
 &lt;h2 id=&quot;what-do-you-need-out-of-a-webapp-test-suite&quot;&gt;What do you need out of a webapp test suite&lt;/h2&gt;
 
@@ -567,9 +567,9 @@ You should be able to get up and running with it fairly quickly; I’ve found th
   &lt;li&gt;My textmate bundle for jasmine / coffeescript development&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <published>2011-08-21 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2011/08/21/testing-web-applications/</link>
-      </item>
-    
-  </channel>
+				<published>2011-08-21 00:00:00 +1000</published>
+				<link>http://daniel.heath.cc/2011/08/21/testing-web-applications/</link>
+			</item>
+		
+	</channel>
 </rss>

@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title> Removing Carmen Ortiz is pointless |  Sans Bytes</title>
+		<title> Testing web applications |  Sans Bytes</title>
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
 		<link rel="stylesheet" href="/style.css" />
@@ -33,7 +33,7 @@
 					<a href="/furious-earth">Furious Earth<br/> (two-player shooter)</a>
 				</li>
 				<li>
-					<a href="http://darkblade.herokuapp.com/characters/new" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
+					<a href="http://wod.daniel.heath.cc" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
 				</li>
 				<li class="nav-header">Posts</li>
 			
@@ -95,36 +95,73 @@
 
 <article class="post span8 offset1 h-entry">
   <h3>
-  	<a class="p-name" href="/2013/03/19/removing-cortiz-is-pointless/">Removing Carmen Ortiz is pointless</a>
+  	<a class="p-name" href="/2011/08/21/testing-web-applications/">Testing web applications</a>
   	<div class="byline">
 	  	<span
 	  		class="small post-date dt-published"
-	  		datetime="2013-03-19 00-00-00"
-	  	>Mar 19, 2013</span>
+	  		datetime="2011-08-21 00-00-00"
+	  	>Aug 21, 2011</span>
 	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
   	</div>
   </h3>
 
   <div class="row">
     <div class="span6 content offset1 e-content">
-      <p>There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp; Scott Garland (assistant us attorneys) from office.</p>
+      <p>As a followup to my last post - a description of how I test my work.</p>
 
-<p>It’s natural to want the wrongdoer to be punished when their behavior causes something as awful as Aarons death.
-It’s also unhelpful, and a waste of energy that could be directed towards preventing future cases like this.</p>
+<h2 id="what-do-you-need-out-of-a-webapp-test-suite">What do you need out of a webapp test suite</h2>
 
-<p>Ortiz, Heymann and Garland reacted the same way you or I would.
-This is a controversial position because few people like the idea that they could become that kind of amoral scoundrel.
-However, almost all human beings derive their sense of right and wrong from those around them.</p>
+<p>Must haves:</p>
 
-<p>The US attorneys office promotes those who successfully prosecute high-profile cases. 
-That is the metric by which success is judged, and Ortiz (and other US attorneys) have adjusted their behavior to optimize for this.</p>
+<ul>
+  <li>Run tests in a real browser</li>
+  <li>Inspect test state using a debugger to track down the reason for failures</li>
+</ul>
 
-<p>As long as prosecutorial overreach results in promotions (and is only infrequently punished, however severely) we are going to keep seeing US attorneys behaving like this.</p>
+<p>Nice to have:</p>
 
-<p>The solution isn’t to fire more attorneys.</p>
+<ul>
+  <li>Run your entire suite fast (See next post)</li>
+  <li>When you save a spec file, it runs and pops up a notification with the result (See next post)</li>
+  <li>When you save a code file, it runs the associated test and pops up a notification with the result</li>
+  <li>Run specific tests</li>
+</ul>
 
-<p>So here’s my question: 
-What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?</p>
+<h2 id="setting-up-the-basics">Setting up the basics</h2>
+<p>To get started testing, I’ve found jasmine.js is pretty awesome.
+You should be able to get up and running with it fairly quickly; I’ve found the following approach works well:</p>
+
+<ul>
+  <li>Write a hello world spec that has one failing and one passing test</li>
+  <li>Put it in <code>spec/jasmine/hello_world_spec.coffee</code></li>
+  <li>I’ve got a very simple <code>spec_controller.rb</code>, which
+    <ul>
+      <li>Is only available when RAILS_ENV is development</li>
+      <li>Serves up <a href="/examples/jasmine_runner.html.erb.txt">an html page</a> with
+        <ul>
+          <li>jasmine and jasmine-html</li>
+          <li>All the javascript for my app (except the application starter file)</li>
+          <li>Test-specific css styles</li>
+          <li>DOM fixtures</li>
+          <li>The actual test</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Here’s the html.erb template I use:</p>
+  </li>
+  <li>Serve spec files out of /spec when your app is in development mode.</li>
+  <li>Run specs by visiting <code>http://localhost/spec?spec_file=hello_world_spec</code></li>
+  <li>You can now run the specs manually; a good start</li>
+  <li>I use <a href="/examples/jasmine_runner.rake.txt">a capybara script</a> in a rake task to run the specs in CI.</li>
+</ul>
+
+<h2 id="next-time">Next time</h2>
+<ul>
+  <li>How to set up phantomjs, autotest (with growl/libnotify) to run your tests</li>
+  <li>My textmate bundle for jasmine / coffeescript development</li>
+</ul>
 
     </div>
   </div>

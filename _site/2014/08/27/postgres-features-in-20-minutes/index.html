@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title> Home |  Sans Bytes</title>
+		<title> Postgres features for Ruby developers |  Sans Bytes</title>
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
 		<link rel="stylesheet" href="/style.css" />
@@ -33,7 +33,7 @@
 					<a href="/furious-earth">Furious Earth<br/> (two-player shooter)</a>
 				</li>
 				<li>
-					<a href="http://darkblade.herokuapp.com/characters/new" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
+					<a href="http://wod.daniel.heath.cc" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
 				</li>
 				<li class="nav-header">Posts</li>
 			
@@ -91,11 +91,9 @@
 		<div class="span10">
 
 				<div id="content">
-					<!-- Show last 5 posts here -->
+					
 
-
-  
-  <article class="post span8 offset1 h-entry">
+<article class="post span8 offset1 h-entry">
   <h3>
   	<a class="p-name" href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
   	<div class="byline">
@@ -296,260 +294,10 @@ a totally different database (e.g. MySql or any JDBC database).</p>
 </article>
 
 
-
-
-  
-  <article class="post span8 offset1 h-entry">
-  <h3>
-  	<a class="p-name" href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-  	<div class="byline">
-	  	<span
-	  		class="small post-date dt-published"
-	  		datetime="2013-10-03 00-00-00"
-	  	>Oct  3, 2013</span>
-	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
-  	</div>
-  </h3>
-
-  <div class="row">
-    <div class="span6 content offset1 e-content">
-      <p>I’ve been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.</p>
-
-<h2 id="corporate">Corporate</h2>
-
-<p>How many large customers? How many small ones? How much variance in customer spend is there? (companies with few large customers are probably going to work on whatever those customers tell them to work on; if they have many small customers and don’t  A/B test something might be wrong)</p>
-
-<p>Org chart: How many sales / dev / product / UX / admin?</p>
-
-<p>Has the team released any interesting OSS in the last year (on work time)?</p>
-
-<p>Has the team released any interesting OSS in the last year (on their own time)?</p>
-
-<p>How much pairing do you do and when/why do you do it?</p>
-
-<p>How/when do you do code reviews? During pairing?</p>
-
-<h2 id="code">Code</h2>
-
-<p>What’s your take on test coverage?</p>
-
-<p>What quality metrics do you use?</p>
-
-<p>Do you enforce a styleguide? How?</p>
-
-<p>What languages &amp; frameworks do you use?</p>
-
-<p>How long does a typical CI build take?
-How long does a typical local build take?</p>
-
-<p>What techniques do you use to keep tests running fast? (e.g. parallel tests, GC tweaks, avoiding I/O)</p>
-
-<p>How many code repositories? apps?</p>
-
-<h2 id="devops">Devops</h2>
-<p>How similar is your development environment to production?</p>
-
-<p>How many architectural pieces are there (appworker, queue, cache, database)?</p>
-
-<p>How many of these are outsourced vs self run (e.g. are you using RDS/heroku PG, or running mysql/postgres yourselves? Do you run your own queue or use iron.io?)</p>
-
-<p>How often do you deploy? Continuous delivery? Fortnightly sprints?</p>
-
-<p>How many production-like environments do you have (eg staging, uat)?</p>
-
-<p>How long from ‘lets deploy’ to ‘done’?</p>
-
-<p>How long to roll-back from a bad deploy?</p>
-
-<p>How many servers are you running?</p>
-
-<p>How many kinds of server are you running (db, cache, web, ci, SCM hosting…)?</p>
-
-<p>Cloud or self-hosted (or something else)?</p>
-
-<h2 id="team--culture">Team &amp; Culture</h2>
-
-<p>How is the team organised? Small groups? Heirarchy? Triads?
-How do the dev team decide what to work on?
-How do you stay in sync across multiple locations (if applicable)?
-How do the team keep each other informed (eg email/chat/face-to-face)?</p>
-
-<p>How often do you use A/B testing to determine whether a change stays? Who makes the call on what to test?</p>
-
-<p>How do you set up a new development environment?</p>
-
-
-    </div>
-  </div>
-</article>
-
-
-
-
-  
-  <article class="post span8 offset1 h-entry">
-  <h3>
-  	<a class="p-name" href="/2013/06/23/learning-go/">Learning Go</a>
-  	<div class="byline">
-	  	<span
-	  		class="small post-date dt-published"
-	  		datetime="2013-06-23 00-00-00"
-	  	>Jun 23, 2013</span>
-	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
-  	</div>
-  </h3>
-
-  <div class="row">
-    <div class="span6 content offset1 e-content">
-      <p>I’ve been using Go fulltime for ~9 months now.</p>
-
-<p>The big differences I’ve noticed coming from Ruby:</p>
-
-<h2 id="imports">Imports</h2>
-
-<p>Imports can’t clobber the global namespace or change the behavior of other packages (unless those packages were designed to allow it).</p>
-
-<p>Only types/methods that are exported by a package are available when you import it.</p>
-
-<h2 id="static-language">Static language</h2>
-<p>There’s no monkey patching.
-When writing packages, export interfaces, not types (to make testing possible).</p>
-
-<h2 id="composition-not-inheritance">Composition, not inheritance</h2>
-<p>Go has no classes. Group data together using structs.</p>
-
-<p>Any type can have methods. E.G.</p>
-
- 	type Foo string
- 	func(f Foo) Print() { fmt.Println(f) }
- 	Foo(“a string”).Print() # Prints “a string”
-
- 	type Bar struct { str string }
- 	func(b Bar) Print() { fmt.Println(b.str) }
- 	Bar{“A different string”}.Print() # Prints “A different string”
-
-<p>Important differences moving from ruby to go:
-* Code re-use via composition feels very natural coming from ruby.
- * Where you would have used a module Foo in ruby, embed an interface Foo in go.</p>
-
-<ul>
-  <li>
-    <p>Because imports can’t interfere with one another, many small dependencies is not a problem. Compose your app from many small frameworks rather than using one large one.</p>
-  </li>
-  <li>
-    <p>Monitoring is back in the dark ages (No newrelic). Plan accordingly.</p>
-  </li>
-</ul>
-
-    </div>
-  </div>
-</article>
-
-
-
-
-  
-  <article class="post span8 offset1 h-entry">
-  <h3>
-  	<a class="p-name" href="/2013/06/03/sprockets-and-go/">The rails asset pipeline - Now for every framework.</a>
-  	<div class="byline">
-	  	<span
-	  		class="small post-date dt-published"
-	  		datetime="2013-06-03 00-00-00"
-	  	>Jun  3, 2013</span>
-	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
-  	</div>
-  </h3>
-
-  <div class="row">
-    <div class="span6 content offset1 e-content">
-      <p>I recently found myself wanting the features of the rails asset pipeline in my golang project at work.</p>
-
-<p>Since there isn’t much in the way of asset pipelining for golang yet, I built it.</p>
-
-<p>Turns out, sprockets is really easy to integrate.</p>
-
-<h2 id="assets-in-development">Assets in development</h2>
-<p>First things first - lets get to ‘it works on my machine’.</p>
-
-<p>I’ve put together a <a href="https://github.com/DanielHeath/sprockets-sample">sample repo</a> using the asset pipeline.</p>
-
-<p>The setup for your app will be similar:
- * The <code>assets</code> folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).
- * You’ll need a similar <code>Rakefile</code> to build assets (and maybe launch the server)
- * You might store the <code>sprockets</code> directory somewhere else - update the <code>Rakefile</code> to match.
- * Use a Gemfile and the bundler rubygem to manage dependencies.
- * Edit the rakefile to change the port the asset server runs on.</p>
-
-<p>When your app starts (in development), it should make a request to <code>http://localhost:11111/assets/manifest.json</code>.</p>
-
-<p>Parse this JSON hash; the keys are asset names (eg “application.css”) and the values are relative URLs the compiled assets can be fetched from.</p>
-
-<p>When generating a link to an asset in your app, use the JSON hash you fetched to lookup the URL. In the case of “application.css” this might look like <code>http://localhost:11111/application-8e5bf6909b33895a72899ee43f5a9d53.css</code>.</p>
-
-<p>That should be all you need for development - you should be able to see SASS/Coffeescript assets compiled and loading normally.</p>
-
-<h2 id="assets-in-production">Assets in production</h2>
-<p>For production we want to pre-compile assets rather than regenerating them each time they change.</p>
-
-<p><code>rake assets</code> will create a ‘public’ folder containing ‘manifest.json’ (same format as before).
-Get this directory onto your production servers (<code>git add -Af public/</code> will add it to source control if you deploy via git).</p>
-
-<p>When generating a link to an asset, look up manifest.json (the same as in development, but from the filesystem instead of over HTTP).</p>
-
-<h2 id="fin">Fin</h2>
-
-<p>The whole thing, including deployment, took me well under a day to add to our app.
-The resulting assets are minified, concatenated, and gzipped (for size).
-They are also fingerprinted (so you can set an unlimited cache lifetime).</p>
-
-    </div>
-  </div>
-</article>
-
-
-
-
-  
-  <article class="post span8 offset1 h-entry">
-  <h3>
-  	<a class="p-name" href="/2013/03/19/removing-cortiz-is-pointless/">Removing Carmen Ortiz is pointless</a>
-  	<div class="byline">
-	  	<span
-	  		class="small post-date dt-published"
-	  		datetime="2013-03-19 00-00-00"
-	  	>Mar 19, 2013</span>
-	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
-  	</div>
-  </h3>
-
-  <div class="row">
-    <div class="span6 content offset1 e-content">
-      <p>There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp; Scott Garland (assistant us attorneys) from office.</p>
-
-<p>It’s natural to want the wrongdoer to be punished when their behavior causes something as awful as Aarons death.
-It’s also unhelpful, and a waste of energy that could be directed towards preventing future cases like this.</p>
-
-<p>Ortiz, Heymann and Garland reacted the same way you or I would.
-This is a controversial position because few people like the idea that they could become that kind of amoral scoundrel.
-However, almost all human beings derive their sense of right and wrong from those around them.</p>
-
-<p>The US attorneys office promotes those who successfully prosecute high-profile cases. 
-That is the metric by which success is judged, and Ortiz (and other US attorneys) have adjusted their behavior to optimize for this.</p>
-
-<p>As long as prosecutorial overreach results in promotions (and is only infrequently punished, however severely) we are going to keep seeing US attorneys behaving like this.</p>
-
-<p>The solution isn’t to fire more attorneys.</p>
-
-<p>So here’s my question: 
-What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?</p>
-
-    </div>
-  </div>
-</article>
-
-
-
+<div class="row small clear">
+  There is no comment box here.<br/>
+  If you have something to contribute I would be delighted to hear it via <a href="mailto:daniel@heath.cc">email</a>.<br/>
+</div>
 
 				</div>
 			</div>

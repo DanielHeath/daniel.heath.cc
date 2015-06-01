@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title> Removing Carmen Ortiz is pointless |  Sans Bytes</title>
+		<title> Push vs Pull |  Sans Bytes</title>
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
 		<link rel="stylesheet" href="/style.css" />
@@ -33,7 +33,7 @@
 					<a href="/furious-earth">Furious Earth<br/> (two-player shooter)</a>
 				</li>
 				<li>
-					<a href="http://darkblade.herokuapp.com/characters/new" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
+					<a href="http://wod.daniel.heath.cc" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
 				</li>
 				<li class="nav-header">Posts</li>
 			
@@ -95,36 +95,65 @@
 
 <article class="post span8 offset1 h-entry">
   <h3>
-  	<a class="p-name" href="/2013/03/19/removing-cortiz-is-pointless/">Removing Carmen Ortiz is pointless</a>
+  	<a class="p-name" href="/2013/02/11/push-vs-pull/">Push vs Pull</a>
   	<div class="byline">
 	  	<span
 	  		class="small post-date dt-published"
-	  		datetime="2013-03-19 00-00-00"
-	  	>Mar 19, 2013</span>
+	  		datetime="2013-02-11 00-00-00"
+	  	>Feb 11, 2013</span>
 	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
   	</div>
   </h3>
 
   <div class="row">
     <div class="span6 content offset1 e-content">
-      <p>There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp; Scott Garland (assistant us attorneys) from office.</p>
+      <h2 id="team-structure-and-productivity">Team structure and productivity</h2>
 
-<p>It’s natural to want the wrongdoer to be punished when their behavior causes something as awful as Aarons death.
-It’s also unhelpful, and a waste of energy that could be directed towards preventing future cases like this.</p>
+<p>When a manager publicly assigns a task to someone (eg in jira, or pivotal, or on a card wall),
+they are publicly attaching that employee to an expectation that the task will be completed.</p>
 
-<p>Ortiz, Heymann and Garland reacted the same way you or I would.
-This is a controversial position because few people like the idea that they could become that kind of amoral scoundrel.
-However, almost all human beings derive their sense of right and wrong from those around them.</p>
+<p>Humans are susceptible to a cognitive bias in this situation; they naturally want to please (and be seen to please) their manager.
+The problem with this bias is that other important activities (eg maintaining a holistic view of the system, bugfixes, toolchain improvements, assisting others) are not prioritised fairly.</p>
 
-<p>The US attorneys office promotes those who successfully prosecute high-profile cases. 
-That is the metric by which success is judged, and Ortiz (and other US attorneys) have adjusted their behavior to optimize for this.</p>
+<p>As a result, employees micro-optimize for their current task (eg by not helping others, creating/ignoring bugs, not testing their work carefully). This is particularly the case when the current task is behind its expected completion date.</p>
 
-<p>As long as prosecutorial overreach results in promotions (and is only infrequently punished, however severely) we are going to keep seeing US attorneys behaving like this.</p>
+<h2 id="an-alternative">An alternative</h2>
+<p>In the LPOS team at Lonely Planet, we adopted a different approach.</p>
 
-<p>The solution isn’t to fire more attorneys.</p>
+<p>The entire team were involved in prioritisation meetings weekly (lead by management), to produce a single, prioritised queue of tasks - features, bugfixes, you name it. 
+They were totally optional (about half the development team came to any given meeting).</p>
 
-<p>So here’s my question: 
-What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?</p>
+<p>Developers (collectively) became responsible for getting the highest-priority things completed as quickly as possible.</p>
+
+<p>This avoids the bias described earlier: now, when a task drags out, the whole team hold collective responsibility (and everyone wants to know how they can help).</p>
+
+<p>Developers no longer prioritise multiple incoming streams of work (eg features/bugs/support requests), but instead assist management in evaluating priorities for the queue.</p>
+
+<p>Spending time on improving tools so the whole team benefits no longer requires putting aside ‘your’ work.</p>
+
+<p>Did it make all our problems go away? Of course not.</p>
+
+<p>Would it work with 15-20 developers? I would love to find out.</p>
+
+<p>We shipped more software after the change, and our users were thrilled.</p>
+
+<h2 id="followup">Followup</h2>
+
+<p>I’d like to thank <a href="http://twitter.com/brentsnook">Brent Snook</a> for some really insightful observations which I’ve incorporated into this original article.</p>
+
+<p>Paraphrasing from his response:</p>
+
+<div class="well">
+  <p>
+    There is a definite difference when everyone feels like they own prioritisation and agree on the importance of what they are doing next.
+  </p>
+  <p>
+    When you go through the process of evaluating pieces of work against others, your goal becomes to solve that important problem in the context of delivering a product.
+  </p>
+  <p>
+    We gained a more holistic view of the problem we were solving, which helped us avoid micro-optimization.
+  </p>
+</div>
 
     </div>
   </div>

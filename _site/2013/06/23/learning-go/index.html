@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title> Removing Carmen Ortiz is pointless |  Sans Bytes</title>
+		<title> Learning Go |  Sans Bytes</title>
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
 		<link rel="stylesheet" href="/style.css" />
@@ -33,7 +33,7 @@
 					<a href="/furious-earth">Furious Earth<br/> (two-player shooter)</a>
 				</li>
 				<li>
-					<a href="http://darkblade.herokuapp.com/characters/new" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
+					<a href="http://wod.daniel.heath.cc" target="blank">Mage: the Awakening Character Creator<br/>(new window)</a>
 				</li>
 				<li class="nav-header">Posts</li>
 			
@@ -95,36 +95,57 @@
 
 <article class="post span8 offset1 h-entry">
   <h3>
-  	<a class="p-name" href="/2013/03/19/removing-cortiz-is-pointless/">Removing Carmen Ortiz is pointless</a>
+  	<a class="p-name" href="/2013/06/23/learning-go/">Learning Go</a>
   	<div class="byline">
 	  	<span
 	  		class="small post-date dt-published"
-	  		datetime="2013-03-19 00-00-00"
-	  	>Mar 19, 2013</span>
+	  		datetime="2013-06-23 00-00-00"
+	  	>Jun 23, 2013</span>
 	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
   	</div>
   </h3>
 
   <div class="row">
     <div class="span6 content offset1 e-content">
-      <p>There have been a few petitions to remove Carmen Ortiz (U.S. Attorney), Stephen Heymann &amp; Scott Garland (assistant us attorneys) from office.</p>
+      <p>I’ve been using Go fulltime for ~9 months now.</p>
 
-<p>It’s natural to want the wrongdoer to be punished when their behavior causes something as awful as Aarons death.
-It’s also unhelpful, and a waste of energy that could be directed towards preventing future cases like this.</p>
+<p>The big differences I’ve noticed coming from Ruby:</p>
 
-<p>Ortiz, Heymann and Garland reacted the same way you or I would.
-This is a controversial position because few people like the idea that they could become that kind of amoral scoundrel.
-However, almost all human beings derive their sense of right and wrong from those around them.</p>
+<h2 id="imports">Imports</h2>
 
-<p>The US attorneys office promotes those who successfully prosecute high-profile cases. 
-That is the metric by which success is judged, and Ortiz (and other US attorneys) have adjusted their behavior to optimize for this.</p>
+<p>Imports can’t clobber the global namespace or change the behavior of other packages (unless those packages were designed to allow it).</p>
 
-<p>As long as prosecutorial overreach results in promotions (and is only infrequently punished, however severely) we are going to keep seeing US attorneys behaving like this.</p>
+<p>Only types/methods that are exported by a package are available when you import it.</p>
 
-<p>The solution isn’t to fire more attorneys.</p>
+<h2 id="static-language">Static language</h2>
+<p>There’s no monkey patching.
+When writing packages, export interfaces, not types (to make testing possible).</p>
 
-<p>So here’s my question: 
-What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?</p>
+<h2 id="composition-not-inheritance">Composition, not inheritance</h2>
+<p>Go has no classes. Group data together using structs.</p>
+
+<p>Any type can have methods. E.G.</p>
+
+ 	type Foo string
+ 	func(f Foo) Print() { fmt.Println(f) }
+ 	Foo(“a string”).Print() # Prints “a string”
+
+ 	type Bar struct { str string }
+ 	func(b Bar) Print() { fmt.Println(b.str) }
+ 	Bar{“A different string”}.Print() # Prints “A different string”
+
+<p>Important differences moving from ruby to go:
+* Code re-use via composition feels very natural coming from ruby.
+ * Where you would have used a module Foo in ruby, embed an interface Foo in go.</p>
+
+<ul>
+  <li>
+    <p>Because imports can’t interfere with one another, many small dependencies is not a problem. Compose your app from many small frameworks rather than using one large one.</p>
+  </li>
+  <li>
+    <p>Monitoring is back in the dark ages (No newrelic). Plan accordingly.</p>
+  </li>
+</ul>
 
     </div>
   </div>
