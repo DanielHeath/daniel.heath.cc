@@ -1,4 +1,3 @@
 source "https://rubygems.org"
 
-gem 'jekyll'
-gem 'coffee-script'
+gem 'jekyll', "<= 2.1.0"
