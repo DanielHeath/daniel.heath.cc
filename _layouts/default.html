@@ -7,6 +7,15 @@
 		<link rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.min.css" />
 		<link rel="stylesheet" href="/style.css" />
 		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="{{site.baseurl}}/feed.xml" />
+
+		{% if page.title %}
+			<meta property="og:title" content="{{ page.title }}" />
+		{% endif %}
+
+		<meta
+			property="og:type"
+			content="{% if page.og_type %}{{ page.og_type }}{% else %}article{% endif %}"
+		/>
 	</head>
 
 	<body>
