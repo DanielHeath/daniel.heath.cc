@@ -12,6 +12,7 @@ permalink: pretty
 
 exclude:
   - '.bundle'
+  - 'vendor'
   - 'conf'
   - 'bin'
 
