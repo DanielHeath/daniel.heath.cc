@@ -15,5 +15,8 @@ exclude:
   - 'vendor'
   - 'conf'
   - 'bin'
+  - 'Gemfile'
+  - 'Gemfile.lock'
+  - 'Procfile'
 
 destination: www
