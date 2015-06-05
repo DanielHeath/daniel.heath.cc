@@ -20,6 +20,7 @@ http {
 
   server {
     listen        <%= ENV['PORT'] %>;
+    rewrite ^(.*[^/])$ $1/ permanent;
     location / {
       root         www;
     }
