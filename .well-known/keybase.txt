@@ -1,0 +1,48 @@
+I hereby claim:
+
+  * I am an admin of https://daniel.heath.cc
+  * I am danielheath (https://keybase.io/danielheath) on keybase.
+  * I have a public key ASB64BNLOuSdIVF8CXaTle3Sq2GsnpxBwPhdcErwvGd6lAo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "01207ae0134b3ae49d21517c09769395edd2ab61ac9e9c41c0f85d704af0bc677a940a",
+            "host": "keybase.io",
+            "kid": "01207ae0134b3ae49d21517c09769395edd2ab61ac9e9c41c0f85d704af0bc677a940a",
+            "uid": "5b2e35cbd09783cd2948fd3adaf36919",
+            "username": "danielheath"
+        },
+        "service": {
+            "hostname": "daniel.heath.cc",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.14"
+    },
+    "ctime": 1460592841,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1460592758,
+        "hash": "407e6fcde16fa55869c94da4f0abea8d2846b13de3e75d72eca71f5194107730fec329b3098212e2b0fa7909b4a66422677c50b0b2298d10d46d550584a1be6e",
+        "seqno": 441814
+    },
+    "prev": "f855fee46c7b0a46f82d9b8e1398b8f4bd0219a65d669c504e5087e81333abfc",
+    "seqno": 7,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+g6Rib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgeuATSzrknSFRfAl2k5Xt0qthrJ6cQcD4XXBK8LxnepQKp3BheWxvYWTFAvp7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwN2FlMDEzNGIzYWU0OWQyMTUxN2MwOTc2OTM5NWVkZDJhYjYxYWM5ZTljNDFjMGY4NWQ3MDRhZjBiYzY3N2E5NDBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwN2FlMDEzNGIzYWU0OWQyMTUxN2MwOTc2OTM5NWVkZDJhYjYxYWM5ZTljNDFjMGY4NWQ3MDRhZjBiYzY3N2E5NDBhIiwidWlkIjoiNWIyZTM1Y2JkMDk3ODNjZDI5NDhmZDNhZGFmMzY5MTkiLCJ1c2VybmFtZSI6ImRhbmllbGhlYXRoIn0sInNlcnZpY2UiOnsiaG9zdG5hbWUiOiJkYW5pZWwuaGVhdGguY2MiLCJwcm90b2NvbCI6Imh0dHBzOiJ9LCJ0eXBlIjoid2ViX3NlcnZpY2VfYmluZGluZyIsInZlcnNpb24iOjF9LCJjbGllbnQiOnsibmFtZSI6ImtleWJhc2UuaW8gZ28gY2xpZW50IiwidmVyc2lvbiI6IjEuMC4xNCJ9LCJjdGltZSI6MTQ2MDU5Mjg0MSwiZXhwaXJlX2luIjo1MDQ1NzYwMDAsIm1lcmtsZV9yb290Ijp7ImN0aW1lIjoxNDYwNTkyNzU4LCJoYXNoIjoiNDA3ZTZmY2RlMTZmYTU1ODY5Yzk0ZGE0ZjBhYmVhOGQyODQ2YjEzZGUzZTc1ZDcyZWNhNzFmNTE5NDEwNzczMGZlYzMyOWIzMDk4MjEyZTJiMGZhNzkwOWI0YTY2NDIyNjc3YzUwYjBiMjI5OGQxMGQ0NmQ1NTA1ODRhMWJlNmUiLCJzZXFubyI6NDQxODE0fSwicHJldiI6ImY4NTVmZWU0NmM3YjBhNDZmODJkOWI4ZTEzOThiOGY0YmQwMjE5YTY1ZDY2OWM1MDRlNTA4N2U4MTMzM2FiZmMiLCJzZXFubyI6NywidGFnIjoic2lnbmF0dXJlIn2jc2lnxEBosUazE6xqdLG9cVC8/bnPgy+KP2sdt99XdD77sSUDqVPctLd784elGbgTRLZr4aPPrB4ZBHeHmP2eAe/X7n8JqHNpZ190eXBlIKN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/danielheath
