@@ -1,3 +1,7 @@
+---
+layout: none
+permalink: .well-known/keybase.txt
+---
 I hereby claim:
 
   * I am an admin of https://daniel.heath.cc
