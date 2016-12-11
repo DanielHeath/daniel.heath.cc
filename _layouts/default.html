@@ -47,16 +47,16 @@
 				</details>
 
 				<details>
-					<summary>Posts</summary>
+					<summary>Recent Posts</summary>
 					{% for post in site.posts limit:4 %}
 						<a href="{{ post.url }}">{{ post.title }}</a>
 					{% endfor %}
-					<details>
-						<summary>All posts</summary>
-						{% for post in site.posts offset:4 %}
-							<a href="{{ post.url }}">{{ post.title }}</a>
-						{% endfor %}
-					</details>
+				</details>
+				<details>
+					<summary>Older posts</summary>
+					{% for post in site.posts offset:4 %}
+						<a href="{{ post.url }}">{{ post.title }}</a>
+					{% endfor %}
 				</details>
 			</details>
 

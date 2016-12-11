@@ -57,9 +57,10 @@ nav {
     justify-content: space-between;
 
     a, details {
-      // padding-left: 1em;
-      // display: block;
-      // margin: 0.2em 0;
+      padding-left: 1em;
+      display: block;
+      cursor: pointer;
+      margin: 0.2em 0;
     }
 
     @media (min-width: 60em) {

@@ -43,6 +43,11 @@ nav {
     display: flex;
     flex-direction: column;
     justify-content: space-between; }
+    nav > details a, nav > details details {
+      padding-left: 1em;
+      display: block;
+      cursor: pointer;
+      margin: 0.2em 0; }
     @media (min-width: 60em) {
       nav > details {
         flex-direction: row; } }
