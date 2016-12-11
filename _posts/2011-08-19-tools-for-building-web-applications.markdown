@@ -19,7 +19,13 @@ Note that this solution can often end up serving outdated files (in development;
 The sprockets-based pipeline in Rails 3.1beta is a far superior solution if you have the option of running the latest version.
 
 ## Frameworks can save you a lot of time
-I use and recommend [coffeescript](http://jashkenas.github.com/coffee-script/), [jQuery](http://jquery.com/), [underscore.js](http://documentcloud.github.com/underscore/), [backbone.js](http://documentcloud.github.com/backbone/) and [haml.js](https://github.com/creationix/haml-js/).
+<em>EDIT: The front-end landscape has moved a long way in 5 years. These tools were a good way to build things at the time.</em>
+I use and recommend
+[coffeescript](http://jashkenas.github.com/coffee-script/),
+[jQuery](http://jquery.com/),
+[underscore.js](http://underscorejs.org/),
+[backbone.js](http://backbonejs.org/) (edit: dead link) and
+[haml.js](https://github.com/creationix/haml-js/).
 
 For example (using all of them at once):
 
