@@ -1,18 +1,18 @@
-<article class="post span8 offset1 h-entry">
-  <h3>
-  	<a class="p-name" href="{{ post.url }}">{{ post.title }}</a>
-  	<div class="byline">
-	  	<span
-	  		class="small post-date dt-published"
-	  		datetime="{{ post.date | date: "%Y-%m-%d %H-%M-%S" }}"
-	  	>{{ post.date | date: "%b %e, %Y" }}</span>
-	  	<span class="small p-author author-byline h-card">Daniel Heath</span>
-  	</div>
-  </h3>
+<article class="post h-entry">
+	<h1>
+		<a class="p-name" href="{{ post.url }}">{{ post.title }}</a>
+		<div class="byline">
+			<span
+				class="small post-date dt-published"
+				datetime="{{ post.date | date: "%Y-%m-%d %H-%M-%S" }}"
+			>{{ post.date | date: "%b %e, %Y" }}</span>
+			<span class="small p-author author-byline h-card">Daniel Heath</span>
+		</div>
+	</h1>
 
-  <div class="row">
-    <div class="span6 content offset1 e-content">
-      {{ postcontent }}
-    </div>
-  </div>
+	<div class="row">
+		<div class="content e-content">
+			{{ postcontent }}
+		</div>
+	</div>
 </article>
