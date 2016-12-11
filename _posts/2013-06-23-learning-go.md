@@ -24,13 +24,15 @@ Go has no classes. Group data together using structs.
 
 Any type can have methods. E.G.
 
- 	type Foo string
- 	func(f Foo) Print() { fmt.Println(f) }
- 	Foo("a string").Print() # Prints "a string"
+~~~go
+type Foo string
+func(f Foo) Print() { fmt.Println(f) }
+Foo("a string").Print() # Prints "a string"
 
- 	type Bar struct { str string }
- 	func(b Bar) Print() { fmt.Println(b.str) }
- 	Bar{"A different string"}.Print() # Prints "A different string"
+type Bar struct { str string }
+func(b Bar) Print() { fmt.Println(b.str) }
+Bar{"A different string"}.Print() # Prints "A different string"
+~~~
 
 Important differences moving from ruby to go:
 * Code re-use via composition feels very natural coming from ruby.

@@ -31,7 +31,7 @@ The process of removing irrelevant parts of the word is called 'stemming'.
 * Filter results to 'things which match at all', then sort (don't sort the whole resultset!).
 
 ### Example:
-```
+~~~
 select
   *,
   ts_rank_cd(my_vector, my_query)
@@ -43,14 +43,14 @@ order by
   ts_rank_cd(my_vector, my_query) desc
 limit 10
 offset 10
-```
+~~~
 
 ### Proper Nouns
 
 Sometimes (e.g. suburb names) you don't want postgres to stem the words (`epping` is not similar to `ep`).
 To do this, you'll need to setup an alternative search configuration.
 
-```
+~~~
 CREATE TEXT SEARCH DICTIONARY public.proper_noun (
     TEMPLATE = pg_catalog.simple
 );
@@ -63,11 +63,11 @@ ALTER MAPPING
 REPLACE simple WITH proper_noun;
 
 select to_tsvector('proper_noun', 'epping');
-```
+~~~
 
 ## Putting it all together
 
-```
+~~~
 CREATE TABLE texts (
     id uuid DEFAULT uuid_generate_v4() NOT NULL,
     description character varying(255) NOT NULL
@@ -102,4 +102,4 @@ where
   to_tsvector('english', description) @@ to_tsquery('''bees'':*')
 ;
 
-```
+~~~

@@ -503,13 +503,14 @@ When writing packages, export interfaces, not types (to make testing possible).&
 
 &lt;p&gt;Any type can have methods. E.G.&lt;/p&gt;
 
- 	type Foo string
- 	func(f Foo) Print() { fmt.Println(f) }
- 	Foo(“a string”).Print() # Prints “a string”
+&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;type Foo string
+func(f Foo) Print() { fmt.Println(f) }
+Foo(&quot;a string&quot;).Print() # Prints &quot;a string&quot;
 
- 	type Bar struct { str string }
- 	func(b Bar) Print() { fmt.Println(b.str) }
- 	Bar{“A different string”}.Print() # Prints “A different string”
+type Bar struct { str string }
+func(b Bar) Print() { fmt.Println(b.str) }
+Bar{&quot;A different string&quot;}.Print() # Prints &quot;A different string&quot;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Important differences moving from ruby to go:
 * Code re-use via composition feels very natural coming from ruby.
