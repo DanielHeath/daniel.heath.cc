@@ -1,0 +1,215 @@
+script {
+  display: none;
+}
+
+.headingtext {
+  color: white;
+  font-family: Verdana, sans-serif;
+  font-weight: normal;
+}
+.commalist {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+.commalist > li { display: inline; }
+.commalist > li > *:after { content: ','; }
+.commalist > li:nth-child(2) > *:after { content: ''; }
+.commalist > li:last-child:before {
+  line-height: 1.125em;
+  font-family: Verdana, sans-serif;
+  content: ' and ';
+}
+.commalist > li:last-child > *:after { content: '.'; }
+.outline_li {
+  border: 1px solid #000000;
+  margin: 5px;
+  padding: 5px;
+}
+.outline_li span li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+.outline_li div li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+.vcard * { display: block; }
+body {
+  line-height: 1.125em;
+  font-family: Verdana, sans-serif;
+}
+body span.duration { display: block; }
+body span.work { display: block; }
+body li { list-style: none; }
+body header {
+  padding: 20px;
+  background-color: #0b61a4;
+}
+body header div#header_content {
+  width: 840px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+body header div#header_content h1 {
+  font-family: 'Hoefler Text', 'Georgia', 'Times New Roman', serif;
+  font-weight: normal;
+  font-size: 1.75em;
+  letter-spacing: 0.25em;
+  line-height: 1.5em;
+  text-transform: uppercase;
+  margin: 0px;
+  text-shadow: white 1px 1px 1px;
+}
+body header div#header_content a {
+  color: white;
+  font-family: Verdana, sans-serif;
+  font-weight: normal;
+}
+body header div#header_content p {
+  display: inline;
+  color: white;
+  font-family: Verdana, sans-serif;
+  font-weight: normal;
+}
+body header div#header_content ul#passions {
+  font-family: 'Hoefler Text', 'Georgia', 'Times New Roman', serif;
+  font-weight: bold;
+  color: #333333;
+  color: white;
+  font-family: Verdana, sans-serif;
+  font-weight: normal;
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+body header div#header_content ul#passions > li { display: inline; }
+body header div#header_content ul#passions > li > *:after { content: ','; }
+body header div#header_content ul#passions > li:nth-child(2) > *:after { content: ''; }
+body header div#header_content ul#passions > li:last-child:before {
+  line-height: 1.125em;
+  font-family: Verdana, sans-serif;
+  content: ' and ';
+}
+body header div#header_content ul#passions > li:last-child > *:after { content: '.'; }
+body section {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0px;
+  margin-top: 40px;
+  width: 840px;
+}
+body section#contact-info ul {
+  border: 1px solid #000000;
+  margin: 5px;
+  padding: 5px;
+}
+body section#work-history > ol > li {
+  border: 1px solid #000000;
+  margin: 5px;
+  padding: 5px;
+}
+body section#work-history > ol > li span li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#work-history > ol > li div li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#work-history > ol > li a { color: black; }
+body section#work-history > ol > li span.title { font-weight: bold; }
+body section#work-history > ol > li span.company { font-weight: bold; }
+body section#work-history > ol > li span.title:after { content: '-'; }
+body section#work-history > ol > li span.duration {
+  display: block;
+  margin-bottom: 10px;
+}
+body section#work-history > ol > li .work {
+  display: block;
+  margin-bottom: 10px;
+}
+body section#education > ol > li {
+  border: 1px solid #000000;
+  margin: 5px;
+  padding: 5px;
+}
+body section#education > ol > li span li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#education > ol > li div li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#education > ol > li a { color: black; }
+body section#education > ol > li span.title { font-weight: bold; }
+body section#education > ol > li span.company { font-weight: bold; }
+body section#education > ol > li span.title:after { content: '-'; }
+body section#education > ol > li span.duration {
+  display: block;
+  margin-bottom: 10px;
+}
+body section#education > ol > li .work {
+  display: block;
+  margin-bottom: 10px;
+}
+body section#other-interests > ul > li {
+  border: 1px solid #000000;
+  margin: 5px;
+  padding: 5px;
+}
+body section#other-interests > ul > li span li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#other-interests > ul > li div li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#other-interests #other-languages li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#references > ul > li {
+  border: 1px solid #000000;
+  margin: 5px;
+  padding: 5px;
+}
+body section#references > ul > li span li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#references > ul > li div li {
+  list-style: disc inside none;
+  margin: 5px;
+}
+body section#references > ul > li a { color: black; }
+body section#references > ul > li span.title { font-weight: bold; }
+body section#references > ul > li span.company { font-weight: bold; }
+body section#references > ul > li span.title:after { content: '-'; }
+body section#references > ul > li span.duration {
+  display: block;
+  margin-bottom: 10px;
+}
+body section#references > ul > li span.work {
+  display: block;
+  margin-bottom: 10px;
+}
+body section#skills table {
+  border: 1px solid #000000;
+  width: 830px;
+  padding: 5px;
+  margin: 5px;
+}
+body section#skills th {
+  text-align: left;
+  padding: 1px;
+}
+body section#skills td {
+  text-align: left;
+  padding: 1px;
+}
+body section#skills tbody tr:nth-child(2n+1) { background-color: #dddddd; }
+body section#skills tr:first-child { width: 190px; }

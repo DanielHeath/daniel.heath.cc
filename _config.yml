@@ -22,4 +22,4 @@ exclude:
 include:
   - '.well-known'
 
-destination: www
+destination: docs
