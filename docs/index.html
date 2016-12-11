@@ -49,7 +49,7 @@
 				<details>
 					<summary>Posts</summary>
 					
-						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation the hard way</a>
+						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
@@ -90,7 +90,7 @@
   
   <article class="post h-entry">
 	<h1>
-		<a class="p-name" href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation the hard way</a>
+		<a class="p-name" href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 		<div class="byline">
 			<span
 				class="small post-date dt-published"
@@ -100,9 +100,8 @@
 		</div>
 	</h1>
 
-	<div class="row">
-		<div class="content e-content">
-			<h1 id="browser-automation-with-selenium-webdriver">Browser automation with selenium-webdriver</h1>
+	<div class="content e-content">
+		<h1 id="browser-automation-with-selenium-webdriver">Browser automation with selenium-webdriver</h1>
 
 <h2 id="why">Why?</h2>
 
@@ -111,6 +110,10 @@
 <p>This reputation is largely the result of developers learning high-level frameworks without understanding the underlying abstractions.</p>
 
 <p>In this guide I’ll show you some cool terminal tricks - including how to drive a browser directly.</p>
+
+<p>I wouldn’t write my tests for a production app this way, but it illustrates the underlying concepts in a way most tools abstract away.</p>
+
+<p>This will help you to develop a better understanding of how most web testing tools work.</p>
 
 <h2 id="setup">Setup</h2>
 
@@ -123,7 +126,7 @@
   <li>A terminal (preinstalled on linux/mac)</li>
   <li>curl (installed on most linux/mac )</li>
   <li><a href="https://stedolan.github.io/jq/download/">jq</a> to extract fields from JSON documents</li>
-  <li><a href="http://www.seleniumhq.org/download/">selenium-server-standalone.jar</a></li>
+  <li><a href="http://www.seleniumhq.org/download/">selenium-server-standalone.jar</a> selenium-webdriver (not the same as selenium-rc - referred to as ‘selenium’ below)</li>
   <li><a href="https://sites.google.com/a/chromium.org/chromedriver/">chromedriver</a></li>
 </ul>
 
@@ -136,8 +139,9 @@ brew install chromedriver
 
 <h2 id="getting-started">Getting started</h2>
 
-<p>selenium-webdriver (not the same as selenium-rc) runs on a
-client/server model with the following components:</p>
+<p>selenium is the predominant way of writing automatinc browser tests. It can operate all major browsers.</p>
+
+<p>Selenium runs on a client/server model with the following components:</p>
 
 <ul>
   <li>Some website(s)</li>
@@ -156,7 +160,8 @@ java -jar selenium-server-standalone-3.0.1.jar -port 4444
 </code></pre>
 
 <p>Leave this running and open a another terminal window.
-In the new window, run the following to ask the server to start a new chrome session:</p>
+In the new window, run the following to ask the server to start a new chrome session
+(copy &amp; paste will work, or save it to a file and run <code>source &lt;file&gt;</code>):</p>
 
 <pre><code class="language-bash">`# Save the URL to the local selenium server`
 `# to the variable SELENIUM_URL`
@@ -307,7 +312,6 @@ selenium-python.readthedocs.io/getting-started.html
 https://seleniumhq.wordpress.com/
 </code></pre>
 
-		</div>
 	</div>
 </article>
 
@@ -327,9 +331,8 @@ https://seleniumhq.wordpress.com/
 		</div>
 	</h1>
 
-	<div class="row">
-		<div class="content e-content">
-			<h2 id="about-postgres">About postgres</h2>
+	<div class="content e-content">
+		<h2 id="about-postgres">About postgres</h2>
 
 <p>Postgres is a relational database which is
 widely used by Ruby developers.</p>
@@ -511,7 +514,6 @@ a totally different database (e.g. MySql or any JDBC database).</p>
 
 <p>Handy when dealing with really big, organically grown systems.</p>
 
-		</div>
 	</div>
 </article>
 
@@ -531,9 +533,8 @@ a totally different database (e.g. MySql or any JDBC database).</p>
 		</div>
 	</h1>
 
-	<div class="row">
-		<div class="content e-content">
-			<p>I’ve been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.</p>
+	<div class="content e-content">
+		<p>I’ve been jobhunting a bit recently. Below are a few of the questions I find give me a reasonable sense of what a company is about.</p>
 
 <h2 id="corporate">Corporate</h2>
 
@@ -599,7 +600,6 @@ How do the team keep each other informed (eg email/chat/face-to-face)?</p>
 <p>How do you set up a new development environment?</p>
 
 
-		</div>
 	</div>
 </article>
 
@@ -619,9 +619,8 @@ How do the team keep each other informed (eg email/chat/face-to-face)?</p>
 		</div>
 	</h1>
 
-	<div class="row">
-		<div class="content e-content">
-			<p>I’ve been using Go fulltime for ~9 months now.</p>
+	<div class="content e-content">
+		<p>I’ve been using Go fulltime for ~9 months now.</p>
 
 <p>The big differences I’ve noticed coming from Ruby:</p>
 
@@ -661,7 +660,6 @@ When writing packages, export interfaces, not types (to make testing possible).<
   </li>
 </ul>
 
-		</div>
 	</div>
 </article>
 
@@ -681,9 +679,8 @@ When writing packages, export interfaces, not types (to make testing possible).<
 		</div>
 	</h1>
 
-	<div class="row">
-		<div class="content e-content">
-			<p>I recently found myself wanting the features of the rails asset pipeline in my golang project at work.</p>
+	<div class="content e-content">
+		<p>I recently found myself wanting the features of the rails asset pipeline in my golang project at work.</p>
 
 <p>Since there isn’t much in the way of asset pipelining for golang yet, I built it.</p>
 
@@ -723,7 +720,6 @@ Get this directory onto your production servers (<code>git add -Af public/</code
 The resulting assets are minified, concatenated, and gzipped (for size).
 They are also fingerprinted (so you can set an unlimited cache lifetime).</p>
 
-		</div>
 	</div>
 </article>
 

@@ -1,7 +1,12 @@
 ---
 ---
+body, html {
+  margin: 0;
+  background-color: rgb(238, 238, 238);
+}
 
 header {
+  background-color: #8ae;
   .home-link {
     display: flex;
     flex-direction: row;
@@ -9,7 +14,7 @@ header {
     text-decoration:none;
     vertical-align: middle;
     font-size: 200%;
-    min-height: 250px;
+    min-height: 254px;
 
     @media (max-width: 650px) {
       font-size: 100%;
@@ -19,6 +24,7 @@ header {
     .heading-image {
       height: 250px;
       width: 250px;
+      margin: 2px;
       @media (max-width: 650px) {
         height: 100px;
         width: 100px;
@@ -41,21 +47,27 @@ header {
 }
 
 nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background-color: #8e8;
+
   padding: 1em;
   font-size: 200%;
-}
+  > details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-nav a {
-  display: block;
-  margin: 0.2em 0;
-}
+    a, details {
+      // padding-left: 1em;
+      // display: block;
+      // margin: 0.2em 0;
+    }
 
-nav details a,
-nav details details {
-  padding-left: 1em;
+    @media (min-width: 60em) {
+      flex-direction: row;
+      &[open] {
+      }
+    }
+  }
 }
 
 /* Single post
@@ -65,9 +77,12 @@ nav details details {
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
-  background: url("//s3.amazonaws.com/wrapbootstrap/live/imgs/darkgrain.png") repeat scroll 0% 0% rgb(238, 238, 238);
   padding: 12px;
+
+  max-width: 60em;
+  margin: auto;
 }
+
 address {
   display: inline;
 }

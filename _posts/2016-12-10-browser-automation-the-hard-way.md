@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Learn browser automation the hard way
+title: Learn browser automation from scratch
 
 excerpt: Browser tests are famously full of hard to debug, unreliable failures.
          This reputation is largely the result of developers learning high-level frameworks without understanding the underlying abstractions.
@@ -16,6 +16,10 @@ This reputation is largely the result of developers learning high-level framewor
 
 In this guide I'll show you some cool terminal tricks - including how to drive a browser directly.
 
+I wouldn't write my tests for a production app this way, but it illustrates the underlying concepts in a way most tools abstract away.
+
+This will help you to develop a better understanding of how most web testing tools work.
+
 ## Setup
 
 You will need:
@@ -26,7 +30,7 @@ You will need:
  * A terminal (preinstalled on linux/mac)
  * curl (installed on most linux/mac )
  * [jq](https://stedolan.github.io/jq/download/) to extract fields from JSON documents
- * [selenium-server-standalone.jar](http://www.seleniumhq.org/download/)
+ * [selenium-server-standalone.jar](http://www.seleniumhq.org/download/) selenium-webdriver (not the same as selenium-rc - referred to as 'selenium' below)
  * [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
 If you are using homebrew on mac, you can install the last three that way:
@@ -39,8 +43,9 @@ brew install chromedriver
 
 ## Getting started
 
-selenium-webdriver (not the same as selenium-rc) runs on a
-client/server model with the following components:
+selenium is the predominant way of writing automatinc browser tests. It can operate all major browsers.
+
+Selenium runs on a client/server model with the following components:
 
  * Some website(s)
  * A browser (chrome, in this example)
@@ -58,7 +63,8 @@ java -jar selenium-server-standalone-3.0.1.jar -port 4444
 ~~~
 
 Leave this running and open a another terminal window.
-In the new window, run the following to ask the server to start a new chrome session:
+In the new window, run the following to ask the server to start a new chrome session
+(copy & paste will work, or save it to a file and run `source <file>`):
 
 ~~~bash
 `# Save the URL to the local selenium server`

@@ -6,7 +6,7 @@
     <link>http://daniel.heath.cc</link>
     
       <item>
-        <title>Learn browser automation the hard way</title>
+        <title>Learn browser automation from scratch</title>
         <description>&lt;h1 id=&quot;browser-automation-with-selenium-webdriver&quot;&gt;Browser automation with selenium-webdriver&lt;/h1&gt;
 
 &lt;h2 id=&quot;why&quot;&gt;Why?&lt;/h2&gt;
@@ -16,6 +16,10 @@
 &lt;p&gt;This reputation is largely the result of developers learning high-level frameworks without understanding the underlying abstractions.&lt;/p&gt;
 
 &lt;p&gt;In this guide I’ll show you some cool terminal tricks - including how to drive a browser directly.&lt;/p&gt;
+
+&lt;p&gt;I wouldn’t write my tests for a production app this way, but it illustrates the underlying concepts in a way most tools abstract away.&lt;/p&gt;
+
+&lt;p&gt;This will help you to develop a better understanding of how most web testing tools work.&lt;/p&gt;
 
 &lt;h2 id=&quot;setup&quot;&gt;Setup&lt;/h2&gt;
 
@@ -28,7 +32,7 @@
   &lt;li&gt;A terminal (preinstalled on linux/mac)&lt;/li&gt;
   &lt;li&gt;curl (installed on most linux/mac )&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://stedolan.github.io/jq/download/&quot;&gt;jq&lt;/a&gt; to extract fields from JSON documents&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.seleniumhq.org/download/&quot;&gt;selenium-server-standalone.jar&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.seleniumhq.org/download/&quot;&gt;selenium-server-standalone.jar&lt;/a&gt; selenium-webdriver (not the same as selenium-rc - referred to as ‘selenium’ below)&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://sites.google.com/a/chromium.org/chromedriver/&quot;&gt;chromedriver&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -41,8 +45,9 @@ brew install chromedriver
 
 &lt;h2 id=&quot;getting-started&quot;&gt;Getting started&lt;/h2&gt;
 
-&lt;p&gt;selenium-webdriver (not the same as selenium-rc) runs on a
-client/server model with the following components:&lt;/p&gt;
+&lt;p&gt;selenium is the predominant way of writing automatinc browser tests. It can operate all major browsers.&lt;/p&gt;
+
+&lt;p&gt;Selenium runs on a client/server model with the following components:&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Some website(s)&lt;/li&gt;
@@ -61,7 +66,8 @@ java -jar selenium-server-standalone-3.0.1.jar -port 4444
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Leave this running and open a another terminal window.
-In the new window, run the following to ask the server to start a new chrome session:&lt;/p&gt;
+In the new window, run the following to ask the server to start a new chrome session
+(copy &amp;amp; paste will work, or save it to a file and run &lt;code&gt;source &amp;lt;file&amp;gt;&lt;/code&gt;):&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;`# Save the URL to the local selenium server`
 `# to the variable SELENIUM_URL`

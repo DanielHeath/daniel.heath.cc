@@ -1,47 +1,51 @@
-header .home-link {
-  display: flex;
-  flex-direction: row;
-  color: #333;
-  text-decoration: none;
-  vertical-align: middle;
-  font-size: 200%;
-  min-height: 250px; }
-  @media (max-width: 650px) {
-    header .home-link {
-      font-size: 100%;
-      min-height: 100px; } }
-  header .home-link .heading-image {
-    height: 250px;
-    width: 250px;
-    background: url("/Avatar.jpg");
-    background-size: contain;
-    border-radius: 50%; }
-    @media (max-width: 650px) {
-      header .home-link .heading-image {
-        height: 100px;
-        width: 100px; } }
-  header .home-link .header-text {
+body, html {
+  margin: 0;
+  background-color: #eeeeee; }
+
+header {
+  background-color: #8ae; }
+  header .home-link {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-left: 2em; }
-  header .home-link h1 {
-    margin: 0; }
+    flex-direction: row;
+    color: #333;
+    text-decoration: none;
+    vertical-align: middle;
+    font-size: 200%;
+    min-height: 254px; }
+    @media (max-width: 650px) {
+      header .home-link {
+        font-size: 100%;
+        min-height: 100px; } }
+    header .home-link .heading-image {
+      height: 250px;
+      width: 250px;
+      margin: 2px;
+      background: url("/Avatar.jpg");
+      background-size: contain;
+      border-radius: 50%; }
+      @media (max-width: 650px) {
+        header .home-link .heading-image {
+          height: 100px;
+          width: 100px; } }
+    header .home-link .header-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 2em; }
+    header .home-link h1 {
+      margin: 0; }
 
 nav {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background-color: #8e8;
   padding: 1em;
   font-size: 200%; }
-
-nav a {
-  display: block;
-  margin: 0.2em 0; }
-
-nav details a,
-nav details details {
-  padding-left: 1em; }
+  nav > details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; }
+    @media (min-width: 60em) {
+      nav > details {
+        flex-direction: row; } }
 
 /* Single post
 ------------------------- */
@@ -50,8 +54,9 @@ nav details details {
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
-  background: url("//s3.amazonaws.com/wrapbootstrap/live/imgs/darkgrain.png") repeat scroll 0% 0% #eeeeee;
-  padding: 12px; }
+  padding: 12px;
+  max-width: 60em;
+  margin: auto; }
 
 address {
   display: inline; }
