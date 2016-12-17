@@ -217,6 +217,128 @@ selenium-python.readthedocs.io/
 selenium-python.readthedocs.io/getting-started.html
 https://seleniumhq.wordpress.com/
 &lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;further-reading&quot;&gt;Further reading&lt;/h2&gt;
+
+&lt;p&gt;I’ve referred frequently to &lt;a href=&quot;https://w3c.github.io/webdriver/webdriver-spec.html&quot;&gt;the spec&lt;/a&gt; in writing this.
+In particular, the “List of Endpoints” and “Command Contexts” sections are useful.
+At the time of writing you can search the page for those terms to get there quickly.&lt;/p&gt;
+
+&lt;h2 id=&quot;builtin-methods&quot;&gt;Builtin methods&lt;/h2&gt;
+
+&lt;p&gt;The list of supported actions (from &lt;a href=&quot;https://w3c.github.io/webdriver/webdriver-spec.html&quot;&gt;the spec&lt;/a&gt;) are summarized below.&lt;/p&gt;
+
+&lt;p&gt;The spec makes for hard reading but each section is quite short.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;New Session (&lt;em&gt;POST&lt;/em&gt;) - Open a browser session. The only API not requiring a session ID&lt;/li&gt;
+  &lt;li&gt;Delete Session (&lt;em&gt;DELETE&lt;/em&gt;) - Terminate a browser session&lt;/li&gt;
+  &lt;li&gt;Status (&lt;em&gt;GET&lt;/em&gt;) - Describe a session&lt;/li&gt;
+  &lt;li&gt;Go (&lt;em&gt;POST&lt;/em&gt;) - Navigate the current tab&lt;/li&gt;
+  &lt;li&gt;Get Current URL (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Back (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Forward (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Refresh (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Title (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Page Source (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Take Screenshot (&lt;em&gt;GET&lt;/em&gt;) - Return a base64 encoded PNG of the page&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;element-interaction&quot;&gt;Element interaction&lt;/h3&gt;
+
+&lt;p&gt;These APIs operate on element handles, which are opaque IDs
+allocated by selenium when you find/get an element.&lt;/p&gt;
+
+&lt;p&gt;Use those IDs to interact with elements.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Find Element (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Find Element From Element (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Find Elements (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Find Elements From Element (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Active Element (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Is Element Selected (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Element Attribute (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Element Property (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Element CSS Value (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Element Text (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Element Tag Name (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Element Rect (&lt;em&gt;GET&lt;/em&gt;) - get element position and size&lt;/li&gt;
+  &lt;li&gt;Is Element Enabled (&lt;em&gt;GET&lt;/em&gt;) - only for form controls&lt;/li&gt;
+  &lt;li&gt;Element Click (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Element Clear (&lt;em&gt;POST&lt;/em&gt;) - Empty text fields, unchecks checkboxes, etc&lt;/li&gt;
+  &lt;li&gt;Element Send Keys (&lt;em&gt;POST&lt;/em&gt;) - Can be used to fill in forms, hit enter, etc.&lt;/li&gt;
+  &lt;li&gt;Take Element Screenshot (&lt;em&gt;GET&lt;/em&gt;) - Return a base64 encoded PNG of the element&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;javascript&quot;&gt;Javascript&lt;/h3&gt;
+
+&lt;p&gt;Inject arbitrary JS to run in the page.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Execute Script (&lt;em&gt;POST&lt;/em&gt;) - Must be expressed as an inline function call - return value is serialized and sent back&lt;/li&gt;
+  &lt;li&gt;Execute Async Script (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;modals-alert-confirm-and-prompt&quot;&gt;Modals: ‘alert’, ‘confirm’ and ‘prompt’&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Dismiss Alert (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Accept Alert (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Alert Text (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Send Alert Text (&lt;em&gt;POST&lt;/em&gt;) - Fill in a prompt&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;cookies&quot;&gt;Cookies&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Get All Cookies (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Named Cookie (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Add Cookie (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Delete Cookie (&lt;em&gt;DELETE&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Delete All Cookies (&lt;em&gt;DELETE&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;window-management&quot;&gt;Window management&lt;/h3&gt;
+
+&lt;p&gt;Lets you open multiple tabs/windows in the same selenium session.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Get Window Handle (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Close Window (&lt;em&gt;DELETE&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Switch To Window (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Window Handles (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Fullscreen Window (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Maximize Window (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Set Window Size (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Window Position (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Set Window Position (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Get Window Size (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Switch To Frame (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Switch To Parent Frame (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;timeout-management&quot;&gt;Timeout management&lt;/h3&gt;
+
+&lt;p&gt;Lets you define how long a page is allowed to spend loading html/scripts.&lt;/p&gt;
+
+&lt;p&gt;I haven’t had a reason to use them to date so can’t describe them in much more detail than that.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Get Timeouts (&lt;em&gt;GET&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Set Timeouts (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;action-api&quot;&gt;Action API&lt;/h3&gt;
+
+&lt;p&gt;This API lets you script relatively advanced sequences of user behaviors - eg by describing the touch events that form a gesture.&lt;/p&gt;
+
+&lt;p&gt;I haven’t had a reason to use them to date so can’t describe them in much more detail than that.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Perform Actions (&lt;em&gt;POST&lt;/em&gt;)&lt;/li&gt;
+  &lt;li&gt;Releasing Actions (&lt;em&gt;DELETE&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
 </description>
         <published>2016-12-10 00:00:00 +1100</published>
         <link>http://daniel.heath.cc/2016/12/10/browser-automation-the-hard-way/</link>

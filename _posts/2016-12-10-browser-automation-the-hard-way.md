@@ -220,3 +220,110 @@ selenium-python.readthedocs.io/
 selenium-python.readthedocs.io/getting-started.html
 https://seleniumhq.wordpress.com/
 ~~~
+
+
+## Further reading
+
+I've referred frequently to [the spec](https://w3c.github.io/webdriver/webdriver-spec.html) in writing this.
+In particular, the "List of Endpoints" and "Command Contexts" sections are useful.
+At the time of writing you can search the page for those terms to get there quickly.
+
+## Builtin methods
+
+The list of supported actions (from [the spec](https://w3c.github.io/webdriver/webdriver-spec.html)) are summarized below.
+
+The spec makes for hard reading but each section is quite short.
+
+ * New Session (*POST*) - Open a browser session. The only API not requiring a session ID
+ * Delete Session (*DELETE*) - Terminate a browser session
+ * Status (*GET*) - Describe a session
+ * Go (*POST*) - Navigate the current tab
+ * Get Current URL (*GET*)
+ * Back (*POST*)
+ * Forward (*POST*)
+ * Refresh (*POST*)
+ * Get Title (*GET*)
+ * Get Page Source (*GET*)
+ * Take Screenshot (*GET*) - Return a base64 encoded PNG of the page
+
+### Element interaction
+
+These APIs operate on element handles, which are opaque IDs
+allocated by selenium when you find/get an element.
+
+Use those IDs to interact with elements.
+
+ * Find Element (*POST*)
+ * Find Element From Element (*POST*)
+ * Find Elements (*POST*)
+ * Find Elements From Element (*POST*)
+ * Get Active Element (*GET*)
+ * Is Element Selected (*GET*)
+ * Get Element Attribute (*GET*)
+ * Get Element Property (*GET*)
+ * Get Element CSS Value (*GET*)
+ * Get Element Text (*GET*)
+ * Get Element Tag Name (*GET*)
+ * Get Element Rect (*GET*) - get element position and size
+ * Is Element Enabled (*GET*) - only for form controls
+ * Element Click (*POST*)
+ * Element Clear (*POST*) - Empty text fields, unchecks checkboxes, etc
+ * Element Send Keys (*POST*) - Can be used to fill in forms, hit enter, etc.
+ * Take Element Screenshot (*GET*) - Return a base64 encoded PNG of the element
+
+### Javascript
+
+Inject arbitrary JS to run in the page.
+
+ * Execute Script (*POST*) - Must be expressed as an inline function call - return value is serialized and sent back
+ * Execute Async Script (*POST*)
+
+### Modals: 'alert', 'confirm' and 'prompt'
+ * Dismiss Alert (*POST*)
+ * Accept Alert (*POST*)
+ * Get Alert Text (*GET*)
+ * Send Alert Text (*POST*) - Fill in a prompt
+
+### Cookies
+
+ * Get All Cookies (*GET*)
+ * Get Named Cookie (*GET*)
+ * Add Cookie (*POST*)
+ * Delete Cookie (*DELETE*)
+ * Delete All Cookies (*DELETE*)
+
+### Window management
+
+Lets you open multiple tabs/windows in the same selenium session.
+
+ * Get Window Handle (*GET*)
+ * Close Window (*DELETE*)
+ * Switch To Window (*POST*)
+ * Get Window Handles (*GET*)
+ * Fullscreen Window (*POST*)
+ * Maximize Window (*POST*)
+ * Set Window Size (*POST*)
+ * Get Window Position (*GET*)
+ * Set Window Position (*POST*)
+ * Get Window Size (*GET*)
+ * Switch To Frame (*POST*)
+ * Switch To Parent Frame (*POST*)
+
+### Timeout management
+
+Lets you define how long a page is allowed to spend loading html/scripts.
+
+I haven't had a reason to use them to date so can't describe them in much more detail than that.
+
+ * Get Timeouts (*GET*)
+ * Set Timeouts (*POST*)
+
+### Action API
+
+This API lets you script relatively advanced sequences of user behaviors - eg by describing the touch events that form a gesture.
+
+I haven't had a reason to use them to date so can't describe them in much more detail than that.
+
+ * Perform Actions (*POST*)
+ * Releasing Actions (*DELETE*)
+

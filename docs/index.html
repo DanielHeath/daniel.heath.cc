@@ -312,6 +312,128 @@ selenium-python.readthedocs.io/getting-started.html
 https://seleniumhq.wordpress.com/
 </code></pre>
 
+<h2 id="further-reading">Further reading</h2>
+
+<p>I’ve referred frequently to <a href="https://w3c.github.io/webdriver/webdriver-spec.html">the spec</a> in writing this.
+In particular, the “List of Endpoints” and “Command Contexts” sections are useful.
+At the time of writing you can search the page for those terms to get there quickly.</p>
+
+<h2 id="builtin-methods">Builtin methods</h2>
+
+<p>The list of supported actions (from <a href="https://w3c.github.io/webdriver/webdriver-spec.html">the spec</a>) are summarized below.</p>
+
+<p>The spec makes for hard reading but each section is quite short.</p>
+
+<ul>
+  <li>New Session (<em>POST</em>) - Open a browser session. The only API not requiring a session ID</li>
+  <li>Delete Session (<em>DELETE</em>) - Terminate a browser session</li>
+  <li>Status (<em>GET</em>) - Describe a session</li>
+  <li>Go (<em>POST</em>) - Navigate the current tab</li>
+  <li>Get Current URL (<em>GET</em>)</li>
+  <li>Back (<em>POST</em>)</li>
+  <li>Forward (<em>POST</em>)</li>
+  <li>Refresh (<em>POST</em>)</li>
+  <li>Get Title (<em>GET</em>)</li>
+  <li>Get Page Source (<em>GET</em>)</li>
+  <li>Take Screenshot (<em>GET</em>) - Return a base64 encoded PNG of the page</li>
+</ul>
+
+<h3 id="element-interaction">Element interaction</h3>
+
+<p>These APIs operate on element handles, which are opaque IDs
+allocated by selenium when you find/get an element.</p>
+
+<p>Use those IDs to interact with elements.</p>
+
+<ul>
+  <li>Find Element (<em>POST</em>)</li>
+  <li>Find Element From Element (<em>POST</em>)</li>
+  <li>Find Elements (<em>POST</em>)</li>
+  <li>Find Elements From Element (<em>POST</em>)</li>
+  <li>Get Active Element (<em>GET</em>)</li>
+  <li>Is Element Selected (<em>GET</em>)</li>
+  <li>Get Element Attribute (<em>GET</em>)</li>
+  <li>Get Element Property (<em>GET</em>)</li>
+  <li>Get Element CSS Value (<em>GET</em>)</li>
+  <li>Get Element Text (<em>GET</em>)</li>
+  <li>Get Element Tag Name (<em>GET</em>)</li>
+  <li>Get Element Rect (<em>GET</em>) - get element position and size</li>
+  <li>Is Element Enabled (<em>GET</em>) - only for form controls</li>
+  <li>Element Click (<em>POST</em>)</li>
+  <li>Element Clear (<em>POST</em>) - Empty text fields, unchecks checkboxes, etc</li>
+  <li>Element Send Keys (<em>POST</em>) - Can be used to fill in forms, hit enter, etc.</li>
+  <li>Take Element Screenshot (<em>GET</em>) - Return a base64 encoded PNG of the element</li>
+</ul>
+
+<h3 id="javascript">Javascript</h3>
+
+<p>Inject arbitrary JS to run in the page.</p>
+
+<ul>
+  <li>Execute Script (<em>POST</em>) - Must be expressed as an inline function call - return value is serialized and sent back</li>
+  <li>Execute Async Script (<em>POST</em>)</li>
+</ul>
+
+<h3 id="modals-alert-confirm-and-prompt">Modals: ‘alert’, ‘confirm’ and ‘prompt’</h3>
+<ul>
+  <li>Dismiss Alert (<em>POST</em>)</li>
+  <li>Accept Alert (<em>POST</em>)</li>
+  <li>Get Alert Text (<em>GET</em>)</li>
+  <li>Send Alert Text (<em>POST</em>) - Fill in a prompt</li>
+</ul>
+
+<h3 id="cookies">Cookies</h3>
+
+<ul>
+  <li>Get All Cookies (<em>GET</em>)</li>
+  <li>Get Named Cookie (<em>GET</em>)</li>
+  <li>Add Cookie (<em>POST</em>)</li>
+  <li>Delete Cookie (<em>DELETE</em>)</li>
+  <li>Delete All Cookies (<em>DELETE</em>)</li>
+</ul>
+
+<h3 id="window-management">Window management</h3>
+
+<p>Lets you open multiple tabs/windows in the same selenium session.</p>
+
+<ul>
+  <li>Get Window Handle (<em>GET</em>)</li>
+  <li>Close Window (<em>DELETE</em>)</li>
+  <li>Switch To Window (<em>POST</em>)</li>
+  <li>Get Window Handles (<em>GET</em>)</li>
+  <li>Fullscreen Window (<em>POST</em>)</li>
+  <li>Maximize Window (<em>POST</em>)</li>
+  <li>Set Window Size (<em>POST</em>)</li>
+  <li>Get Window Position (<em>GET</em>)</li>
+  <li>Set Window Position (<em>POST</em>)</li>
+  <li>Get Window Size (<em>GET</em>)</li>
+  <li>Switch To Frame (<em>POST</em>)</li>
+  <li>Switch To Parent Frame (<em>POST</em>)</li>
+</ul>
+
+<h3 id="timeout-management">Timeout management</h3>
+
+<p>Lets you define how long a page is allowed to spend loading html/scripts.</p>
+
+<p>I haven’t had a reason to use them to date so can’t describe them in much more detail than that.</p>
+
+<ul>
+  <li>Get Timeouts (<em>GET</em>)</li>
+  <li>Set Timeouts (<em>POST</em>)</li>
+</ul>
+
+<h3 id="action-api">Action API</h3>
+
+<p>This API lets you script relatively advanced sequences of user behaviors - eg by describing the touch events that form a gesture.</p>
+
+<p>I haven’t had a reason to use them to date so can’t describe them in much more detail than that.</p>
+
+<ul>
+  <li>Perform Actions (<em>POST</em>)</li>
+  <li>Releasing Actions (<em>DELETE</em>)</li>
+</ul>
+
+
 	</div>
 </article>
 
