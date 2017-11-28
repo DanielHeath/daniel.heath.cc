@@ -1,0 +1,46 @@
+<h1 id="learning-rust-an-experience-report">Learning rust: an experience report</h1>
+
+<h2 id="installing">Installing</h2>
+
+<p>Installing the latest version of rust via <code>brew</code> worked correctly first time.</p>
+
+<h2 id="finding-a-tutorial">Finding a tutorial</h2>
+
+<p>Searched for “getting started with rust”.</p>
+
+<ul>
+  <li><a href="https://doc.rust-lang.org/book/first-edition/getting-started.html">Google for ‘getting started rust’</a></li>
+  <li><a href="https://doc.rust-lang.org/book/getting-started.html">DuckDuckGo for ‘getting started rust’</a></li>
+</ul>
+
+<p>Google found the first edition of the tutorial.
+DuckDuckGo found the tutorial landing page, which suggested I used the second edition but anyone on google would’ve been unaware it existed.</p>
+
+<p>I used <a href="https://doc.rust-lang.org/book/second-edition/">the second edition</a>.</p>
+
+<h2 id="using-the-tutorial">Using the tutorial</h2>
+
+<p>The tutorial suggested using rustup to install, using <code>curl | sh</code>.
+I decide it’s probably safe to ignore that advice and use the version from my package manager (<code>rustc 1.21.0</code>).</p>
+
+<p>The first example (hello world) works fine.
+The second example (guessing game) doesn’t compile.
+The error linked me to issue #27703.</p>
+
+<p>I manage to figure out that rust issues are tracked on github (the error just has an issue number), and find that issue.
+It’s clearly related, but tells me nothing I can use to get my code compiling.</p>
+
+<p>A bit of searching turns up <a href="https://stackoverflow.com/questions/19671845/how-can-i-generate-a-random-number-within-a-range-in-rust#19674981">a stackoverflow question on the topic</a>;
+the top answer is outdated, but a comment tells me
+to check a different answer, which tells me to
+use <code>extern crate rand;</code> and add dependencies to cargo.toml.</p>
+
+<p>After reading up how to add dependencies to cargo.toml, I update the file and try again.
+Cargo spends twenty-four minutes ‘updating registry’ (I want one small dependency and have specified the exact version!). My connection is slow, but it’s not <em>that</em> slow.
+Activity monitor confirms it’s downloading at 20kb/s - everything else is fine).
+Perhaps it would help if the default registry were installed at the same time as cargo?</p>
+
+<p>Now the guessing game example runs - great!
+I test out the example and it works.
+In doing so, I (incidentally) notice that backtraces don’t have line numbers (!). Close enough for now - I’ll have another look next week or something.</p>
+

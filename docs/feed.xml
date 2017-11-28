@@ -6,6 +6,59 @@
     <link>http://daniel.heath.cc</link>
     
       <item>
+        <title>Rust An Experience Report</title>
+        <description>&lt;h1 id=&quot;learning-rust-an-experience-report&quot;&gt;Learning rust: an experience report&lt;/h1&gt;
+
+&lt;h2 id=&quot;installing&quot;&gt;Installing&lt;/h2&gt;
+
+&lt;p&gt;Installing the latest version of rust via &lt;code&gt;brew&lt;/code&gt; worked correctly first time.&lt;/p&gt;
+
+&lt;h2 id=&quot;finding-a-tutorial&quot;&gt;Finding a tutorial&lt;/h2&gt;
+
+&lt;p&gt;Searched for “getting started with rust”.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://doc.rust-lang.org/book/first-edition/getting-started.html&quot;&gt;Google for ‘getting started rust’&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://doc.rust-lang.org/book/getting-started.html&quot;&gt;DuckDuckGo for ‘getting started rust’&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Google found the first edition of the tutorial.
+DuckDuckGo found the tutorial landing page, which suggested I used the second edition but anyone on google would’ve been unaware it existed.&lt;/p&gt;
+
+&lt;p&gt;I used &lt;a href=&quot;https://doc.rust-lang.org/book/second-edition/&quot;&gt;the second edition&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;using-the-tutorial&quot;&gt;Using the tutorial&lt;/h2&gt;
+
+&lt;p&gt;The tutorial suggested using rustup to install, using &lt;code&gt;curl | sh&lt;/code&gt;.
+I decide it’s probably safe to ignore that advice and use the version from my package manager (&lt;code&gt;rustc 1.21.0&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;The first example (hello world) works fine.
+The second example (guessing game) doesn’t compile.
+The error linked me to issue #27703.&lt;/p&gt;
+
+&lt;p&gt;I manage to figure out that rust issues are tracked on github (the error just has an issue number), and find that issue.
+It’s clearly related, but tells me nothing I can use to get my code compiling.&lt;/p&gt;
+
+&lt;p&gt;A bit of searching turns up &lt;a href=&quot;https://stackoverflow.com/questions/19671845/how-can-i-generate-a-random-number-within-a-range-in-rust#19674981&quot;&gt;a stackoverflow question on the topic&lt;/a&gt;;
+the top answer is outdated, but a comment tells me
+to check a different answer, which tells me to
+use &lt;code&gt;extern crate rand;&lt;/code&gt; and add dependencies to cargo.toml.&lt;/p&gt;
+
+&lt;p&gt;After reading up how to add dependencies to cargo.toml, I update the file and try again.
+Cargo spends twenty-four minutes ‘updating registry’ (I want one small dependency and have specified the exact version!). My connection is slow, but it’s not &lt;em&gt;that&lt;/em&gt; slow.
+Activity monitor confirms it’s downloading at 20kb/s - everything else is fine).
+Perhaps it would help if the default registry were installed at the same time as cargo?&lt;/p&gt;
+
+&lt;p&gt;Now the guessing game example runs - great!
+I test out the example and it works.
+In doing so, I (incidentally) notice that backtraces don’t have line numbers (!). Close enough for now - I’ll have another look next week or something.&lt;/p&gt;
+
+</description>
+        <published>2017-11-27 00:00:00 +1100</published>
+        <link>http://daniel.heath.cc/2017/11/27/rust-an-experience-report/</link>
+      </item>
+    
+      <item>
         <title>Learn browser automation from scratch</title>
         <description>&lt;h1 id=&quot;browser-automation-with-selenium-webdriver&quot;&gt;Browser automation with selenium-webdriver&lt;/h1&gt;
 
@@ -813,40 +866,6 @@ It seemed that almost everyone had a story of a team where someone had started w
 </description>
         <published>2013-02-09 00:00:00 +1100</published>
         <link>http://daniel.heath.cc/2013/02/09/distributed-teams/</link>
-      </item>
-    
-      <item>
-        <title>Fast tests with PhantomJS</title>
-        <description>&lt;p&gt;date: 22/08/2011&lt;/p&gt;
-
-&lt;p&gt;So, I write (and run) javascript tests a lot.&lt;/p&gt;
-
-&lt;p&gt;I run javascript specs by serving them as part of a page.
-This lets me use the browser tools (debugger/inspector etc)
-It also means that the specs are running on the same platform as the code (no bugs that only happen in the specs).&lt;/p&gt;
-
-&lt;p&gt;To run these in CI, I wrote a &lt;a href=&quot;/examples/jasmine_runner.rake.txt&quot;&gt;script using capybara&lt;/a&gt;.
-It visits the URL for each of the spec files and scrapes the pages to determine success/failure.
-However, it was slow - the suite for our app took over 100 seconds.&lt;/p&gt;
-
-&lt;p&gt;So I sat down and hacked together &lt;a href=&quot;/examples/jasmine_runner.coffee.txt&quot;&gt;a faster script&lt;/a&gt;.
-Rather than completely replacing my CI script, I just got it running a single test file.
-This individual specs running about 5 times faster.&lt;/p&gt;
-
-&lt;p&gt;Then I realised that without the overhead of loading a firefox instance, there was no reason not to run all the specs in parallel. Some quick shell scripting and I was there:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;find public/spec/integration -iname *.js | grep -v _spec_helper.js | sed s/^public.spec.//g | xargs -L1 -P30 ./lib/tasks/phantom_runner.coffee
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Hey presto! the entire suite ran in under 7 seconds, even on my ancient, groaning hardware.&lt;/p&gt;
-
-&lt;p&gt;Next, I set up &lt;a href=&quot;https://github.com/DanielHeath/JasmineCoffee.tmbundle&quot;&gt;a textmate bundle&lt;/a&gt; so I could hit command-R to launch the spec in a browser, and command-D to run it using phantom.
-Then, I set up a &lt;a href=&quot;/examples/jasmine_runner.guardfile.txt&quot;&gt;Guardfile&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Now I’m wondering if I could fork from within PhantomJS to speed things up further - but that’s a post for another day.&lt;/p&gt;
-</description>
-        <published>2011-08-22 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2011/08/22/fast-tests-with-phantomjs/</link>
       </item>
     
   </channel>
