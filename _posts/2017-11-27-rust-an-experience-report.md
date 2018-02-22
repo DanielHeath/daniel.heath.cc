@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Rust: An experience report
+title: "Rust: An experience report"
 
 excerpt: Rust is very promising but easy to bounce off.
          I've decided to start logging my attempts to use it here.
