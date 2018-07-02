@@ -2,12 +2,12 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8"/>
-		<title> Learning Go |  Sans Bytes</title>
+		<title> CSS Modules in Rails with Webpacker |  Sans Bytes</title>
 		<link rel="stylesheet" href="/styles.css" />
 		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/feed.xml" />
 
 		
-			<meta property="og:title" content="Learning Go" />
+			<meta property="og:title" content="CSS Modules in Rails with Webpacker" />
 		
 
 		<meta
@@ -92,56 +92,125 @@
 
 <article class="post h-entry">
 	<h1>
-		<a class="p-name" href="/2013/06/23/learning-go/">Learning Go</a>
+		<a class="p-name" href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
 		<div class="byline">
 			<span
 				class="small post-date dt-published"
-				datetime="2013-06-23 00-00-00"
-			>Jun 23, 2013</span>
+				datetime="2018-07-02 00-00-00"
+			>Jul  2, 2018</span>
 			<span class="small p-author author-byline h-card">Daniel Heath</span>
 		</div>
 	</h1>
 
 	<div class="content e-content">
-		<p>I’ve been using Go fulltime for ~9 months now.</p>
+		<h2 id="css-modules">CSS Modules?</h2>
 
-<p>The big differences I’ve noticed coming from Ruby:</p>
+<p>CSS Modules lets you write CSS with predictable local scope.</p>
 
-<h2 id="imports">Imports</h2>
+<p>This avoids the need for (eg) manually following a naming convention to prevent accidental conflicts.</p>
 
-<p>Imports can’t clobber the global namespace or change the behavior of other packages (unless those packages were designed to allow it).</p>
+<h2 id="alright-how-do-i-do-it">Alright, how do I do it?</h2>
 
-<p>Only types/methods that are exported by a package are available when you import it.</p>
+<h3 id="install-webpacker">Install webpacker</h3>
 
-<h2 id="static-language">Static language</h2>
-<p>There’s no monkey patching.
-When writing packages, export interfaces, not types (to make testing possible).</p>
+<p>First, your app will need the <code class="highlighter-rouge">webpacker</code> gem installed &amp; configured (new rails apps come with it).</p>
 
-<h2 id="composition-not-inheritance">Composition, not inheritance</h2>
-<p>Go has no classes. Group data together using structs.</p>
+<p>Add <code class="highlighter-rouge">javascript_pack_tag</code> and <code class="highlighter-rouge">stylesheet_pack_tag</code> to your layout per the webpacker setup instructions.</p>
 
-<p>Any type can have methods. E.G.</p>
+<h3 id="setup-css-modules-for-webpack">Setup CSS modules for webpack</h3>
 
-<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">type</span><span class="x"> </span><span class="n">Foo</span><span class="x"> </span><span class="kt">string</span><span class="x">
-</span><span class="k">func</span><span class="p">(</span><span class="n">f</span><span class="x"> </span><span class="n">Foo</span><span class="p">)</span><span class="x"> </span><span class="n">Print</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x"> </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="x"> </span><span class="p">}</span><span class="x">
-</span><span class="n">Foo</span><span class="p">(</span><span class="s">"a string"</span><span class="p">)</span><span class="o">.</span><span class="n">Print</span><span class="p">()</span><span class="x"> </span><span class="err">#</span><span class="x"> </span><span class="n">Prints</span><span class="x"> </span><span class="s">"a string"</span><span class="x">
+<p>There are two webpack implementations of CSS modules (css-loader and postcss-modules).</p>
 
-</span><span class="k">type</span><span class="x"> </span><span class="n">Bar</span><span class="x"> </span><span class="k">struct</span><span class="x"> </span><span class="p">{</span><span class="x"> </span><span class="n">str</span><span class="x"> </span><span class="kt">string</span><span class="x"> </span><span class="p">}</span><span class="x">
-</span><span class="k">func</span><span class="p">(</span><span class="n">b</span><span class="x"> </span><span class="n">Bar</span><span class="p">)</span><span class="x"> </span><span class="n">Print</span><span class="p">()</span><span class="x"> </span><span class="p">{</span><span class="x"> </span><span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">str</span><span class="p">)</span><span class="x"> </span><span class="p">}</span><span class="x">
-</span><span class="n">Bar</span><span class="p">{</span><span class="s">"A different string"</span><span class="p">}</span><span class="o">.</span><span class="n">Print</span><span class="p">()</span><span class="x"> </span><span class="err">#</span><span class="x"> </span><span class="n">Prints</span><span class="x"> </span><span class="s">"A different string"</span><span class="x">
-</span></code></pre></div></div>
+<p>Webpacker uses postcss by default, so I’ve used postcss-modules (<code class="highlighter-rouge">yarn add postcss-modules</code>).</p>
 
-<p>Important differences moving from ruby to go:</p>
-<ul>
-  <li>Code re-use via composition feels very natural coming from ruby.</li>
-  <li>
-    <p>Where you would have used a module Foo in ruby, embed an interface Foo in go.</p>
-  </li>
-  <li>
-    <p>Because imports can’t interfere with one another, many small dependencies is not a problem. Compose your app from many small frameworks rather than using one large one.</p>
-  </li>
-  <li>Monitoring is back in the dark ages (No newrelic). Plan accordingly.</li>
-</ul>
+<p>Having installed postcss-modules and autoprefier using <code class="highlighter-rouge">yarn</code>, lets configure webpacker to use them.
+My projects <code class="highlighter-rouge">.postcssrc.yml</code> looks like this:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plugins:
+  postcss-import: {}
+  postcss-cssnext: {}
+  postcss-modules:
+    generateScopedName: '[name]__[local]___[hash:base64:5]'
+    modules: true
+</code></pre></div></div>
+
+<h3 id="add-some-css">Add some CSS</h3>
+
+<p>Next, lets put some CSS where webpack will find it:</p>
+
+<p>First, write your CSS in <code class="highlighter-rouge">app/javascript/src/my-module.css</code>.</p>
+
+<p>Then, in <code class="highlighter-rouge">app/javascript/packs/application.js</code>, add <code class="highlighter-rouge">import myModule from '../src/my-module.css';</code> (at the start)</p>
+
+<p>After you load a page in development, or run <code class="highlighter-rouge">rake assets:precompile</code>, you should see a new file appear: <code class="highlighter-rouge">app/javascript/src/my-module.css.json</code>.
+This file describes how your CSS has been transformed.</p>
+
+<h3 id="reference-your-css-from-rails-views">Reference your CSS from rails views</h3>
+
+<p>I’ve written a helper to read these files.</p>
+
+<p>In my project it’s at <code class="highlighter-rouge">app/helpers/css_modules_helper.rb</code> and contains the following code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module CssModulesHelper
+
+  mattr_accessor :cache
+  self.cache ||= {}
+
+  def cssmodule(path)
+    cache = {}
+    if Rails.application.config.action_controller.perform_caching
+      # Avoid reloading CSS paths
+      cache = CssmodulesHelper.cache
+    end
+
+    return cache[path] if cache.include?(path)
+
+    mod = JSON.parse(File.read Rails.root.join('app', 'javascript', 'src', path + '.json').to_s)
+
+    # Let people use dashes in CSS and underscores in ruby
+    mod.keys.each { |k| mod[k.underscore] = mod[k] }
+
+    os = OpenStruct.new(mod)
+
+    def os.call(*args)
+      args.map do |arg|
+        case arg
+        when Hash
+          arg.keys.select {|k| arg[k]}.map {|k| public_send(k) }
+        else
+          public_send arg
+        end
+      end.compact.flatten.join(" ")
+    end
+
+    cache[path] = os
+
+    yield os
+  end
+
+end
+
+</code></pre></div></div>
+
+<p>Finally, we can reference our CSS from a view:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;% cssmodule "my-module.css" do |css| %&gt;
+  &lt;!-- Dashes are turned into underscores, so .my-box becomes my_box --&gt;
+  &lt;div
+    class="&lt;%= css.my_box %&gt;"
+  &gt;
+    a box
+  &lt;/div&gt;
+
+  &lt;!-- The helper also offers multiple &amp; conditional class names (like the classnames JS lib) --&gt;
+  &lt;div
+    class="&lt;%= css.(:my_box, my_class: (Random.rand &gt; 0.5)) %&gt;"
+  &gt;
+    conditional class
+  &lt;/div&gt;
+&lt;% end %&gt;
+</code></pre></div></div>
+
+<p>You should see your styles applying now.</p>
+
 
 	</div>
 </article>

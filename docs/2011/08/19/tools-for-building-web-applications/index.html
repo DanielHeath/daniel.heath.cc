@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -125,7 +127,7 @@ I use and recommend
 
 <p>For example (using all of them at once):</p>
 
-<pre><code>class BB.views.RichText extends Backbone.View
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class BB.views.RichText extends Backbone.View
   template: JST['rich_text_editing']
 
   initialize: (options) -&gt;
@@ -137,7 +139,7 @@ I use and recommend
     e.html @template(this)
     e.data('view', this)
     this
-</code></pre>
+</code></pre></div></div>
 
 <h2 id="testing">Testing</h2>
 <p>I plan to write an entire post on how I approach testing this kind of app.
@@ -149,11 +151,11 @@ I use <a href="http://pivotal.github.com/jasmine/">jasmine.js</a> for my suite, 
       beforeEach -&gt;
         @phone = new BB.models.PhoneNumber</p>
 
-<pre><code>  describe "isBlank", -&gt;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  describe "isBlank", -&gt;
     it "is true if text and number are blank", -&gt;
       @phone.set(text: "", number: "")
       expect(@phone.isBlank()).toEqual true
-</code></pre>
+</code></pre></div></div>
 
 <h2 id="use-json-for-transport">Use JSON for transport</h2>
 <p>There are a few ways to get data from a server to a client:</p>
@@ -171,14 +173,14 @@ Not bad otherwise.</p>
 <p>This is really the best way to go - most of the strengths of XML without writing a line of code.
 The general pattern is:</p>
 
-<pre><code>updateContentFromUrl:(url) -&gt;
-  self = this
-  @get(url, (parsedJsonForContent) -&gt;
-    model = new BB.models.Content(parsedJsonForContent)
-    view = new BB.views.ContentView(model: model)
-    self.element.find(".results").append view.render().el
-  )
-</code></pre>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">updateContentFromUrl</span><span class="p">:(</span><span class="n">url</span><span class="p">)</span> <span class="p">-&gt;</span>
+  <span class="n">self</span> <span class="p">=</span> <span class="n">this</span>
+  <span class="p">@</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="p">(</span><span class="n">parsedJsonForContent</span><span class="p">)</span> <span class="p">-&gt;</span>
+    <span class="k">model</span> <span class="p">=</span> <span class="n">new</span> <span class="n">BB</span><span class="p">.</span><span class="n">models</span><span class="p">.</span><span class="n">Content</span><span class="p">(</span><span class="n">parsedJsonForContent</span><span class="p">)</span>
+    <span class="n">view</span> <span class="p">=</span> <span class="n">new</span> <span class="n">BB</span><span class="p">.</span><span class="n">views</span><span class="p">.</span><span class="n">ContentView</span><span class="p">(</span><span class="k">model</span><span class="p">:</span> <span class="k">model</span><span class="p">)</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">element</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s2">".results"</span><span class="p">).</span><span class="n">append</span> <span class="n">view</span><span class="p">.</span><span class="n">render</span><span class="p">().</span><span class="n">el</span>
+  <span class="p">)</span>
+</code></pre></div></div>
 
 
 	</div>

@@ -3,7 +3,122 @@
   <channel>
     <title>daniel.heath.cc</title>
     <description>Daniel Heath - Blog</description>
-    <link>http://daniel.heath.cc</link>
+    <link>http://localhost:4000</link>
+    
+      <item>
+        <title>CSS Modules in Rails with Webpacker</title>
+        <description>&lt;h2 id=&quot;css-modules&quot;&gt;CSS Modules?&lt;/h2&gt;
+
+&lt;p&gt;CSS Modules lets you write CSS with predictable local scope.&lt;/p&gt;
+
+&lt;p&gt;This avoids the need for (eg) manually following a naming convention to prevent accidental conflicts.&lt;/p&gt;
+
+&lt;h2 id=&quot;alright-how-do-i-do-it&quot;&gt;Alright, how do I do it?&lt;/h2&gt;
+
+&lt;h3 id=&quot;install-webpacker&quot;&gt;Install webpacker&lt;/h3&gt;
+
+&lt;p&gt;First, your app will need the &lt;code class=&quot;highlighter-rouge&quot;&gt;webpacker&lt;/code&gt; gem installed &amp;amp; configured (new rails apps come with it).&lt;/p&gt;
+
+&lt;p&gt;Add &lt;code class=&quot;highlighter-rouge&quot;&gt;javascript_pack_tag&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;stylesheet_pack_tag&lt;/code&gt; to your layout per the webpacker setup instructions.&lt;/p&gt;
+
+&lt;h3 id=&quot;setup-css-modules-for-webpack&quot;&gt;Setup CSS modules for webpack&lt;/h3&gt;
+
+&lt;p&gt;There are two webpack implementations of CSS modules (css-loader and postcss-modules).&lt;/p&gt;
+
+&lt;p&gt;Webpacker uses postcss by default, so I’ve used postcss-modules (&lt;code class=&quot;highlighter-rouge&quot;&gt;yarn add postcss-modules&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;Having installed postcss-modules and autoprefier using &lt;code class=&quot;highlighter-rouge&quot;&gt;yarn&lt;/code&gt;, lets configure webpacker to use them.
+My projects &lt;code class=&quot;highlighter-rouge&quot;&gt;.postcssrc.yml&lt;/code&gt; looks like this:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;plugins:
+  postcss-import: {}
+  postcss-cssnext: {}
+  postcss-modules:
+    generateScopedName: '[name]__[local]___[hash:base64:5]'
+    modules: true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;add-some-css&quot;&gt;Add some CSS&lt;/h3&gt;
+
+&lt;p&gt;Next, lets put some CSS where webpack will find it:&lt;/p&gt;
+
+&lt;p&gt;First, write your CSS in &lt;code class=&quot;highlighter-rouge&quot;&gt;app/javascript/src/my-module.css&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Then, in &lt;code class=&quot;highlighter-rouge&quot;&gt;app/javascript/packs/application.js&lt;/code&gt;, add &lt;code class=&quot;highlighter-rouge&quot;&gt;import myModule from '../src/my-module.css';&lt;/code&gt; (at the start)&lt;/p&gt;
+
+&lt;p&gt;After you load a page in development, or run &lt;code class=&quot;highlighter-rouge&quot;&gt;rake assets:precompile&lt;/code&gt;, you should see a new file appear: &lt;code class=&quot;highlighter-rouge&quot;&gt;app/javascript/src/my-module.css.json&lt;/code&gt;.
+This file describes how your CSS has been transformed.&lt;/p&gt;
+
+&lt;h3 id=&quot;reference-your-css-from-rails-views&quot;&gt;Reference your CSS from rails views&lt;/h3&gt;
+
+&lt;p&gt;I’ve written a helper to read these files.&lt;/p&gt;
+
+&lt;p&gt;In my project it’s at &lt;code class=&quot;highlighter-rouge&quot;&gt;app/helpers/css_modules_helper.rb&lt;/code&gt; and contains the following code:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module CssModulesHelper
+
+  mattr_accessor :cache
+  self.cache ||= {}
+
+  def cssmodule(path)
+    cache = {}
+    if Rails.application.config.action_controller.perform_caching
+      # Avoid reloading CSS paths
+      cache = CssmodulesHelper.cache
+    end
+
+    return cache[path] if cache.include?(path)
+
+    mod = JSON.parse(File.read Rails.root.join('app', 'javascript', 'src', path + '.json').to_s)
+
+    # Let people use dashes in CSS and underscores in ruby
+    mod.keys.each { |k| mod[k.underscore] = mod[k] }
+
+    os = OpenStruct.new(mod)
+
+    def os.call(*args)
+      args.map do |arg|
+        case arg
+        when Hash
+          arg.keys.select {|k| arg[k]}.map {|k| public_send(k) }
+        else
+          public_send arg
+        end
+      end.compact.flatten.join(&quot; &quot;)
+    end
+
+    cache[path] = os
+
+    yield os
+  end
+
+end
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we can reference our CSS from a view:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;% cssmodule &quot;my-module.css&quot; do |css| %&amp;gt;
+  &amp;lt;!-- Dashes are turned into underscores, so .my-box becomes my_box --&amp;gt;
+  &amp;lt;div
+    class=&quot;&amp;lt;%= css.my_box %&amp;gt;&quot;
+  &amp;gt;
+    a box
+  &amp;lt;/div&amp;gt;
+
+  &amp;lt;!-- The helper also offers multiple &amp;amp; conditional class names (like the classnames JS lib) --&amp;gt;
+  &amp;lt;div
+    class=&quot;&amp;lt;%= css.(:my_box, my_class: (Random.rand &amp;gt; 0.5)) %&amp;gt;&quot;
+  &amp;gt;
+    conditional class
+  &amp;lt;/div&amp;gt;
+&amp;lt;% end %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You should see your styles applying now.&lt;/p&gt;
+
+</description>
+        <published>2018-07-02 00:00:00 +1000</published>
+        <link>http://localhost:4000/2018/07/02/css-modules-with-webpacker/</link>
+      </item>
     
       <item>
         <title>Rust: An experience report</title>
@@ -11,7 +126,7 @@
 
 &lt;h2 id=&quot;installing&quot;&gt;Installing&lt;/h2&gt;
 
-&lt;p&gt;Installing the latest version of rust via &lt;code&gt;brew&lt;/code&gt; worked correctly first time.&lt;/p&gt;
+&lt;p&gt;Installing the latest version of rust via &lt;code class=&quot;highlighter-rouge&quot;&gt;brew&lt;/code&gt; worked correctly first time.&lt;/p&gt;
 
 &lt;h2 id=&quot;finding-a-tutorial&quot;&gt;Finding a tutorial&lt;/h2&gt;
 
@@ -29,8 +144,8 @@ DuckDuckGo found the tutorial landing page, which suggested I used the second ed
 
 &lt;h2 id=&quot;using-the-tutorial&quot;&gt;Using the tutorial&lt;/h2&gt;
 
-&lt;p&gt;The tutorial suggested using rustup to install, using &lt;code&gt;curl | sh&lt;/code&gt;.
-I decide it’s probably safe to ignore that advice and use the version from my package manager (&lt;code&gt;rustc 1.21.0&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;The tutorial suggested using rustup to install, using &lt;code class=&quot;highlighter-rouge&quot;&gt;curl | sh&lt;/code&gt;.
+I decide it’s probably safe to ignore that advice and use the version from my package manager (&lt;code class=&quot;highlighter-rouge&quot;&gt;rustc 1.21.0&lt;/code&gt;).&lt;/p&gt;
 
 &lt;p&gt;The first example (hello world) works fine.
 The second example (guessing game) doesn’t compile.
@@ -42,7 +157,7 @@ It’s clearly related, but tells me nothing I can use to get my code compiling.
 &lt;p&gt;A bit of searching turns up &lt;a href=&quot;https://stackoverflow.com/questions/19671845/how-can-i-generate-a-random-number-within-a-range-in-rust#19674981&quot;&gt;a stackoverflow question on the topic&lt;/a&gt;;
 the top answer is outdated, but a comment tells me
 to check a different answer, which tells me to
-use &lt;code&gt;extern crate rand;&lt;/code&gt; and add dependencies to cargo.toml.&lt;/p&gt;
+use &lt;code class=&quot;highlighter-rouge&quot;&gt;extern crate rand;&lt;/code&gt; and add dependencies to cargo.toml.&lt;/p&gt;
 
 &lt;p&gt;After reading up how to add dependencies to cargo.toml, I update the file and try again.
 Cargo spends twenty-four minutes ‘updating registry’ (I want one small dependency and have specified the exact version!). My connection is slow, but it’s not &lt;em&gt;that&lt;/em&gt; slow.
@@ -55,7 +170,7 @@ In doing so, I (incidentally) notice that backtraces don’t have line numbers (
 
 </description>
         <published>2017-11-27 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2017/11/27/rust-an-experience-report/</link>
+        <link>http://localhost:4000/2017/11/27/rust-an-experience-report/</link>
       </item>
     
       <item>
@@ -91,10 +206,10 @@ In doing so, I (incidentally) notice that backtraces don’t have line numbers (
 
 &lt;p&gt;If you are using homebrew on mac, you can install the last three that way:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;brew install selenium-server-standalone
-brew install jq
-brew install chromedriver
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;selenium-server-standalone
+brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;jq
+brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;chromedriver
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;getting-started&quot;&gt;Getting started&lt;/h2&gt;
 
@@ -111,37 +226,37 @@ brew install chromedriver
 
 &lt;p&gt;Open a terminal and run the standalone server:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;# On OSX using homebrew:
-/usr/local/bin/selenium-server -port 4444
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# On OSX using homebrew:&lt;/span&gt;
+/usr/local/bin/selenium-server &lt;span class=&quot;nt&quot;&gt;-port&lt;/span&gt; 4444
 
-# Everyone else - you&#39;ll need to be in the directory where selenium is downloaded to / installed:
-java -jar selenium-server-standalone-3.0.1.jar -port 4444
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;c&quot;&gt;# Everyone else - you'll need to be in the directory where selenium is downloaded to / installed:&lt;/span&gt;
+java &lt;span class=&quot;nt&quot;&gt;-jar&lt;/span&gt; selenium-server-standalone-3.0.1.jar &lt;span class=&quot;nt&quot;&gt;-port&lt;/span&gt; 4444
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Leave this running and open a another terminal window.
 In the new window, run the following to ask the server to start a new chrome session
-(copy &amp;amp; paste will work, or save it to a file and run &lt;code&gt;source &amp;lt;file&amp;gt;&lt;/code&gt;):&lt;/p&gt;
+(copy &amp;amp; paste will work, or save it to a file and run &lt;code class=&quot;highlighter-rouge&quot;&gt;source &amp;lt;file&amp;gt;&lt;/code&gt;):&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;`# Save the URL to the local selenium server`
-`# to the variable SELENIUM_URL`
-SELENIUM_URL=&quot;http://localhost:4444/wd/hub/session&quot;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Save the URL to the local selenium server`&lt;/span&gt;
+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# to the variable SELENIUM_URL`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:4444/wd/hub/session&quot;&lt;/span&gt;
 
-`# Save the result of asking for a new browser session`
-`# to the variable SELENIUM_SESSION_ID`
-SELENIUM_SESSION_ID=$( \
-  `# Use curl to make a HTTP POST asking the selenium` \
-  `# server to open chrome` \
-  curl &quot;$SELENIUM_URL&quot; \
-       --data-ascii \
-       &#39;{&quot;desiredCapabilities&quot;:{&quot;browserName&quot;:&quot;chrome&quot;}}&#39; \
-       | jq -r .sessionId \
-)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Save the result of asking for a new browser session`&lt;/span&gt;
+&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# to the variable SELENIUM_SESSION_ID`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;SELENIUM_SESSION_ID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Use curl to make a HTTP POST asking the selenium` \&lt;/span&gt;
+  &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# server to open chrome` \&lt;/span&gt;
+  curl &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;--data-ascii&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       &lt;span class=&quot;s1&quot;&gt;'{&quot;desiredCapabilities&quot;:{&quot;browserName&quot;:&quot;chrome&quot;}}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       | jq &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .sessionId &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;You should see a new window running chrome, looking at a blank page.&lt;/p&gt;
 
 &lt;p&gt;The above command sets your current shell (terminal window) up
-with the variables &lt;code&gt;SELENIUM_SESSION_ID&lt;/code&gt; and &lt;code&gt;SELENIUM_ID&lt;/code&gt;,
+with the variables &lt;code class=&quot;highlighter-rouge&quot;&gt;SELENIUM_SESSION_ID&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;SELENIUM_ID&lt;/code&gt;,
 which are used in later commands.&lt;/p&gt;
 
 &lt;p&gt;If you open a new shell, those variables will not be present
@@ -151,16 +266,16 @@ and the commands won’t work.&lt;/p&gt;
 
 &lt;p&gt;Lets make our browser go to google.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;curl &quot;$SELENIUM_URL/$SELENIUM_SESSION_ID/url&quot; \
-     --data-ascii \
-     &#39;{&quot;url&quot;: &quot;https://google.com&quot;}&#39; \
-     | jq .
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_SESSION_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/url&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;--data-ascii&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+     &lt;span class=&quot;s1&quot;&gt;'{&quot;url&quot;: &quot;https://google.com&quot;}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+     | jq &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;You should see:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;A page of JSON, including &lt;code&gt;{&quot;state&quot;: &quot;success&quot;}&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;A page of JSON, including &lt;code class=&quot;highlighter-rouge&quot;&gt;{&quot;state&quot;: &quot;success&quot;}&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;The chrome window is now on google.com.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -169,23 +284,23 @@ and the commands won’t work.&lt;/p&gt;
 &lt;p&gt;Lets automate issuing a search.
 First, find the input element:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;SEARCH_BOX_ELEMENT=$(
-  curl &quot;$SELENIUM_URL/$SELENIUM_SESSION_ID/element&quot; \
-       --data-ascii \
-       &#39;{&quot;using&quot;: &quot;css selector&quot;, &quot;value&quot;: &quot;input[name=q]&quot;}&#39; \
-       `# Use &#39;jq&#39; to extract part of the response. ` \
-       `# -r to get the text without quotes. ` \
-       | jq -r .value.ELEMENT \
-)
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;SEARCH_BOX_ELEMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;
+  curl &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_SESSION_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/element&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       &lt;span class=&quot;nt&quot;&gt;--data-ascii&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       &lt;span class=&quot;s1&quot;&gt;'{&quot;using&quot;: &quot;css selector&quot;, &quot;value&quot;: &quot;input[name=q]&quot;}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Use 'jq' to extract part of the response. ` \&lt;/span&gt;
+       &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# -r to get the text without quotes. ` \&lt;/span&gt;
+       | jq &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .value.ELEMENT &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Now we’ll type something into the search box:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;curl &quot;$SELENIUM_URL/$SELENIUM_SESSION_ID/element/$SEARCH_BOX_ELEMENT/value&quot; \
-     --data-ascii \
-     &#39;{&quot;value&quot;: [&quot;s&quot;,&quot;e&quot;,&quot;l&quot;,&quot;e&quot;,&quot;n&quot;,&quot;i&quot;,&quot;u&quot;,&quot;m&quot;, &quot;\n&quot;]}&#39; \
-     | jq .
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SELENIUM_SESSION_ID&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/element/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$SEARCH_BOX_ELEMENT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/value&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+     &lt;span class=&quot;nt&quot;&gt;--data-ascii&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+     &lt;span class=&quot;s1&quot;&gt;'{&quot;value&quot;: [&quot;s&quot;,&quot;e&quot;,&quot;l&quot;,&quot;e&quot;,&quot;n&quot;,&quot;i&quot;,&quot;u&quot;,&quot;m&quot;, &quot;\n&quot;]}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+     | jq &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Switching to the chrome window, you should be able to see the search results.&lt;/p&gt;
 
@@ -193,49 +308,49 @@ First, find the input element:&lt;/p&gt;
 
 &lt;p&gt;This is getting repetitive. Lets define some bash functions to make it easier:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;function debug {
-  if [ -n &quot;$DEBUG&quot; ] ; then
-    # Print debug messages to STDERR
-    echo &quot;$@&quot; 1&amp;gt;&amp;amp;2
-  fi
-}
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;debug &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DEBUG&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;# Print debug messages to STDERR&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; 1&amp;gt;&amp;amp;2
+  &lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-function get {
-  # Build the URL, requiring that a path was provided
-  local URL=&quot;${SELENIUM_URL}/${SELENIUM_SESSION_ID}${1?Must provide URL}&quot;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;get &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;# Build the URL, requiring that a path was provided&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SELENIUM_SESSION_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?Must provide URL&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
-  debug &quot;$URL&quot;
+  debug &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$URL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
-  # Fetch the URL and format with jq.
-  curl --silent &quot;${URL}&quot; | jq .
-}
+  &lt;span class=&quot;c&quot;&gt;# Fetch the URL and format with jq.&lt;/span&gt;
+  curl &lt;span class=&quot;nt&quot;&gt;--silent&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; | jq &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-function post {
-  # Build the URL, requiring that a path was provided
-  local URL=&quot;${SELENIUM_URL}/${SELENIUM_SESSION_ID}${1?Must provide URL}&quot;
+&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;post &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;c&quot;&gt;# Build the URL, requiring that a path was provided&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SELENIUM_URL&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;SELENIUM_SESSION_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?Must provide URL&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
-  # Set a default value for the POST data
-  local DATA=&quot;${2-{\}}&quot;
+  &lt;span class=&quot;c&quot;&gt;# Set a default value for the POST data&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DATA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-{\&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;}&quot;&lt;/span&gt;
 
-  # Validate that the provided data is valid JSON
-  echo &quot;$DATA&quot; | jq . &amp;gt; /dev/null || \
-    ${ALLOW_INVALID_JSON?Second argument is not valid JSON}
+  &lt;span class=&quot;c&quot;&gt;# Validate that the provided data is valid JSON&lt;/span&gt;
+  &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DATA&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; | jq &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; /dev/null &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;ALLOW_INVALID_JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?Second argument is not valid JSON&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
 
-  debug &quot;$URL&quot;
+  debug &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$URL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
-  # Fetch the URL and format the response with jq.
-  curl --silent &quot;${URL}&quot; --data-ascii &quot;${DATA}&quot; | jq .
-&lt;/code&gt;&lt;/pre&gt;
+  &lt;span class=&quot;c&quot;&gt;# Fetch the URL and format the response with jq.&lt;/span&gt;
+  curl &lt;span class=&quot;nt&quot;&gt;--silent&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;URL&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--data-ascii&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DATA&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; | jq &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;screenshots&quot;&gt;Screenshots&lt;/h2&gt;
 
 &lt;p&gt;Lets use these new functions to take a screenshot:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;get /screenshot `# Ask for a screenshot` \
-    | jq -r .value `# Fetch the raw (-r) string from the &#39;value&#39;` \
-    | base64 -D `# Decode the base64-encoded data provided by selenium` \
-    &amp;gt; screenshot.png `# Save the result to screenshot.png`
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;get /screenshot &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Ask for a screenshot` \&lt;/span&gt;
+    | jq &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .value &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Fetch the raw (-r) string from the 'value'` \&lt;/span&gt;
+    | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-D&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Decode the base64-encoded data provided by selenium` \&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; screenshot.png &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;# Save the result to screenshot.png`&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;If you open ‘screenshot.png’ you should see the page screenshotted.&lt;/p&gt;
 
@@ -244,17 +359,17 @@ function post {
 &lt;p&gt;Lets grab the URL of each search result.&lt;/p&gt;
 
 &lt;p&gt;Looking at the document using ‘inspect element’, I can see that
-search result URLs are all in &lt;code&gt;cite&lt;/code&gt; elements and nothing else is.
+search result URLs are all in &lt;code class=&quot;highlighter-rouge&quot;&gt;cite&lt;/code&gt; elements and nothing else is.
 That sounds like a good way to identify those URLs.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;for element_id in $( \
-  post /elements \
-       &#39;{&quot;using&quot;: &quot;css selector&quot;, &quot;value&quot;: &quot;cite&quot;}&#39; \
-       | jq -r .value[].ELEMENT \
-  ) ; do
-  get &quot;/element/$element_id/text&quot; | jq -r .value
-done
-&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;element_id &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  post /elements &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       &lt;span class=&quot;s1&quot;&gt;'{&quot;using&quot;: &quot;css selector&quot;, &quot;value&quot;: &quot;cite&quot;}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+       | jq &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .value[].ELEMENT &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do
+  &lt;/span&gt;get &lt;span class=&quot;s2&quot;&gt;&quot;/element/&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$element_id&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/text&quot;&lt;/span&gt; | jq &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .value
+&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;I get the following output:&lt;/p&gt;
 
@@ -394,7 +509,7 @@ allocated by selenium when you find/get an element.&lt;/p&gt;
 
 </description>
         <published>2016-12-10 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2016/12/10/browser-automation-the-hard-way/</link>
+        <link>http://localhost:4000/2016/12/10/browser-automation-the-hard-way/</link>
       </item>
     
       <item>
@@ -426,7 +541,7 @@ record - you can’t specify the value for a new records ID.&lt;/p&gt;
 
 &lt;p&gt;Postgres supports using a Universally Unique ID (UUID) instead.&lt;/p&gt;
 
-&lt;p&gt;UUIDs look like this: &lt;code&gt;93743318-67f4-4c29-8ba0-5ba4f667c7b2&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;UUIDs look like this: &lt;code class=&quot;highlighter-rouge&quot;&gt;93743318-67f4-4c29-8ba0-5ba4f667c7b2&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;This can be a useful alternative because it lets you specify
 the ID, but will still generate an ID if you don’t specify one.&lt;/p&gt;
@@ -467,9 +582,9 @@ the database server can become overloaded.&lt;/p&gt;
 &lt;p&gt;Partitioning lets you use multiple servers, storing part of your data on each of them.&lt;/p&gt;
 
 &lt;p&gt;This technique helps you scale a database which is overloaded
-due to too many &lt;code&gt;update&lt;/code&gt;, &lt;code&gt;delete&lt;/code&gt; &amp;amp; &lt;code&gt;insert&lt;/code&gt; commands.&lt;/p&gt;
+due to too many &lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;delete&lt;/code&gt; &amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt; commands.&lt;/p&gt;
 
-&lt;p&gt;For instance, all records where the &lt;code&gt;name&lt;/code&gt; field starts from A through F
+&lt;p&gt;For instance, all records where the &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt; field starts from A through F
 will go to one server, G through P to a second, and the remainder to a third.&lt;/p&gt;
 
 &lt;p&gt;You can achieve this using a feature called child tables (the documentation has good examples).&lt;/p&gt;
@@ -477,10 +592,10 @@ will go to one server, G through P to a second, and the remainder to a third.&lt
 &lt;h4 id=&quot;replication&quot;&gt;Replication&lt;/h4&gt;
 
 &lt;p&gt;Replication lets you use multiple servers, storing all of your data on each of them.
-Only one of the servers is allowed to handle &lt;code&gt;update&lt;/code&gt;, &lt;code&gt;insert&lt;/code&gt; or &lt;code&gt;delete&lt;/code&gt; queries.&lt;/p&gt;
+Only one of the servers is allowed to handle &lt;code class=&quot;highlighter-rouge&quot;&gt;update&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;delete&lt;/code&gt; queries.&lt;/p&gt;
 
 &lt;p&gt;This technique helps you scale a database which is overloaded
-due to too many &lt;code&gt;select&lt;/code&gt; queries running at once.&lt;/p&gt;
+due to too many &lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt; queries running at once.&lt;/p&gt;
 
 &lt;p&gt;It is also good because each server has a full copy of the database,
 meaning that if the primary database fails, you can
@@ -502,7 +617,7 @@ work like normal Ruby arrays.&lt;/p&gt;
 
 &lt;h4 id=&quot;hashes-via-hstore&quot;&gt;Hashes (via HSTORE)&lt;/h4&gt;
 
-&lt;p&gt;Similarly to arrays, you can store hashes like &lt;code&gt;{&#39;foo&#39; =&amp;gt; &#39;bar&#39;, &#39;k&#39; =&amp;gt; &#39;v&#39;}&lt;/code&gt;
+&lt;p&gt;Similarly to arrays, you can store hashes like &lt;code class=&quot;highlighter-rouge&quot;&gt;{'foo' =&amp;gt; 'bar', 'k' =&amp;gt; 'v'}&lt;/code&gt;
 This works like a normal Ruby hash through ActiveRecord, except you can
 only use strings for the keys and values.&lt;/p&gt;
 
@@ -547,14 +662,14 @@ the database where to find the records which match a query.&lt;/p&gt;
 &lt;h4 id=&quot;partial-indexes&quot;&gt;Partial indexes&lt;/h4&gt;
 
 &lt;p&gt;Unlike other databases, postgres lets you create an index with a
-&lt;code&gt;where&lt;/code&gt; condition (e.g. &lt;code&gt;create index (...) where (condition)&lt;/code&gt;).&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;where&lt;/code&gt; condition (e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;create index (...) where (condition)&lt;/code&gt;).&lt;/p&gt;
 
 &lt;p&gt;This means that the index file can be even smaller and quicker to use.&lt;/p&gt;
 
 &lt;h4 id=&quot;expression-indexes&quot;&gt;Expression indexes&lt;/h4&gt;
 
 &lt;p&gt;Postgres also allows you to create an index on any expression (not just a column).
-This means you can do things like &lt;code&gt;create index index_name on table_name ( to_uppercase(description) )&lt;/code&gt;&lt;/p&gt;
+This means you can do things like &lt;code class=&quot;highlighter-rouge&quot;&gt;create index index_name on table_name ( to_uppercase(description) )&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;ddl-transactions&quot;&gt;DDL Transactions&lt;/h3&gt;
 
@@ -571,7 +686,7 @@ do nothing at all.&lt;/p&gt;
 
 &lt;p&gt;However, they are often hard to use because they can’t be broken, even temporarily.&lt;/p&gt;
 
-&lt;p&gt;Postgres supports &lt;code&gt;deferred&lt;/code&gt; constraints, which only apply when you commit a transaction.
+&lt;p&gt;Postgres supports &lt;code class=&quot;highlighter-rouge&quot;&gt;deferred&lt;/code&gt; constraints, which only apply when you commit a transaction.
 This makes constraints far more usable with Rails.&lt;/p&gt;
 
 &lt;h3 id=&quot;foreign-tables&quot;&gt;Foreign Tables&lt;/h3&gt;
@@ -582,7 +697,7 @@ a totally different database (e.g. MySql or any JDBC database).&lt;/p&gt;
 &lt;p&gt;Handy when dealing with really big, organically grown systems.&lt;/p&gt;
 </description>
         <published>2014-08-27 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2014/08/27/postgres-features-in-20-minutes/</link>
+        <link>http://localhost:4000/2014/08/27/postgres-features-in-20-minutes/</link>
       </item>
     
       <item>
@@ -654,7 +769,7 @@ How do the team keep each other informed (eg email/chat/face-to-face)?&lt;/p&gt;
 
 </description>
         <published>2013-10-03 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2013/10/03/questions-for-prospective-employers/</link>
+        <link>http://localhost:4000/2013/10/03/questions-for-prospective-employers/</link>
       </item>
     
       <item>
@@ -678,30 +793,29 @@ When writing packages, export interfaces, not types (to make testing possible).&
 
 &lt;p&gt;Any type can have methods. E.G.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&quot;language-go&quot;&gt;type Foo string
-func(f Foo) Print() { fmt.Println(f) }
-Foo(&quot;a string&quot;).Print() # Prints &quot;a string&quot;
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Foo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a string&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Prints&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a string&quot;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
 
-type Bar struct { str string }
-func(b Bar) Print() { fmt.Println(b.str) }
-Bar{&quot;A different string&quot;}.Print() # Prints &quot;A different string&quot;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A different string&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Prints&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;A different string&quot;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Important differences moving from ruby to go:
-* Code re-use via composition feels very natural coming from ruby.
- * Where you would have used a module Foo in ruby, embed an interface Foo in go.&lt;/p&gt;
-
+&lt;p&gt;Important differences moving from ruby to go:&lt;/p&gt;
 &lt;ul&gt;
+  &lt;li&gt;Code re-use via composition feels very natural coming from ruby.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Where you would have used a module Foo in ruby, embed an interface Foo in go.&lt;/p&gt;
+  &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Because imports can’t interfere with one another, many small dependencies is not a problem. Compose your app from many small frameworks rather than using one large one.&lt;/p&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Monitoring is back in the dark ages (No newrelic). Plan accordingly.&lt;/p&gt;
-  &lt;/li&gt;
+  &lt;li&gt;Monitoring is back in the dark ages (No newrelic). Plan accordingly.&lt;/li&gt;
 &lt;/ul&gt;
 </description>
         <published>2013-06-23 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2013/06/23/learning-go/</link>
+        <link>http://localhost:4000/2013/06/23/learning-go/</link>
       </item>
     
       <item>
@@ -717,26 +831,28 @@ Bar{&quot;A different string&quot;}.Print() # Prints &quot;A different string&qu
 
 &lt;p&gt;I’ve put together a &lt;a href=&quot;https://github.com/DanielHeath/sprockets-sample&quot;&gt;sample repo&lt;/a&gt; using the asset pipeline.&lt;/p&gt;
 
-&lt;p&gt;The setup for your app will be similar:
- * The &lt;code&gt;assets&lt;/code&gt; folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).
- * You’ll need a similar &lt;code&gt;Rakefile&lt;/code&gt; to build assets (and maybe launch the server)
- * You might store the &lt;code&gt;sprockets&lt;/code&gt; directory somewhere else - update the &lt;code&gt;Rakefile&lt;/code&gt; to match.
- * Use a Gemfile and the bundler rubygem to manage dependencies.
- * Edit the rakefile to change the port the asset server runs on.&lt;/p&gt;
+&lt;p&gt;The setup for your app will be similar:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;assets&lt;/code&gt; folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).&lt;/li&gt;
+  &lt;li&gt;You’ll need a similar &lt;code class=&quot;highlighter-rouge&quot;&gt;Rakefile&lt;/code&gt; to build assets (and maybe launch the server)&lt;/li&gt;
+  &lt;li&gt;You might store the &lt;code class=&quot;highlighter-rouge&quot;&gt;sprockets&lt;/code&gt; directory somewhere else - update the &lt;code class=&quot;highlighter-rouge&quot;&gt;Rakefile&lt;/code&gt; to match.&lt;/li&gt;
+  &lt;li&gt;Use a Gemfile and the bundler rubygem to manage dependencies.&lt;/li&gt;
+  &lt;li&gt;Edit the rakefile to change the port the asset server runs on.&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;When your app starts (in development), it should make a request to &lt;code&gt;http://localhost:11111/assets/manifest.json&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;When your app starts (in development), it should make a request to &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:11111/assets/manifest.json&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;Parse this JSON hash; the keys are asset names (eg “application.css”) and the values are relative URLs the compiled assets can be fetched from.&lt;/p&gt;
 
-&lt;p&gt;When generating a link to an asset in your app, use the JSON hash you fetched to lookup the URL. In the case of “application.css” this might look like &lt;code&gt;http://localhost:11111/application-8e5bf6909b33895a72899ee43f5a9d53.css&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;When generating a link to an asset in your app, use the JSON hash you fetched to lookup the URL. In the case of “application.css” this might look like &lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:11111/application-8e5bf6909b33895a72899ee43f5a9d53.css&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;That should be all you need for development - you should be able to see SASS/Coffeescript assets compiled and loading normally.&lt;/p&gt;
 
 &lt;h2 id=&quot;assets-in-production&quot;&gt;Assets in production&lt;/h2&gt;
 &lt;p&gt;For production we want to pre-compile assets rather than regenerating them each time they change.&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;rake assets&lt;/code&gt; will create a ‘public’ folder containing ‘manifest.json’ (same format as before).
-Get this directory onto your production servers (&lt;code&gt;git add -Af public/&lt;/code&gt; will add it to source control if you deploy via git).&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;rake assets&lt;/code&gt; will create a ‘public’ folder containing ‘manifest.json’ (same format as before).
+Get this directory onto your production servers (&lt;code class=&quot;highlighter-rouge&quot;&gt;git add -Af public/&lt;/code&gt; will add it to source control if you deploy via git).&lt;/p&gt;
 
 &lt;p&gt;When generating a link to an asset, look up manifest.json (the same as in development, but from the filesystem instead of over HTTP).&lt;/p&gt;
 
@@ -747,7 +863,7 @@ The resulting assets are minified, concatenated, and gzipped (for size).
 They are also fingerprinted (so you can set an unlimited cache lifetime).&lt;/p&gt;
 </description>
         <published>2013-06-03 00:00:00 +1000</published>
-        <link>http://daniel.heath.cc/2013/06/03/sprockets-and-go/</link>
+        <link>http://localhost:4000/2013/06/03/sprockets-and-go/</link>
       </item>
     
       <item>
@@ -772,7 +888,7 @@ That is the metric by which success is judged, and Ortiz (and other US attorneys
 What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?&lt;/p&gt;
 </description>
         <published>2013-03-19 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/03/19/removing-cortiz-is-pointless/</link>
+        <link>http://localhost:4000/2013/03/19/removing-cortiz-is-pointless/</link>
       </item>
     
       <item>
@@ -826,7 +942,7 @@ They were totally optional (about half the development team came to any given me
 &lt;/div&gt;
 </description>
         <published>2013-02-11 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/02/11/push-vs-pull/</link>
+        <link>http://localhost:4000/2013/02/11/push-vs-pull/</link>
       </item>
     
       <item>
@@ -846,26 +962,7 @@ They were totally optional (about half the development team came to any given me
 &lt;p&gt;Not to mention the constellation of other open source software which supports everything I do - from curl/sed to postgres/sendmail to ruby/go/gcc to linux/bsd. To every OSS developer out there - thank you!&lt;/p&gt;
 </description>
         <published>2013-02-10 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/02/10/static-sites-on-s3/</link>
-      </item>
-    
-      <item>
-        <title>Distributed Teams</title>
-        <description>&lt;p&gt;I got into a conversation a couple of weeks back about distributed teams.
-It seemed that almost everyone had a story of a team where someone had started working remotely and the results had not been positive.&lt;/p&gt;
-
-&lt;p&gt;As I see it, the problem is most people prefer in-person interaction (and this biases decisions about who to communicate with).&lt;/p&gt;
-
-&lt;p&gt;This bias results in remote workers being left out and prevents them from contributing as fully as they otherwise could.&lt;/p&gt;
-
-&lt;p&gt;When any one person on your team is working remotely, communication within the team needs to be done online - even when you’re right next to the rest of the team.&lt;/p&gt;
-
-&lt;p&gt;Otherwise, your remote workers will slowly become disconnected from your on-site workers.&lt;/p&gt;
-
-&lt;p&gt;99designs uses basecamp, github, email, an internal chatroom and instant messenging. Chat is the preferred way to get in touch, even for developers on the same floor. As a result, remote workers are looped in despite being spread over several offices in different time zones and countries.&lt;/p&gt;
-</description>
-        <published>2013-02-09 00:00:00 +1100</published>
-        <link>http://daniel.heath.cc/2013/02/09/distributed-teams/</link>
+        <link>http://localhost:4000/2013/02/10/static-sites-on-s3/</link>
       </item>
     
   </channel>

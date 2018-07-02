@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -132,10 +134,10 @@
 
 <p>If you are using homebrew on mac, you can install the last three that way:</p>
 
-<pre><code class="language-bash">brew install selenium-server-standalone
-brew install jq
-brew install chromedriver
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>selenium-server-standalone
+brew <span class="nb">install </span>jq
+brew <span class="nb">install </span>chromedriver
+</code></pre></div></div>
 
 <h2 id="getting-started">Getting started</h2>
 
@@ -152,37 +154,37 @@ brew install chromedriver
 
 <p>Open a terminal and run the standalone server:</p>
 
-<pre><code class="language-bash"># On OSX using homebrew:
-/usr/local/bin/selenium-server -port 4444
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># On OSX using homebrew:</span>
+/usr/local/bin/selenium-server <span class="nt">-port</span> 4444
 
-# Everyone else - you'll need to be in the directory where selenium is downloaded to / installed:
-java -jar selenium-server-standalone-3.0.1.jar -port 4444
-</code></pre>
+<span class="c"># Everyone else - you'll need to be in the directory where selenium is downloaded to / installed:</span>
+java <span class="nt">-jar</span> selenium-server-standalone-3.0.1.jar <span class="nt">-port</span> 4444
+</code></pre></div></div>
 
 <p>Leave this running and open a another terminal window.
 In the new window, run the following to ask the server to start a new chrome session
-(copy &amp; paste will work, or save it to a file and run <code>source &lt;file&gt;</code>):</p>
+(copy &amp; paste will work, or save it to a file and run <code class="highlighter-rouge">source &lt;file&gt;</code>):</p>
 
-<pre><code class="language-bash">`# Save the URL to the local selenium server`
-`# to the variable SELENIUM_URL`
-SELENIUM_URL="http://localhost:4444/wd/hub/session"
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sb">`</span><span class="c"># Save the URL to the local selenium server`</span>
+<span class="sb">`</span><span class="c"># to the variable SELENIUM_URL`</span>
+<span class="nv">SELENIUM_URL</span><span class="o">=</span><span class="s2">"http://localhost:4444/wd/hub/session"</span>
 
-`# Save the result of asking for a new browser session`
-`# to the variable SELENIUM_SESSION_ID`
-SELENIUM_SESSION_ID=$( \
-  `# Use curl to make a HTTP POST asking the selenium` \
-  `# server to open chrome` \
-  curl "$SELENIUM_URL" \
-       --data-ascii \
-       '{"desiredCapabilities":{"browserName":"chrome"}}' \
-       | jq -r .sessionId \
-)
-</code></pre>
+<span class="sb">`</span><span class="c"># Save the result of asking for a new browser session`</span>
+<span class="sb">`</span><span class="c"># to the variable SELENIUM_SESSION_ID`</span>
+<span class="nv">SELENIUM_SESSION_ID</span><span class="o">=</span><span class="k">$(</span> <span class="se">\</span>
+  <span class="sb">`</span><span class="c"># Use curl to make a HTTP POST asking the selenium` \</span>
+  <span class="sb">`</span><span class="c"># server to open chrome` \</span>
+  curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">"</span> <span class="se">\</span>
+       <span class="nt">--data-ascii</span> <span class="se">\</span>
+       <span class="s1">'{"desiredCapabilities":{"browserName":"chrome"}}'</span> <span class="se">\</span>
+       | jq <span class="nt">-r</span> .sessionId <span class="se">\</span>
+<span class="k">)</span>
+</code></pre></div></div>
 
 <p>You should see a new window running chrome, looking at a blank page.</p>
 
 <p>The above command sets your current shell (terminal window) up
-with the variables <code>SELENIUM_SESSION_ID</code> and <code>SELENIUM_ID</code>,
+with the variables <code class="highlighter-rouge">SELENIUM_SESSION_ID</code> and <code class="highlighter-rouge">SELENIUM_ID</code>,
 which are used in later commands.</p>
 
 <p>If you open a new shell, those variables will not be present
@@ -192,16 +194,16 @@ and the commands won’t work.</p>
 
 <p>Lets make our browser go to google.</p>
 
-<pre><code class="language-bash">curl "$SELENIUM_URL/$SELENIUM_SESSION_ID/url" \
-     --data-ascii \
-     '{"url": "https://google.com"}' \
-     | jq .
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">/</span><span class="nv">$SELENIUM_SESSION_ID</span><span class="s2">/url"</span> <span class="se">\</span>
+     <span class="nt">--data-ascii</span> <span class="se">\</span>
+     <span class="s1">'{"url": "https://google.com"}'</span> <span class="se">\</span>
+     | jq <span class="nb">.</span>
+</code></pre></div></div>
 
 <p>You should see:</p>
 
 <ul>
-  <li>A page of JSON, including <code>{"state": "success"}</code></li>
+  <li>A page of JSON, including <code class="highlighter-rouge">{"state": "success"}</code></li>
   <li>The chrome window is now on google.com.</li>
 </ul>
 
@@ -210,23 +212,23 @@ and the commands won’t work.</p>
 <p>Lets automate issuing a search.
 First, find the input element:</p>
 
-<pre><code class="language-bash">SEARCH_BOX_ELEMENT=$(
-  curl "$SELENIUM_URL/$SELENIUM_SESSION_ID/element" \
-       --data-ascii \
-       '{"using": "css selector", "value": "input[name=q]"}' \
-       `# Use 'jq' to extract part of the response. ` \
-       `# -r to get the text without quotes. ` \
-       | jq -r .value.ELEMENT \
-)
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">SEARCH_BOX_ELEMENT</span><span class="o">=</span><span class="k">$(</span>
+  curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">/</span><span class="nv">$SELENIUM_SESSION_ID</span><span class="s2">/element"</span> <span class="se">\</span>
+       <span class="nt">--data-ascii</span> <span class="se">\</span>
+       <span class="s1">'{"using": "css selector", "value": "input[name=q]"}'</span> <span class="se">\</span>
+       <span class="sb">`</span><span class="c"># Use 'jq' to extract part of the response. ` \</span>
+       <span class="sb">`</span><span class="c"># -r to get the text without quotes. ` \</span>
+       | jq <span class="nt">-r</span> .value.ELEMENT <span class="se">\</span>
+<span class="k">)</span>
+</code></pre></div></div>
 
 <p>Now we’ll type something into the search box:</p>
 
-<pre><code class="language-bash">curl "$SELENIUM_URL/$SELENIUM_SESSION_ID/element/$SEARCH_BOX_ELEMENT/value" \
-     --data-ascii \
-     '{"value": ["s","e","l","e","n","i","u","m", "\n"]}' \
-     | jq .
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">/</span><span class="nv">$SELENIUM_SESSION_ID</span><span class="s2">/element/</span><span class="nv">$SEARCH_BOX_ELEMENT</span><span class="s2">/value"</span> <span class="se">\</span>
+     <span class="nt">--data-ascii</span> <span class="se">\</span>
+     <span class="s1">'{"value": ["s","e","l","e","n","i","u","m", "\n"]}'</span> <span class="se">\</span>
+     | jq <span class="nb">.</span>
+</code></pre></div></div>
 
 <p>Switching to the chrome window, you should be able to see the search results.</p>
 
@@ -234,49 +236,49 @@ First, find the input element:</p>
 
 <p>This is getting repetitive. Lets define some bash functions to make it easier:</p>
 
-<pre><code class="language-bash">function debug {
-  if [ -n "$DEBUG" ] ; then
-    # Print debug messages to STDERR
-    echo "$@" 1&gt;&amp;2
-  fi
-}
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function </span>debug <span class="o">{</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$DEBUG</span><span class="s2">"</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+    <span class="c"># Print debug messages to STDERR</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> 1&gt;&amp;2
+  <span class="k">fi</span>
+<span class="o">}</span>
 
-function get {
-  # Build the URL, requiring that a path was provided
-  local URL="${SELENIUM_URL}/${SELENIUM_SESSION_ID}${1?Must provide URL}"
+<span class="k">function </span>get <span class="o">{</span>
+  <span class="c"># Build the URL, requiring that a path was provided</span>
+  <span class="nb">local </span><span class="nv">URL</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SELENIUM_URL</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">SELENIUM_SESSION_ID</span><span class="k">}${</span><span class="nv">1</span><span class="p">?Must provide URL</span><span class="k">}</span><span class="s2">"</span>
 
-  debug "$URL"
+  debug <span class="s2">"</span><span class="nv">$URL</span><span class="s2">"</span>
 
-  # Fetch the URL and format with jq.
-  curl --silent "${URL}" | jq .
-}
+  <span class="c"># Fetch the URL and format with jq.</span>
+  curl <span class="nt">--silent</span> <span class="s2">"</span><span class="k">${</span><span class="nv">URL</span><span class="k">}</span><span class="s2">"</span> | jq <span class="nb">.</span>
+<span class="o">}</span>
 
-function post {
-  # Build the URL, requiring that a path was provided
-  local URL="${SELENIUM_URL}/${SELENIUM_SESSION_ID}${1?Must provide URL}"
+<span class="k">function </span>post <span class="o">{</span>
+  <span class="c"># Build the URL, requiring that a path was provided</span>
+  <span class="nb">local </span><span class="nv">URL</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SELENIUM_URL</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">SELENIUM_SESSION_ID</span><span class="k">}${</span><span class="nv">1</span><span class="p">?Must provide URL</span><span class="k">}</span><span class="s2">"</span>
 
-  # Set a default value for the POST data
-  local DATA="${2-{\}}"
+  <span class="c"># Set a default value for the POST data</span>
+  <span class="nb">local </span><span class="nv">DATA</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">2</span><span class="p">-{\</span><span class="k">}</span><span class="s2">}"</span>
 
-  # Validate that the provided data is valid JSON
-  echo "$DATA" | jq . &gt; /dev/null || \
-    ${ALLOW_INVALID_JSON?Second argument is not valid JSON}
+  <span class="c"># Validate that the provided data is valid JSON</span>
+  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$DATA</span><span class="s2">"</span> | jq <span class="nb">.</span> <span class="o">&gt;</span> /dev/null <span class="o">||</span> <span class="se">\</span>
+    <span class="k">${</span><span class="nv">ALLOW_INVALID_JSON</span><span class="p">?Second argument is not valid JSON</span><span class="k">}</span>
 
-  debug "$URL"
+  debug <span class="s2">"</span><span class="nv">$URL</span><span class="s2">"</span>
 
-  # Fetch the URL and format the response with jq.
-  curl --silent "${URL}" --data-ascii "${DATA}" | jq .
-</code></pre>
+  <span class="c"># Fetch the URL and format the response with jq.</span>
+  curl <span class="nt">--silent</span> <span class="s2">"</span><span class="k">${</span><span class="nv">URL</span><span class="k">}</span><span class="s2">"</span> <span class="nt">--data-ascii</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DATA</span><span class="k">}</span><span class="s2">"</span> | jq <span class="nb">.</span>
+</code></pre></div></div>
 
 <h2 id="screenshots">Screenshots</h2>
 
 <p>Lets use these new functions to take a screenshot:</p>
 
-<pre><code class="language-bash">get /screenshot `# Ask for a screenshot` \
-    | jq -r .value `# Fetch the raw (-r) string from the 'value'` \
-    | base64 -D `# Decode the base64-encoded data provided by selenium` \
-    &gt; screenshot.png `# Save the result to screenshot.png`
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>get /screenshot <span class="sb">`</span><span class="c"># Ask for a screenshot` \</span>
+    | jq <span class="nt">-r</span> .value <span class="sb">`</span><span class="c"># Fetch the raw (-r) string from the 'value'` \</span>
+    | <span class="nb">base64</span> <span class="nt">-D</span> <span class="sb">`</span><span class="c"># Decode the base64-encoded data provided by selenium` \</span>
+    <span class="o">&gt;</span> screenshot.png <span class="sb">`</span><span class="c"># Save the result to screenshot.png`</span>
+</code></pre></div></div>
 
 <p>If you open ‘screenshot.png’ you should see the page screenshotted.</p>
 
@@ -285,17 +287,17 @@ function post {
 <p>Lets grab the URL of each search result.</p>
 
 <p>Looking at the document using ‘inspect element’, I can see that
-search result URLs are all in <code>cite</code> elements and nothing else is.
+search result URLs are all in <code class="highlighter-rouge">cite</code> elements and nothing else is.
 That sounds like a good way to identify those URLs.</p>
 
-<pre><code class="language-bash">for element_id in $( \
-  post /elements \
-       '{"using": "css selector", "value": "cite"}' \
-       | jq -r .value[].ELEMENT \
-  ) ; do
-  get "/element/$element_id/text" | jq -r .value
-done
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>element_id <span class="k">in</span> <span class="k">$(</span> <span class="se">\</span>
+  post /elements <span class="se">\</span>
+       <span class="s1">'{"using": "css selector", "value": "cite"}'</span> <span class="se">\</span>
+       | jq <span class="nt">-r</span> .value[].ELEMENT <span class="se">\</span>
+  <span class="k">)</span> <span class="p">;</span> <span class="k">do
+  </span>get <span class="s2">"/element/</span><span class="nv">$element_id</span><span class="s2">/text"</span> | jq <span class="nt">-r</span> .value
+<span class="k">done</span>
+</code></pre></div></div>
 
 <p>I get the following output:</p>
 

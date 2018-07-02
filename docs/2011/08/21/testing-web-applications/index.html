@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -127,8 +129,8 @@ You should be able to get up and running with it fairly quickly; I’ve found th
 
 <ul>
   <li>Write a hello world spec that has one failing and one passing test</li>
-  <li>Put it in <code>spec/jasmine/hello_world_spec.coffee</code></li>
-  <li>I’ve got a very simple <code>spec_controller.rb</code>, which
+  <li>Put it in <code class="highlighter-rouge">spec/jasmine/hello_world_spec.coffee</code></li>
+  <li>I’ve got a very simple <code class="highlighter-rouge">spec_controller.rb</code>, which
     <ul>
       <li>Is only available when RAILS_ENV is development</li>
       <li>Serves up <a href="/examples/jasmine_runner.html.erb.txt">an html page</a> with
@@ -146,7 +148,7 @@ You should be able to get up and running with it fairly quickly; I’ve found th
     <p>Here’s the html.erb template I use:</p>
   </li>
   <li>Serve spec files out of /spec when your app is in development mode.</li>
-  <li>Run specs by visiting <code>http://localhost/spec?spec_file=hello_world_spec</code></li>
+  <li>Run specs by visiting <code class="highlighter-rouge">http://localhost/spec?spec_file=hello_world_spec</code></li>
   <li>You can now run the specs manually; a good start</li>
   <li>I use <a href="/examples/jasmine_runner.rake.txt">a capybara script</a> in a rake task to run the specs in CI.</li>
 </ul>

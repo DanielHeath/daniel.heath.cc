@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -92,6 +94,135 @@
   
   <article class="post h-entry">
 	<h1>
+		<a class="p-name" href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+		<div class="byline">
+			<span
+				class="small post-date dt-published"
+				datetime="2018-07-02 00-00-00"
+			>Jul  2, 2018</span>
+			<span class="small p-author author-byline h-card">Daniel Heath</span>
+		</div>
+	</h1>
+
+	<div class="content e-content">
+		<h2 id="css-modules">CSS Modules?</h2>
+
+<p>CSS Modules lets you write CSS with predictable local scope.</p>
+
+<p>This avoids the need for (eg) manually following a naming convention to prevent accidental conflicts.</p>
+
+<h2 id="alright-how-do-i-do-it">Alright, how do I do it?</h2>
+
+<h3 id="install-webpacker">Install webpacker</h3>
+
+<p>First, your app will need the <code class="highlighter-rouge">webpacker</code> gem installed &amp; configured (new rails apps come with it).</p>
+
+<p>Add <code class="highlighter-rouge">javascript_pack_tag</code> and <code class="highlighter-rouge">stylesheet_pack_tag</code> to your layout per the webpacker setup instructions.</p>
+
+<h3 id="setup-css-modules-for-webpack">Setup CSS modules for webpack</h3>
+
+<p>There are two webpack implementations of CSS modules (css-loader and postcss-modules).</p>
+
+<p>Webpacker uses postcss by default, so I’ve used postcss-modules (<code class="highlighter-rouge">yarn add postcss-modules</code>).</p>
+
+<p>Having installed postcss-modules and autoprefier using <code class="highlighter-rouge">yarn</code>, lets configure webpacker to use them.
+My projects <code class="highlighter-rouge">.postcssrc.yml</code> looks like this:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>plugins:
+  postcss-import: {}
+  postcss-cssnext: {}
+  postcss-modules:
+    generateScopedName: '[name]__[local]___[hash:base64:5]'
+    modules: true
+</code></pre></div></div>
+
+<h3 id="add-some-css">Add some CSS</h3>
+
+<p>Next, lets put some CSS where webpack will find it:</p>
+
+<p>First, write your CSS in <code class="highlighter-rouge">app/javascript/src/my-module.css</code>.</p>
+
+<p>Then, in <code class="highlighter-rouge">app/javascript/packs/application.js</code>, add <code class="highlighter-rouge">import myModule from '../src/my-module.css';</code> (at the start)</p>
+
+<p>After you load a page in development, or run <code class="highlighter-rouge">rake assets:precompile</code>, you should see a new file appear: <code class="highlighter-rouge">app/javascript/src/my-module.css.json</code>.
+This file describes how your CSS has been transformed.</p>
+
+<h3 id="reference-your-css-from-rails-views">Reference your CSS from rails views</h3>
+
+<p>I’ve written a helper to read these files.</p>
+
+<p>In my project it’s at <code class="highlighter-rouge">app/helpers/css_modules_helper.rb</code> and contains the following code:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module CssModulesHelper
+
+  mattr_accessor :cache
+  self.cache ||= {}
+
+  def cssmodule(path)
+    cache = {}
+    if Rails.application.config.action_controller.perform_caching
+      # Avoid reloading CSS paths
+      cache = CssmodulesHelper.cache
+    end
+
+    return cache[path] if cache.include?(path)
+
+    mod = JSON.parse(File.read Rails.root.join('app', 'javascript', 'src', path + '.json').to_s)
+
+    # Let people use dashes in CSS and underscores in ruby
+    mod.keys.each { |k| mod[k.underscore] = mod[k] }
+
+    os = OpenStruct.new(mod)
+
+    def os.call(*args)
+      args.map do |arg|
+        case arg
+        when Hash
+          arg.keys.select {|k| arg[k]}.map {|k| public_send(k) }
+        else
+          public_send arg
+        end
+      end.compact.flatten.join(" ")
+    end
+
+    cache[path] = os
+
+    yield os
+  end
+
+end
+
+</code></pre></div></div>
+
+<p>Finally, we can reference our CSS from a view:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;% cssmodule "my-module.css" do |css| %&gt;
+  &lt;!-- Dashes are turned into underscores, so .my-box becomes my_box --&gt;
+  &lt;div
+    class="&lt;%= css.my_box %&gt;"
+  &gt;
+    a box
+  &lt;/div&gt;
+
+  &lt;!-- The helper also offers multiple &amp; conditional class names (like the classnames JS lib) --&gt;
+  &lt;div
+    class="&lt;%= css.(:my_box, my_class: (Random.rand &gt; 0.5)) %&gt;"
+  &gt;
+    conditional class
+  &lt;/div&gt;
+&lt;% end %&gt;
+</code></pre></div></div>
+
+<p>You should see your styles applying now.</p>
+
+
+	</div>
+</article>
+
+
+
+
+  
+  <article class="post h-entry">
+	<h1>
 		<a class="p-name" href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 		<div class="byline">
 			<span
@@ -107,7 +238,7 @@
 
 <h2 id="installing">Installing</h2>
 
-<p>Installing the latest version of rust via <code>brew</code> worked correctly first time.</p>
+<p>Installing the latest version of rust via <code class="highlighter-rouge">brew</code> worked correctly first time.</p>
 
 <h2 id="finding-a-tutorial">Finding a tutorial</h2>
 
@@ -125,8 +256,8 @@ DuckDuckGo found the tutorial landing page, which suggested I used the second ed
 
 <h2 id="using-the-tutorial">Using the tutorial</h2>
 
-<p>The tutorial suggested using rustup to install, using <code>curl | sh</code>.
-I decide it’s probably safe to ignore that advice and use the version from my package manager (<code>rustc 1.21.0</code>).</p>
+<p>The tutorial suggested using rustup to install, using <code class="highlighter-rouge">curl | sh</code>.
+I decide it’s probably safe to ignore that advice and use the version from my package manager (<code class="highlighter-rouge">rustc 1.21.0</code>).</p>
 
 <p>The first example (hello world) works fine.
 The second example (guessing game) doesn’t compile.
@@ -138,7 +269,7 @@ It’s clearly related, but tells me nothing I can use to get my code compiling.
 <p>A bit of searching turns up <a href="https://stackoverflow.com/questions/19671845/how-can-i-generate-a-random-number-within-a-range-in-rust#19674981">a stackoverflow question on the topic</a>;
 the top answer is outdated, but a comment tells me
 to check a different answer, which tells me to
-use <code>extern crate rand;</code> and add dependencies to cargo.toml.</p>
+use <code class="highlighter-rouge">extern crate rand;</code> and add dependencies to cargo.toml.</p>
 
 <p>After reading up how to add dependencies to cargo.toml, I update the file and try again.
 Cargo spends twenty-four minutes ‘updating registry’ (I want one small dependency and have specified the exact version!). My connection is slow, but it’s not <em>that</em> slow.
@@ -201,10 +332,10 @@ In doing so, I (incidentally) notice that backtraces don’t have line numbers (
 
 <p>If you are using homebrew on mac, you can install the last three that way:</p>
 
-<pre><code class="language-bash">brew install selenium-server-standalone
-brew install jq
-brew install chromedriver
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>selenium-server-standalone
+brew <span class="nb">install </span>jq
+brew <span class="nb">install </span>chromedriver
+</code></pre></div></div>
 
 <h2 id="getting-started">Getting started</h2>
 
@@ -221,37 +352,37 @@ brew install chromedriver
 
 <p>Open a terminal and run the standalone server:</p>
 
-<pre><code class="language-bash"># On OSX using homebrew:
-/usr/local/bin/selenium-server -port 4444
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># On OSX using homebrew:</span>
+/usr/local/bin/selenium-server <span class="nt">-port</span> 4444
 
-# Everyone else - you'll need to be in the directory where selenium is downloaded to / installed:
-java -jar selenium-server-standalone-3.0.1.jar -port 4444
-</code></pre>
+<span class="c"># Everyone else - you'll need to be in the directory where selenium is downloaded to / installed:</span>
+java <span class="nt">-jar</span> selenium-server-standalone-3.0.1.jar <span class="nt">-port</span> 4444
+</code></pre></div></div>
 
 <p>Leave this running and open a another terminal window.
 In the new window, run the following to ask the server to start a new chrome session
-(copy &amp; paste will work, or save it to a file and run <code>source &lt;file&gt;</code>):</p>
+(copy &amp; paste will work, or save it to a file and run <code class="highlighter-rouge">source &lt;file&gt;</code>):</p>
 
-<pre><code class="language-bash">`# Save the URL to the local selenium server`
-`# to the variable SELENIUM_URL`
-SELENIUM_URL="http://localhost:4444/wd/hub/session"
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="sb">`</span><span class="c"># Save the URL to the local selenium server`</span>
+<span class="sb">`</span><span class="c"># to the variable SELENIUM_URL`</span>
+<span class="nv">SELENIUM_URL</span><span class="o">=</span><span class="s2">"http://localhost:4444/wd/hub/session"</span>
 
-`# Save the result of asking for a new browser session`
-`# to the variable SELENIUM_SESSION_ID`
-SELENIUM_SESSION_ID=$( \
-  `# Use curl to make a HTTP POST asking the selenium` \
-  `# server to open chrome` \
-  curl "$SELENIUM_URL" \
-       --data-ascii \
-       '{"desiredCapabilities":{"browserName":"chrome"}}' \
-       | jq -r .sessionId \
-)
-</code></pre>
+<span class="sb">`</span><span class="c"># Save the result of asking for a new browser session`</span>
+<span class="sb">`</span><span class="c"># to the variable SELENIUM_SESSION_ID`</span>
+<span class="nv">SELENIUM_SESSION_ID</span><span class="o">=</span><span class="k">$(</span> <span class="se">\</span>
+  <span class="sb">`</span><span class="c"># Use curl to make a HTTP POST asking the selenium` \</span>
+  <span class="sb">`</span><span class="c"># server to open chrome` \</span>
+  curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">"</span> <span class="se">\</span>
+       <span class="nt">--data-ascii</span> <span class="se">\</span>
+       <span class="s1">'{"desiredCapabilities":{"browserName":"chrome"}}'</span> <span class="se">\</span>
+       | jq <span class="nt">-r</span> .sessionId <span class="se">\</span>
+<span class="k">)</span>
+</code></pre></div></div>
 
 <p>You should see a new window running chrome, looking at a blank page.</p>
 
 <p>The above command sets your current shell (terminal window) up
-with the variables <code>SELENIUM_SESSION_ID</code> and <code>SELENIUM_ID</code>,
+with the variables <code class="highlighter-rouge">SELENIUM_SESSION_ID</code> and <code class="highlighter-rouge">SELENIUM_ID</code>,
 which are used in later commands.</p>
 
 <p>If you open a new shell, those variables will not be present
@@ -261,16 +392,16 @@ and the commands won’t work.</p>
 
 <p>Lets make our browser go to google.</p>
 
-<pre><code class="language-bash">curl "$SELENIUM_URL/$SELENIUM_SESSION_ID/url" \
-     --data-ascii \
-     '{"url": "https://google.com"}' \
-     | jq .
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">/</span><span class="nv">$SELENIUM_SESSION_ID</span><span class="s2">/url"</span> <span class="se">\</span>
+     <span class="nt">--data-ascii</span> <span class="se">\</span>
+     <span class="s1">'{"url": "https://google.com"}'</span> <span class="se">\</span>
+     | jq <span class="nb">.</span>
+</code></pre></div></div>
 
 <p>You should see:</p>
 
 <ul>
-  <li>A page of JSON, including <code>{"state": "success"}</code></li>
+  <li>A page of JSON, including <code class="highlighter-rouge">{"state": "success"}</code></li>
   <li>The chrome window is now on google.com.</li>
 </ul>
 
@@ -279,23 +410,23 @@ and the commands won’t work.</p>
 <p>Lets automate issuing a search.
 First, find the input element:</p>
 
-<pre><code class="language-bash">SEARCH_BOX_ELEMENT=$(
-  curl "$SELENIUM_URL/$SELENIUM_SESSION_ID/element" \
-       --data-ascii \
-       '{"using": "css selector", "value": "input[name=q]"}' \
-       `# Use 'jq' to extract part of the response. ` \
-       `# -r to get the text without quotes. ` \
-       | jq -r .value.ELEMENT \
-)
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">SEARCH_BOX_ELEMENT</span><span class="o">=</span><span class="k">$(</span>
+  curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">/</span><span class="nv">$SELENIUM_SESSION_ID</span><span class="s2">/element"</span> <span class="se">\</span>
+       <span class="nt">--data-ascii</span> <span class="se">\</span>
+       <span class="s1">'{"using": "css selector", "value": "input[name=q]"}'</span> <span class="se">\</span>
+       <span class="sb">`</span><span class="c"># Use 'jq' to extract part of the response. ` \</span>
+       <span class="sb">`</span><span class="c"># -r to get the text without quotes. ` \</span>
+       | jq <span class="nt">-r</span> .value.ELEMENT <span class="se">\</span>
+<span class="k">)</span>
+</code></pre></div></div>
 
 <p>Now we’ll type something into the search box:</p>
 
-<pre><code class="language-bash">curl "$SELENIUM_URL/$SELENIUM_SESSION_ID/element/$SEARCH_BOX_ELEMENT/value" \
-     --data-ascii \
-     '{"value": ["s","e","l","e","n","i","u","m", "\n"]}' \
-     | jq .
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="s2">"</span><span class="nv">$SELENIUM_URL</span><span class="s2">/</span><span class="nv">$SELENIUM_SESSION_ID</span><span class="s2">/element/</span><span class="nv">$SEARCH_BOX_ELEMENT</span><span class="s2">/value"</span> <span class="se">\</span>
+     <span class="nt">--data-ascii</span> <span class="se">\</span>
+     <span class="s1">'{"value": ["s","e","l","e","n","i","u","m", "\n"]}'</span> <span class="se">\</span>
+     | jq <span class="nb">.</span>
+</code></pre></div></div>
 
 <p>Switching to the chrome window, you should be able to see the search results.</p>
 
@@ -303,49 +434,49 @@ First, find the input element:</p>
 
 <p>This is getting repetitive. Lets define some bash functions to make it easier:</p>
 
-<pre><code class="language-bash">function debug {
-  if [ -n "$DEBUG" ] ; then
-    # Print debug messages to STDERR
-    echo "$@" 1&gt;&amp;2
-  fi
-}
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function </span>debug <span class="o">{</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$DEBUG</span><span class="s2">"</span> <span class="o">]</span> <span class="p">;</span> <span class="k">then</span>
+    <span class="c"># Print debug messages to STDERR</span>
+    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span> 1&gt;&amp;2
+  <span class="k">fi</span>
+<span class="o">}</span>
 
-function get {
-  # Build the URL, requiring that a path was provided
-  local URL="${SELENIUM_URL}/${SELENIUM_SESSION_ID}${1?Must provide URL}"
+<span class="k">function </span>get <span class="o">{</span>
+  <span class="c"># Build the URL, requiring that a path was provided</span>
+  <span class="nb">local </span><span class="nv">URL</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SELENIUM_URL</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">SELENIUM_SESSION_ID</span><span class="k">}${</span><span class="nv">1</span><span class="p">?Must provide URL</span><span class="k">}</span><span class="s2">"</span>
 
-  debug "$URL"
+  debug <span class="s2">"</span><span class="nv">$URL</span><span class="s2">"</span>
 
-  # Fetch the URL and format with jq.
-  curl --silent "${URL}" | jq .
-}
+  <span class="c"># Fetch the URL and format with jq.</span>
+  curl <span class="nt">--silent</span> <span class="s2">"</span><span class="k">${</span><span class="nv">URL</span><span class="k">}</span><span class="s2">"</span> | jq <span class="nb">.</span>
+<span class="o">}</span>
 
-function post {
-  # Build the URL, requiring that a path was provided
-  local URL="${SELENIUM_URL}/${SELENIUM_SESSION_ID}${1?Must provide URL}"
+<span class="k">function </span>post <span class="o">{</span>
+  <span class="c"># Build the URL, requiring that a path was provided</span>
+  <span class="nb">local </span><span class="nv">URL</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">SELENIUM_URL</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">SELENIUM_SESSION_ID</span><span class="k">}${</span><span class="nv">1</span><span class="p">?Must provide URL</span><span class="k">}</span><span class="s2">"</span>
 
-  # Set a default value for the POST data
-  local DATA="${2-{\}}"
+  <span class="c"># Set a default value for the POST data</span>
+  <span class="nb">local </span><span class="nv">DATA</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">2</span><span class="p">-{\</span><span class="k">}</span><span class="s2">}"</span>
 
-  # Validate that the provided data is valid JSON
-  echo "$DATA" | jq . &gt; /dev/null || \
-    ${ALLOW_INVALID_JSON?Second argument is not valid JSON}
+  <span class="c"># Validate that the provided data is valid JSON</span>
+  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$DATA</span><span class="s2">"</span> | jq <span class="nb">.</span> <span class="o">&gt;</span> /dev/null <span class="o">||</span> <span class="se">\</span>
+    <span class="k">${</span><span class="nv">ALLOW_INVALID_JSON</span><span class="p">?Second argument is not valid JSON</span><span class="k">}</span>
 
-  debug "$URL"
+  debug <span class="s2">"</span><span class="nv">$URL</span><span class="s2">"</span>
 
-  # Fetch the URL and format the response with jq.
-  curl --silent "${URL}" --data-ascii "${DATA}" | jq .
-</code></pre>
+  <span class="c"># Fetch the URL and format the response with jq.</span>
+  curl <span class="nt">--silent</span> <span class="s2">"</span><span class="k">${</span><span class="nv">URL</span><span class="k">}</span><span class="s2">"</span> <span class="nt">--data-ascii</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DATA</span><span class="k">}</span><span class="s2">"</span> | jq <span class="nb">.</span>
+</code></pre></div></div>
 
 <h2 id="screenshots">Screenshots</h2>
 
 <p>Lets use these new functions to take a screenshot:</p>
 
-<pre><code class="language-bash">get /screenshot `# Ask for a screenshot` \
-    | jq -r .value `# Fetch the raw (-r) string from the 'value'` \
-    | base64 -D `# Decode the base64-encoded data provided by selenium` \
-    &gt; screenshot.png `# Save the result to screenshot.png`
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>get /screenshot <span class="sb">`</span><span class="c"># Ask for a screenshot` \</span>
+    | jq <span class="nt">-r</span> .value <span class="sb">`</span><span class="c"># Fetch the raw (-r) string from the 'value'` \</span>
+    | <span class="nb">base64</span> <span class="nt">-D</span> <span class="sb">`</span><span class="c"># Decode the base64-encoded data provided by selenium` \</span>
+    <span class="o">&gt;</span> screenshot.png <span class="sb">`</span><span class="c"># Save the result to screenshot.png`</span>
+</code></pre></div></div>
 
 <p>If you open ‘screenshot.png’ you should see the page screenshotted.</p>
 
@@ -354,17 +485,17 @@ function post {
 <p>Lets grab the URL of each search result.</p>
 
 <p>Looking at the document using ‘inspect element’, I can see that
-search result URLs are all in <code>cite</code> elements and nothing else is.
+search result URLs are all in <code class="highlighter-rouge">cite</code> elements and nothing else is.
 That sounds like a good way to identify those URLs.</p>
 
-<pre><code class="language-bash">for element_id in $( \
-  post /elements \
-       '{"using": "css selector", "value": "cite"}' \
-       | jq -r .value[].ELEMENT \
-  ) ; do
-  get "/element/$element_id/text" | jq -r .value
-done
-</code></pre>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for </span>element_id <span class="k">in</span> <span class="k">$(</span> <span class="se">\</span>
+  post /elements <span class="se">\</span>
+       <span class="s1">'{"using": "css selector", "value": "cite"}'</span> <span class="se">\</span>
+       | jq <span class="nt">-r</span> .value[].ELEMENT <span class="se">\</span>
+  <span class="k">)</span> <span class="p">;</span> <span class="k">do
+  </span>get <span class="s2">"/element/</span><span class="nv">$element_id</span><span class="s2">/text"</span> | jq <span class="nt">-r</span> .value
+<span class="k">done</span>
+</code></pre></div></div>
 
 <p>I get the following output:</p>
 
@@ -550,7 +681,7 @@ record - you can’t specify the value for a new records ID.</p>
 
 <p>Postgres supports using a Universally Unique ID (UUID) instead.</p>
 
-<p>UUIDs look like this: <code>93743318-67f4-4c29-8ba0-5ba4f667c7b2</code>.</p>
+<p>UUIDs look like this: <code class="highlighter-rouge">93743318-67f4-4c29-8ba0-5ba4f667c7b2</code>.</p>
 
 <p>This can be a useful alternative because it lets you specify
 the ID, but will still generate an ID if you don’t specify one.</p>
@@ -591,9 +722,9 @@ the database server can become overloaded.</p>
 <p>Partitioning lets you use multiple servers, storing part of your data on each of them.</p>
 
 <p>This technique helps you scale a database which is overloaded
-due to too many <code>update</code>, <code>delete</code> &amp; <code>insert</code> commands.</p>
+due to too many <code class="highlighter-rouge">update</code>, <code class="highlighter-rouge">delete</code> &amp; <code class="highlighter-rouge">insert</code> commands.</p>
 
-<p>For instance, all records where the <code>name</code> field starts from A through F
+<p>For instance, all records where the <code class="highlighter-rouge">name</code> field starts from A through F
 will go to one server, G through P to a second, and the remainder to a third.</p>
 
 <p>You can achieve this using a feature called child tables (the documentation has good examples).</p>
@@ -601,10 +732,10 @@ will go to one server, G through P to a second, and the remainder to a third.</p
 <h4 id="replication">Replication</h4>
 
 <p>Replication lets you use multiple servers, storing all of your data on each of them.
-Only one of the servers is allowed to handle <code>update</code>, <code>insert</code> or <code>delete</code> queries.</p>
+Only one of the servers is allowed to handle <code class="highlighter-rouge">update</code>, <code class="highlighter-rouge">insert</code> or <code class="highlighter-rouge">delete</code> queries.</p>
 
 <p>This technique helps you scale a database which is overloaded
-due to too many <code>select</code> queries running at once.</p>
+due to too many <code class="highlighter-rouge">select</code> queries running at once.</p>
 
 <p>It is also good because each server has a full copy of the database,
 meaning that if the primary database fails, you can
@@ -626,7 +757,7 @@ work like normal Ruby arrays.</p>
 
 <h4 id="hashes-via-hstore">Hashes (via HSTORE)</h4>
 
-<p>Similarly to arrays, you can store hashes like <code>{'foo' =&gt; 'bar', 'k' =&gt; 'v'}</code>
+<p>Similarly to arrays, you can store hashes like <code class="highlighter-rouge">{'foo' =&gt; 'bar', 'k' =&gt; 'v'}</code>
 This works like a normal Ruby hash through ActiveRecord, except you can
 only use strings for the keys and values.</p>
 
@@ -671,14 +802,14 @@ the database where to find the records which match a query.</p>
 <h4 id="partial-indexes">Partial indexes</h4>
 
 <p>Unlike other databases, postgres lets you create an index with a
-<code>where</code> condition (e.g. <code>create index (...) where (condition)</code>).</p>
+<code class="highlighter-rouge">where</code> condition (e.g. <code class="highlighter-rouge">create index (...) where (condition)</code>).</p>
 
 <p>This means that the index file can be even smaller and quicker to use.</p>
 
 <h4 id="expression-indexes">Expression indexes</h4>
 
 <p>Postgres also allows you to create an index on any expression (not just a column).
-This means you can do things like <code>create index index_name on table_name ( to_uppercase(description) )</code></p>
+This means you can do things like <code class="highlighter-rouge">create index index_name on table_name ( to_uppercase(description) )</code></p>
 
 <h3 id="ddl-transactions">DDL Transactions</h3>
 
@@ -695,7 +826,7 @@ do nothing at all.</p>
 
 <p>However, they are often hard to use because they can’t be broken, even temporarily.</p>
 
-<p>Postgres supports <code>deferred</code> constraints, which only apply when you commit a transaction.
+<p>Postgres supports <code class="highlighter-rouge">deferred</code> constraints, which only apply when you commit a transaction.
 This makes constraints far more usable with Rails.</p>
 
 <h3 id="foreign-tables">Foreign Tables</h3>
@@ -790,67 +921,6 @@ How do the team keep each other informed (eg email/chat/face-to-face)?</p>
 
 <p>How do you set up a new development environment?</p>
 
-
-	</div>
-</article>
-
-
-
-
-  
-  <article class="post h-entry">
-	<h1>
-		<a class="p-name" href="/2013/06/23/learning-go/">Learning Go</a>
-		<div class="byline">
-			<span
-				class="small post-date dt-published"
-				datetime="2013-06-23 00-00-00"
-			>Jun 23, 2013</span>
-			<span class="small p-author author-byline h-card">Daniel Heath</span>
-		</div>
-	</h1>
-
-	<div class="content e-content">
-		<p>I’ve been using Go fulltime for ~9 months now.</p>
-
-<p>The big differences I’ve noticed coming from Ruby:</p>
-
-<h2 id="imports">Imports</h2>
-
-<p>Imports can’t clobber the global namespace or change the behavior of other packages (unless those packages were designed to allow it).</p>
-
-<p>Only types/methods that are exported by a package are available when you import it.</p>
-
-<h2 id="static-language">Static language</h2>
-<p>There’s no monkey patching.
-When writing packages, export interfaces, not types (to make testing possible).</p>
-
-<h2 id="composition-not-inheritance">Composition, not inheritance</h2>
-<p>Go has no classes. Group data together using structs.</p>
-
-<p>Any type can have methods. E.G.</p>
-
-<pre><code class="language-go">type Foo string
-func(f Foo) Print() { fmt.Println(f) }
-Foo("a string").Print() # Prints "a string"
-
-type Bar struct { str string }
-func(b Bar) Print() { fmt.Println(b.str) }
-Bar{"A different string"}.Print() # Prints "A different string"
-</code></pre>
-
-<p>Important differences moving from ruby to go:
-* Code re-use via composition feels very natural coming from ruby.
- * Where you would have used a module Foo in ruby, embed an interface Foo in go.</p>
-
-<ul>
-  <li>
-    <p>Because imports can’t interfere with one another, many small dependencies is not a problem. Compose your app from many small frameworks rather than using one large one.</p>
-  </li>
-  <li>
-    <p>Monitoring is back in the dark ages (No newrelic). Plan accordingly.</p>
-  </li>
-</ul>
 
 	</div>
 </article>

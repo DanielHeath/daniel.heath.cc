@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -119,8 +121,8 @@ This individual specs running about 5 times faster.</p>
 
 <p>Then I realised that without the overhead of loading a firefox instance, there was no reason not to run all the specs in parallel. Some quick shell scripting and I was there:</p>
 
-<pre><code>find public/spec/integration -iname *.js | grep -v _spec_helper.js | sed s/^public.spec.//g | xargs -L1 -P30 ./lib/tasks/phantom_runner.coffee
-</code></pre>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find public/spec/integration -iname *.js | grep -v _spec_helper.js | sed s/^public.spec.//g | xargs -L1 -P30 ./lib/tasks/phantom_runner.coffee
+</code></pre></div></div>
 
 <p>Hey presto! the entire suite ran in under 7 seconds, even on my ancient, groaning hardware.</p>
 

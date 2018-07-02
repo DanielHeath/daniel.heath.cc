@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -105,7 +107,7 @@
 
 <h2 id="installing">Installing</h2>
 
-<p>Installing the latest version of rust via <code>brew</code> worked correctly first time.</p>
+<p>Installing the latest version of rust via <code class="highlighter-rouge">brew</code> worked correctly first time.</p>
 
 <h2 id="finding-a-tutorial">Finding a tutorial</h2>
 
@@ -123,8 +125,8 @@ DuckDuckGo found the tutorial landing page, which suggested I used the second ed
 
 <h2 id="using-the-tutorial">Using the tutorial</h2>
 
-<p>The tutorial suggested using rustup to install, using <code>curl | sh</code>.
-I decide it’s probably safe to ignore that advice and use the version from my package manager (<code>rustc 1.21.0</code>).</p>
+<p>The tutorial suggested using rustup to install, using <code class="highlighter-rouge">curl | sh</code>.
+I decide it’s probably safe to ignore that advice and use the version from my package manager (<code class="highlighter-rouge">rustc 1.21.0</code>).</p>
 
 <p>The first example (hello world) works fine.
 The second example (guessing game) doesn’t compile.
@@ -136,7 +138,7 @@ It’s clearly related, but tells me nothing I can use to get my code compiling.
 <p>A bit of searching turns up <a href="https://stackoverflow.com/questions/19671845/how-can-i-generate-a-random-number-within-a-range-in-rust#19674981">a stackoverflow question on the topic</a>;
 the top answer is outdated, but a comment tells me
 to check a different answer, which tells me to
-use <code>extern crate rand;</code> and add dependencies to cargo.toml.</p>
+use <code class="highlighter-rouge">extern crate rand;</code> and add dependencies to cargo.toml.</p>
 
 <p>After reading up how to add dependencies to cargo.toml, I update the file and try again.
 Cargo spends twenty-four minutes ‘updating registry’ (I want one small dependency and have specified the exact version!). My connection is slow, but it’s not <em>that</em> slow.

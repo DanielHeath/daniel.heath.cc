@@ -49,17 +49,19 @@
 				<details>
 					<summary>Recent Posts</summary>
 					
+						<a href="/2018/07/02/css-modules-with-webpacker/">CSS Modules in Rails with Webpacker</a>
+					
 						<a href="/2017/11/27/rust-an-experience-report/">Rust: An experience report</a>
 					
 						<a href="/2016/12/10/browser-automation-the-hard-way/">Learn browser automation from scratch</a>
 					
 						<a href="/2014/08/27/postgres-features-in-20-minutes/">Postgres features for Ruby developers</a>
 					
-						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
-					
 				</details>
 				<details>
 					<summary>Older posts</summary>
+					
+						<a href="/2013/10/03/questions-for-prospective-employers/">Questions for prospective employers</a>
 					
 						<a href="/2013/06/23/learning-go/">Learning Go</a>
 					
@@ -112,26 +114,28 @@
 
 <p>I’ve put together a <a href="https://github.com/DanielHeath/sprockets-sample">sample repo</a> using the asset pipeline.</p>
 
-<p>The setup for your app will be similar:
- * The <code>assets</code> folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).
- * You’ll need a similar <code>Rakefile</code> to build assets (and maybe launch the server)
- * You might store the <code>sprockets</code> directory somewhere else - update the <code>Rakefile</code> to match.
- * Use a Gemfile and the bundler rubygem to manage dependencies.
- * Edit the rakefile to change the port the asset server runs on.</p>
+<p>The setup for your app will be similar:</p>
+<ul>
+  <li>The <code class="highlighter-rouge">assets</code> folder contains your stylesheets, javascript, etc (this directory name is set in sprockets/environment.rb).</li>
+  <li>You’ll need a similar <code class="highlighter-rouge">Rakefile</code> to build assets (and maybe launch the server)</li>
+  <li>You might store the <code class="highlighter-rouge">sprockets</code> directory somewhere else - update the <code class="highlighter-rouge">Rakefile</code> to match.</li>
+  <li>Use a Gemfile and the bundler rubygem to manage dependencies.</li>
+  <li>Edit the rakefile to change the port the asset server runs on.</li>
+</ul>
 
-<p>When your app starts (in development), it should make a request to <code>http://localhost:11111/assets/manifest.json</code>.</p>
+<p>When your app starts (in development), it should make a request to <code class="highlighter-rouge">http://localhost:11111/assets/manifest.json</code>.</p>
 
 <p>Parse this JSON hash; the keys are asset names (eg “application.css”) and the values are relative URLs the compiled assets can be fetched from.</p>
 
-<p>When generating a link to an asset in your app, use the JSON hash you fetched to lookup the URL. In the case of “application.css” this might look like <code>http://localhost:11111/application-8e5bf6909b33895a72899ee43f5a9d53.css</code>.</p>
+<p>When generating a link to an asset in your app, use the JSON hash you fetched to lookup the URL. In the case of “application.css” this might look like <code class="highlighter-rouge">http://localhost:11111/application-8e5bf6909b33895a72899ee43f5a9d53.css</code>.</p>
 
 <p>That should be all you need for development - you should be able to see SASS/Coffeescript assets compiled and loading normally.</p>
 
 <h2 id="assets-in-production">Assets in production</h2>
 <p>For production we want to pre-compile assets rather than regenerating them each time they change.</p>
 
-<p><code>rake assets</code> will create a ‘public’ folder containing ‘manifest.json’ (same format as before).
-Get this directory onto your production servers (<code>git add -Af public/</code> will add it to source control if you deploy via git).</p>
+<p><code class="highlighter-rouge">rake assets</code> will create a ‘public’ folder containing ‘manifest.json’ (same format as before).
+Get this directory onto your production servers (<code class="highlighter-rouge">git add -Af public/</code> will add it to source control if you deploy via git).</p>
 
 <p>When generating a link to an asset, look up manifest.json (the same as in development, but from the filesystem instead of over HTTP).</p>
 
