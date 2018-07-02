@@ -3,7 +3,7 @@
   <channel>
     <title>daniel.heath.cc</title>
     <description>Daniel Heath - Blog</description>
-    <link>http://localhost:4000</link>
+    <link>http://daniel.heath.cc</link>
     
       <item>
         <title>CSS Modules in Rails with Webpacker</title>
@@ -115,9 +115,14 @@ end
 
 &lt;p&gt;You should see your styles applying now.&lt;/p&gt;
 
+&lt;h2 id=&quot;production&quot;&gt;Production&lt;/h2&gt;
+
+&lt;p&gt;However you organize your deploy, your production app needs the JSON files to be available on the server (so the helper can read them).&lt;/p&gt;
+
+&lt;p&gt;The precise method you use to achieve this will vary according to your asset delivery configuration.&lt;/p&gt;
 </description>
         <published>2018-07-02 00:00:00 +1000</published>
-        <link>http://localhost:4000/2018/07/02/css-modules-with-webpacker/</link>
+        <link>http://daniel.heath.cc/2018/07/02/css-modules-with-webpacker/</link>
       </item>
     
       <item>
@@ -170,7 +175,7 @@ In doing so, I (incidentally) notice that backtraces don’t have line numbers (
 
 </description>
         <published>2017-11-27 00:00:00 +1100</published>
-        <link>http://localhost:4000/2017/11/27/rust-an-experience-report/</link>
+        <link>http://daniel.heath.cc/2017/11/27/rust-an-experience-report/</link>
       </item>
     
       <item>
@@ -509,7 +514,7 @@ allocated by selenium when you find/get an element.&lt;/p&gt;
 
 </description>
         <published>2016-12-10 00:00:00 +1100</published>
-        <link>http://localhost:4000/2016/12/10/browser-automation-the-hard-way/</link>
+        <link>http://daniel.heath.cc/2016/12/10/browser-automation-the-hard-way/</link>
       </item>
     
       <item>
@@ -697,7 +702,7 @@ a totally different database (e.g. MySql or any JDBC database).&lt;/p&gt;
 &lt;p&gt;Handy when dealing with really big, organically grown systems.&lt;/p&gt;
 </description>
         <published>2014-08-27 00:00:00 +1000</published>
-        <link>http://localhost:4000/2014/08/27/postgres-features-in-20-minutes/</link>
+        <link>http://daniel.heath.cc/2014/08/27/postgres-features-in-20-minutes/</link>
       </item>
     
       <item>
@@ -769,7 +774,7 @@ How do the team keep each other informed (eg email/chat/face-to-face)?&lt;/p&gt;
 
 </description>
         <published>2013-10-03 00:00:00 +1000</published>
-        <link>http://localhost:4000/2013/10/03/questions-for-prospective-employers/</link>
+        <link>http://daniel.heath.cc/2013/10/03/questions-for-prospective-employers/</link>
       </item>
     
       <item>
@@ -815,7 +820,7 @@ When writing packages, export interfaces, not types (to make testing possible).&
 &lt;/ul&gt;
 </description>
         <published>2013-06-23 00:00:00 +1000</published>
-        <link>http://localhost:4000/2013/06/23/learning-go/</link>
+        <link>http://daniel.heath.cc/2013/06/23/learning-go/</link>
       </item>
     
       <item>
@@ -863,7 +868,7 @@ The resulting assets are minified, concatenated, and gzipped (for size).
 They are also fingerprinted (so you can set an unlimited cache lifetime).&lt;/p&gt;
 </description>
         <published>2013-06-03 00:00:00 +1000</published>
-        <link>http://localhost:4000/2013/06/03/sprockets-and-go/</link>
+        <link>http://daniel.heath.cc/2013/06/03/sprockets-and-go/</link>
       </item>
     
       <item>
@@ -888,7 +893,7 @@ That is the metric by which success is judged, and Ortiz (and other US attorneys
 What criteria for promotion within the US Attorneys office would result in genuine criminals being chased (instead of ‘people who have upset the government’)?&lt;/p&gt;
 </description>
         <published>2013-03-19 00:00:00 +1100</published>
-        <link>http://localhost:4000/2013/03/19/removing-cortiz-is-pointless/</link>
+        <link>http://daniel.heath.cc/2013/03/19/removing-cortiz-is-pointless/</link>
       </item>
     
       <item>
@@ -942,7 +947,7 @@ They were totally optional (about half the development team came to any given me
 &lt;/div&gt;
 </description>
         <published>2013-02-11 00:00:00 +1100</published>
-        <link>http://localhost:4000/2013/02/11/push-vs-pull/</link>
+        <link>http://daniel.heath.cc/2013/02/11/push-vs-pull/</link>
       </item>
     
       <item>
@@ -962,7 +967,7 @@ They were totally optional (about half the development team came to any given me
 &lt;p&gt;Not to mention the constellation of other open source software which supports everything I do - from curl/sed to postgres/sendmail to ruby/go/gcc to linux/bsd. To every OSS developer out there - thank you!&lt;/p&gt;
 </description>
         <published>2013-02-10 00:00:00 +1100</published>
-        <link>http://localhost:4000/2013/02/10/static-sites-on-s3/</link>
+        <link>http://daniel.heath.cc/2013/02/10/static-sites-on-s3/</link>
       </item>
     
   </channel>

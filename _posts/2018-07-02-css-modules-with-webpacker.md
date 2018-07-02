@@ -117,3 +117,8 @@ Finally, we can reference our CSS from a view:
 
 You should see your styles applying now.
 
+## Production
+
+However you organize your deploy, your production app needs the JSON files to be available on the server (so the helper can read them).
+
+The precise method you use to achieve this will vary according to your asset delivery configuration.
